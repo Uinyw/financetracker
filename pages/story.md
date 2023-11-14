@@ -4,6 +4,26 @@ A story introduces concrete organizations and persons by which the problem is cl
 
 ## Story [Lachenicht]
 
+Lars is a KIT student who recently moved out of his parents' house and into his first apartment of his own.
+To prevent losing control of his financial situation, he wants to track and manage his personal finances.
+A fellow student recommends the app FinanceTracker, which Lars installs and opens on his mobile phone.
+
+First, Lars provides FinanceTracker with information about his income sources.
+Lars works as a waiter on the side, has a scholarship and is financially supported by his parents.
+While his parents pay him a fixed amount per month and the scholarship a fixed amount per quarter, his remuneration in his part-time job depends on the number of hours he works in the current month.
+
+Second, Lars provides FinanceTracker with information about his fixed expenses.
+Lars pays monthly rent, quarterly broadcasting fees and semester fees every six months.
+FinanceTracker allows him to categorize his fixed expenses.
+
+Third, Lars provides FinanceTracker with information about his variable expenses.
+Lars spends different amounts of money each month on food, clothes, books and going to the movies.
+FinanceTracker allows him to categorize his variable expenses.
+
+As Lars wants to reduce his expenses, he sets a budget for each variable expense that he would like to spend.
+Over the following months, Lars enters each expense in the corresponding category.
+FinanceTracker informs hom constantly if he stays within his financial limits.
+
 
 ## Story [Tobias]
 __Very Crude Userstories:__
