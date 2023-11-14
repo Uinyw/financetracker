@@ -15,7 +15,7 @@ While his parents pay him a fixed amount per month and the scholarship a fixed a
 Second, Lars provides FinanceTracker with information about his fixed expenses.
 Lars pays monthly rent, quarterly broadcasting fees and semester fees every six months.
 FinanceTracker allows him to categorize his fixed expenses.
-Lars can set up reminders for his fixed, ensuring he never misses a payment deadline.
+Lars can set up reminders for his fixed expenses, ensuring he never misses a payment deadline.
 
 Third, Lars provides FinanceTracker with information about his variable expenses.
 Lars spends different amounts of money each month on food, clothes, books and going to the movies.
