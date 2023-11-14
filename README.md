@@ -4,15 +4,15 @@
 
 ### General
 
-Story
+[Story](./pages/story.md)
 
-Capabilities
+[Capabilities](./pages/capabilities.md)
 
 ### Functional Requirements
 
-Use Case Diagram
+[Use Case Diagram](./pages/use_case_diagram.md)
 
-Use Cases
+[Use Cases](./pages/use_cases.md)
 
 ## Architectural Design
 
