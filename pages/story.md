@@ -23,7 +23,7 @@ FinanceTracker allows him to categorize his variable expenses.
 
 As Lars wants to reduce his expenses, he sets a budget for each variable expense that he would like to spend.
 Over the following months, Lars enters each expense in the corresponding category.
-FinanceTracker informs hom constantly if he stays within his financial limits and provides insights into his expense behavior over time.
+FinanceTracker informs him constantly if he stays within his financial limits and provides insights into his expense behavior over time.
 
 Lars would like to go on vacation in six months.
 He creates a savings goal for this in FinanceTracker.
