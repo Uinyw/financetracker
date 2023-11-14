@@ -49,21 +49,21 @@ __Very Crude Userstories:__
 
 Max 23 Student\
 
-> lives in karlsruhe and wants to track his shopping expenses with a programm.
-> He wants to enter the product names and the price to get an overview, how much he is spending for food each month.
-> Also he likes to have categories assigned to the specific food types to be able to see, how much he is spending on sweets, vegetables, and alcohol.\
+> Max lives in Karlsruhe and wants to track his shopping expenses with a programm called FinanceTracker.
+> He wants to enter the product names and the price of the goods he buys to get an general overview, on how much he is spending for food and other expenses each month. In order to track this, he can select specific categories of labels that are attached to each purchase. So he is able to distingish alcohol from vegetables and other products and is henceforth able to see which amount of money is being spend on what product.
 
 Susanne 25 BWL student\
 
-> Studies at TUM and want's to track her oveall expenses with furnature and food, as well as her car to be able to show, how the inflation is impacting her buying behaviour and much of her internship money can be saved, on a monthly basis.\
+> Susanne studies at TUM and wants to track her oveall expenses in Munich of her appartment and the cost of living in general, also she wants to see, how much the current inflation is taking impact by comparing the data form several months. Also she keeps track of how much income each month is generated through her internship, ans how much money she is therefore able to save.
+
 
 Ingo 30 Computer scientist\
-
-> Ingo likes data and wants to be able to predict his future expenses and when they are arriving. the best case for him would be to know, how much money he needs to accumulate for the next month, so that his insurances, rent and other expenses are barely covered with the money of his bank account.\
+> Ingo likes data and wants to be able to predict his future expenses using FinanceTracker. He opens the dashboard to see what predicted expenses will be comming next month and also the predicted date.
+So he is able to know, how much money he should keep on his bank account in order to not fall below the limit because of insurance payments or other unexpected payments.\
 
 Ferdinant 37 Technic enthusiast\
 
-> Ferdinatn likes to take pictures of his bills and want's them to be scanned automatically, because he doesn't want to type everything by hand.\
+> Ferdinatn likes to take pictures of his bills and want's them to be scanned automatically by FinanceTracker, because he doesn't want to type everything by hand. He thinks usability is the most important feature and is greatfull for the auto completion offered for even tagging his new items.
 
 Herbert 40\
 
