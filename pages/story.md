@@ -15,6 +15,7 @@ While his parents pay him a fixed amount per month and the scholarship a fixed a
 Second, Lars provides FinanceTracker with information about his fixed expenses.
 Lars pays monthly rent, quarterly broadcasting fees and semester fees every six months.
 FinanceTracker allows him to categorize his fixed expenses.
+Lars can set up reminders for his fixed, ensuring he never misses a payment deadline.
 
 Third, Lars provides FinanceTracker with information about his variable expenses.
 Lars spends different amounts of money each month on food, clothes, books and going to the movies.
@@ -22,7 +23,25 @@ FinanceTracker allows him to categorize his variable expenses.
 
 As Lars wants to reduce his expenses, he sets a budget for each variable expense that he would like to spend.
 Over the following months, Lars enters each expense in the corresponding category.
-FinanceTracker informs hom constantly if he stays within his financial limits.
+FinanceTracker informs hom constantly if he stays within his financial limits and provides insights into his expense behavior over time.
+
+Lars would like to go on vacation in six months.
+He creates a savings goal for this in FinanceTracker.
+FinanceTracker tells him how much he needs to save each month to achieve his goal.
+FinanceTracker also tracks if his expenses in the next months are in limits for his savings goal.
+Lars also wants to save money.
+He sets up a long-term savings goal for this. 
+
+Lars wants to impress his parents with his savings discipline.
+To do this, he creates a financial report about his tracked expenses and incomes with FinanceTracker.
+The report offers insights into spending patterns, income trends, and overall financial health.
+
+Lars wants to optimize his spending behavior. 
+FinanceTracker provides a tool for analyzing spending habits, showing Lars where he might be overspending and suggesting areas for improvement.
+
+Lars' financial information is confidential.
+Therefore FinanceTracker prioritizes security and privacy, ensuring that his information is secure.
+This includes using encryption and other security measures to protect his data.
 
 ## Story [Tobias]
 
