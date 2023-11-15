@@ -63,7 +63,7 @@ So he is able to know, how much money he should keep on his bank account in orde
 
 Ferdinant 37 Technic enthusiast\
 
-> Ferdinatn likes to take pictures of his bills and want's them to be scanned automatically by FinanceTracker, because he doesn't want to type everything by hand. He thinks usability is the most important feature and is greatfull for the auto completion offered for even tagging his new items.
+> Ferdinatn likes to take pictures of his bills and want's them to be scanned automatically by FinanceTracker, because he doesn't want to type everything by hand. He thinks usability is the most important feature and he is often using the auto completion function for the tagging of new expenses.
 
 Herbert 40\
 
