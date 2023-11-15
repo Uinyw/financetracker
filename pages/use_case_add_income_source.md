@@ -1,10 +1,22 @@
 # Use Case Add Income Source
 
-1. Title: Goal of the use case as a short active verb phrase
-2. Primary Actors: Comma-separated list of primary actors
-3. Secondary Actors: Comma-separated list of secondary actors
-4. Preconditions: Declarative description of the precondition
-5. Postconditions: Declarative description of the postconditions
-6. Flow: List of actions
-7. Alternative flows: List of alternate actions
-8. Information Requirements: Information required by the system from the secondary actors
+```
+Title: Add Income Source
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: -
+Postconditions: The given income source is added to set of income sources
+
+Flow:
+1. The user enters the required data for an income source.
+2. The system validates the received data. A monetary amount can only be provided if the income source is static. If the income source is dynamic, income records can be added later.
+3. The system creates a new income source and saves it.
+
+
+Alternative flows:
+3a. The provided data is invalid: The systems informs the user about his invalid input.
+
+Information Requirements: Name, Description, Category, Periodicity, Dynamic or Static, Monetary Amount
+```
