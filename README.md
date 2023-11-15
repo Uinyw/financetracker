@@ -12,7 +12,9 @@
 
 ### Functional Requirements
 
-[Use Case Diagram](./pages/use_case_diagram.md)
+#### Management of Income Sources
+
+[Use Case Diagram](./pages/use_case_diagram_management_of_income_sources.md)
 
 [Use Cases](./pages/use_cases.md)
 
