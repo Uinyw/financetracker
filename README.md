@@ -6,7 +6,7 @@
 
 [Story](./pages/story.md)
 
-[Capabilities](./pages/capabilities.md)
+[Capability Overview](./pages/capabilities.md)
 
 ### Functional Requirements
 
