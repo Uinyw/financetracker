@@ -1,8 +1,4 @@
-# Story
-
-A story introduces concrete organizations and persons by which the problem is clarified the software system to be developed should solve.
-
-## Story [Lachenicht]
+# Story FinanceTracker
 
 Lars is a KIT student who recently moved out of his parents' house and into his first apartment of his own.
 To prevent losing control of his financial situation, he wants to track and manage his personal finances.
