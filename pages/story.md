@@ -4,10 +4,6 @@ Lars is a KIT student who recently moved out of his parents' house and into his 
 To prevent losing control of his financial situation, he wants to track and manage his personal finances.
 A fellow student recommends the app FinanceTracker, which Lars installs and opens on his mobile phone.
 
-
-
-
-
 First, Lars provides FinanceTracker with information about his income sources.
 Lars works as a waiter on the side, has a scholarship and is financially supported by his parents.
 While his parents pay him a fixed amount per month and the scholarship a fixed amount per quarter, his remuneration in his part-time job depends on the number of hours he works in the current month.
@@ -19,9 +15,13 @@ Lars can set up reminders for his fixed expenses, ensuring he never misses a pay
 
 Third, Lars provides FinanceTracker with information about his variable expenses.
 Lars spends different amounts of money each month on food, clothes, books and going to the movies.
-He has already started creating an Excel listfor his expenses.
+He has already started creating an Excel list for his expenses.
 FinanceTracker allows you to import his data.
 FinanceTracker allows him to categorize his variable expenses.
+
+Lars now sees an overview of his finances, for example how much money he has.
+FinanceTracker notifies him as soon as his money falls below a set limit.
+He can also see exactly how much money he earns, spends and has left to save each month/semi-annually/annually.
 
 As Lars wants to reduce his expenses, he sets a budget for each variable expense that he would like to spend.
 Over the following months, Lars enters each expense in the corresponding category.
@@ -56,11 +56,6 @@ Lars likes to track his expenses on his mobile phone, but prefers to view statis
 
 __Very Crude Userstories:__
 
-Susanne 25 BWL student\
-
- Also she keeps track of how much income each month is generated through her internship, ans how much money she is therefore able to save.
-
-
 Ingo 30 Computer scientist\
 > Ingo likes data and wants to be able to predict his future expenses using FinanceTracker. He opens the dashboard to see what predicted expenses will be comming next month and also the predicted date.
 So he is able to know, how much money he should keep on his bank account in order to not fall below the limit because of insurance payments or other unexpected payments.\
@@ -68,10 +63,6 @@ So he is able to know, how much money he should keep on his bank account in orde
 Herbert 40\
 
 > Herbert likes to organise and compare the products he buys with alternatives and want's to see, which product he bought when and he also wants to have a prediction of reoccuring products to be able to schedule for coupons to save some more money.\
-
-Phil 15\
-
-> Phil likes to have a overview over his finances. He receives monthly payments (Taschengeld) from his parents and he wants to know, how much of his "Taschengeld" he still has left, and how much money he has in general. If possible, he also want's to know, if his money falls below a certain limit.
 
 Anna 28\
 
