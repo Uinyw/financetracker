@@ -45,7 +45,28 @@ Information Requirements: UserID, timeframe, Categories, stored data, prediction
 ```
 
 ## Generate Budgeting
+```
+Title: Generate Budgeting
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: -
+Postconditions: A budget plan is returned
+
+Flow:
+1. The user creates a budget goal, that he/she want's to reach.
+2. The user adds the specific categories of the budget goal and the bank account.
+2. The system returns to the user, how much he/she is able to spend to be within the budget goal.
+
+
+Alternative flows:
+2a. The provided data is invalid: The systems informs the user about his/her invalid input.
+
+Information Requirements: UserID, timeframe, Categories, stored data, accountID, budgetGoal
+```
 
 ## Analyse Patterns & Trends
+
 
 ## Improvement Analysis
