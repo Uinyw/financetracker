@@ -16,7 +16,7 @@
 
 [Use Case Diagram](./pages/use_case_diagram_management_of_income_sources.md)
 
-[Use Case Add Income Source](./pages/use_case_add_income_source.md)
+[Use Case Descriptions](./pages/use_case_descriptions_management_of_income_sources.md)
 
 ## Architectural Design
 
