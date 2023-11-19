@@ -3,6 +3,8 @@ matrix:
   aspell:
     lang: en
   dictionary:
+    wordlist:
+      - config/wordlist.txt
     encoding: utf-8
   pipeline:
   - pyspelling.filters.markdown:
