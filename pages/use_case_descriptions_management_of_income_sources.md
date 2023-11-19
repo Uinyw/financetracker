@@ -47,7 +47,7 @@ Alternative flows:
 3a. No income source with the given ID exists: The systems informs the user about the non-existense of the income source to edit.
 7a. The provided data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: ID, Name, Description, Category, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, Income Records
+Information Requirements: ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, Income Records
 ```
 
 ## Categorize Income Source
