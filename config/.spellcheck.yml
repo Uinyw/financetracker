@@ -3,7 +3,7 @@ matrix:
   aspell:
     lang: en
   dictionary:
-    wordlist:
+    wordlists:
       - config/wordlist.txt
     encoding: utf-8
   pipeline:
