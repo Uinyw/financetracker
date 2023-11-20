@@ -40,7 +40,7 @@ To do this, he scans his bills with FinanceTracker and the data is entered autom
 FinanceTracker informs him constantly if he stays within his financial limits and provides insights into his expense behavior over time.
 
 With FinanceTracker, Lars sees how much money he accumulated over the last months/years and what predicted expenses will be coming in the next month.
-Seeing his predicted future expenses, Lars wants to further otimise his spending behavior.
+Seeing his predicted future expenses, Lars wants to further optimise his spending behavior.
 FinanceTracker provides a tool for analyzing spending habits, showing Lars where he might be overspending and suggesting areas for improvement.
 Lars is also interested to see, how much impact the current inflation is having on his current and future expenses.
 Finance Tracker provides him with corresponding statistics prospective analyses.

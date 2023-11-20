@@ -1,6 +1,6 @@
 # Use Case Descriptions Analysis of Data
 
-## Generatre Report
+## Generate Report
 
 ```
 Title: Generate Report
