@@ -1,4 +1,4 @@
-# someUse Case Descriptions Management of Bank Accounts
+# Use Case Descriptions Management of Bank Accounts
 
 ## Add Bank Account
 
@@ -40,7 +40,7 @@ Flow:
 
 
 Alternative flows:
-2a. No bank account with the given ID or name exists: The systems informs the user about the non-existense of the bank account to delete.
+2a. No bank account with the given ID or name exists: The systems informs the user about the non-existence of the bank account to delete.
 
-Information Requirements: ID or name of the bank account, bank accountuser ID
+Information Requirements: ID or name of the bank account, bank account user ID
 ```
