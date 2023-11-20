@@ -12,12 +12,12 @@ Preconditions: -
 Postconditions: A data entry is generated
 
 Flow:
-1. The user adds information about the price for an item, assigns one bank account bank account and optinally adds categories. ALso the user adds whether this is a reoccuring expense or not.
+1. The user adds information about the price for an item, assigns one bank account bank account and optionally adds categories. Also the user adds whether this is a recurring expense or not.
 2. The system creates an data entry about those categories and saves it.
 
 
 Alternative flows:
-1a. The user adds how much money he got giftet. He adds a bank account, catefories and that it's reoccuring.
+1a. The user adds how much money he got gifted. He adds a bank account, categories and if it's recurring.
 
 
 Information Requirements: UserID, optional Categories, accountID, item-name, scheduled event
@@ -59,7 +59,7 @@ Preconditions: Another System talking to the Rest-API
 Postconditions: A data entry is generated
 
 Flow:
-1. The other system calls the appropriate funnction to create a new entry.
+1. The other system calls the appropriate function to create a new entry.
 2. The system creates a new data entry based on the information provided by the new system.
 3. The other system is able to check whether the new entry was created.
 
