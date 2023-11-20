@@ -68,5 +68,3 @@ Alternative flows:
 
 Information Requirements: UserID, timeframe, Categories, stored data, accountID, budgetGoal
 ```
-
-## Improvement Analysis
