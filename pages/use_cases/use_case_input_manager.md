@@ -1,9 +1,9 @@
 # Use Case Descriptions Analysis of Data
 
-## Manual Input
+## Manually Input Data
 
 ```
-Title: Manual Input
+ Title: Manual Input Data
 
 Primary Actors: User
 Secondary Actors: -
