@@ -12,8 +12,8 @@ Preconditions: -
 Postconditions: A report data was generated
 
 Flow:
-1. The user requests an data report, if he wishes, he also cann specify for with category the report schould be generated.
-2. The system collects all the data it gathered, if a specified category was choosen only the relevant data stays there.
+1. The user requests an data report, if he wishes, he also can specify for with category the report should be generated.
+2. The system collects all the data it gathered, if a specified category was chosen only the relevant data stays there.
 3. The system returns the data present for the specified category.
 
 

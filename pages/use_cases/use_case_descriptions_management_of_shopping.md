@@ -41,7 +41,7 @@ Flow:
 
 
 Alternative flows:
-2a. No product entry with the given ID or name exists: The systems informs the user about the non-existense of the product entry to delete.
+2a. No product entry with the given ID or name exists: The systems informs the user about the non-existence of the product entry to delete.
 
 Information Requirements: ID or name of the product entry
 ```
@@ -66,7 +66,7 @@ Flow:
 
 
 Alternative flows:
-2a. No product entry with the given ID exists: The systems informs the user about the non-existense of the product entry to edit.
+2a. No product entry with the given ID exists: The systems informs the user about the non-existence of the product entry to edit.
 
 Information Requirements: ID of the product entry, associated product entry
 ```
