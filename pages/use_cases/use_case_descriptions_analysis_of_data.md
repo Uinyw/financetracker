@@ -1,6 +1,7 @@
 # Use Case Descriptions Analysis of Data
 
 ## Generatre Report
+
 ```
 Title: Generate Report
 
@@ -23,6 +24,7 @@ Information Requirements: UserID, optional Categories, stored data
 ```
 
 ## Generate Prediction
+
 ```
 Title: Generate Prediction
 
@@ -45,6 +47,7 @@ Information Requirements: UserID, timeframe, Categories, stored data, prediction
 ```
 
 ## Generate Budgeting
+
 ```
 Title: Generate Budgeting
 
@@ -65,8 +68,5 @@ Alternative flows:
 
 Information Requirements: UserID, timeframe, Categories, stored data, accountID, budgetGoal
 ```
-
-## Analyse Patterns & Trends
-
 
 ## Improvement Analysis
