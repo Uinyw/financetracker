@@ -66,5 +66,5 @@ Flow:
 Alternative flows:
 2a. The provided data is invalid: The systems informs the user about his/her invalid input.
 
-Information Requirements: UserID, timeframe, Categories, stored data, accountID, budgetGoal
+Information Requirements: UserID, timeframe, Categories, stored data, AccountID, BudgetGoal
 ```

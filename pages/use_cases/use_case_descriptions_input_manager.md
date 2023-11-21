@@ -20,7 +20,7 @@ Alternative flows:
 1a. The user adds how much money he got gifted. He adds a bank account, categories and if it's recurring.
 
 
-Information Requirements: UserID, optional Categories, accountID, item-name, scheduled event
+Information Requirements: UserID, optional Categories, AccountID, item-name, scheduled event
 ```
 
 ## Camera Input
