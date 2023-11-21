@@ -44,7 +44,7 @@ Alternative flows:
 2a. The photo can't be read, so the unfinished data entry is shown to the user to manually enter the missing data.
 
 
-Information Requirements: UserID, optional Categories,accountID, item-name, scheduled event.
+Information Requirements: UserID, optional Categories, AccountID, item-name, scheduled event.
 ```
 
 ## API
@@ -68,7 +68,7 @@ Alternative flows:
 2a. The new entry can't be created, so an error message is returned.
 
 
-Information Requirements: UserID, optional Categories, accountID, item-name, scheduled event.
+Information Requirements: UserID, optional Categories, AccountID, item-name, scheduled event.
 ```
 
 ## Excel Input
@@ -92,5 +92,5 @@ Alternative flows:
 2a. The Excel list has a wrong format and can't be read. A Error message is returned, stating this problem
 
 
-Information Requirements: UserID, optional Categories,accountID, item-name, scheduled event.
+Information Requirements: UserID, optional Categories, AccountID, item-name, scheduled event.
 ```
