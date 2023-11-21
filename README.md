@@ -12,6 +12,8 @@
 
 [Capability Management of Expenses](./pages/capability_management_of_expenses.md)
 
+[Capability Management of Savings Goals](./pages/capability_management_of_savings_goals.md)
+
 ### Functional Requirements
 
 #### Management of Income Sources
@@ -26,11 +28,11 @@
 
 [Use Case Descriptions](./pages/use_case_descriptions_management_of_expenses.md)
 
-#### Management of Saving Goals
+#### Management of Savings Goals
 
-[Use Case Diagram](./pages/use_case_diagram_management_of_saving_goals.md)
+[Use Case Diagram](./pages/use_case_diagram_management_of_savings_goals.md)
 
-[Use Case Descriptions](./pages/use_case_descriptions_management_of_saving_goals.md)
+[Use Case Descriptions](./pages/use_case_descriptions_management_of_savings_goals.md)
 
 ## Architectural Design
 
