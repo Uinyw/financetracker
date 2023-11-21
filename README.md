@@ -26,6 +26,12 @@
 
 [Use Case Descriptions](./pages/use_case_descriptions_management_of_expenses.md)
 
+#### Management of Saving Goals
+
+[Use Case Diagram](./pages/use_case_diagram_management_of_saving_goals.md)
+
+[Use Case Descriptions](./pages/use_case_descriptions_management_of_saving_goals.md)
+
 ## Architectural Design
 
 Software Architecture
