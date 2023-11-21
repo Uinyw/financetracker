@@ -73,6 +73,46 @@ Alternative flows:
 Information Requirements: ID, Name
 ```
 
+## Add Notification
+
+```
+Title: Add Notification
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: The income source to add a notification for is currently added or edited
+Postconditions: A new notification is created for the given income source
+
+Flow:
+1. The user creates a new notification for the income source
+2. The system saves the notication and assigns it to the icome source.
+
+Information Requirements: ID, Name, Priority (High, Medium, Low), Periodicity
+```
+
+## Add Income Record
+
+```
+Title: Add Income Record
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: The income source to add income records for is currently edited
+Postconditions: The income record is added to the income source
+
+Flow:
+1. The user adds income records.
+2. The system validates the provided data. Income records can only be added if income source is dynamic and not OneTime.
+3. The system creates the income record and assigns it to the income source.
+
+Alternative flows:
+3a. The provided data is invalid: The systems informs the user about his invalid input.
+
+Information Requirements: ID, Name, Date, Monetary Amount, Custom References
+```
+
 ## Delete Income Source
 
 ```
