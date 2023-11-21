@@ -1,7 +1,7 @@
 FinanceTracker
 Postconditions
 UserID
-accountID
+AccountID
 Pretrained
 timeframe
 budgetGoal
