@@ -1,1 +1,8 @@
 FinanceTracker
+Postconditions
+UserID
+accountID
+Pretrained
+timeframe
+budgetGoal
+xyz
