@@ -6,4 +6,4 @@ It also offers the function of Predictions, which predict the next expenses, and
 
 Another function is the Pattern&Trends option. This option shows current budgeting patterns, how much money is accumulated, how much is spend, and also for which product category. It also shows the saving rate.
 
-The Improvement Analyst gives one recommendations, where to save the most amount of money. It also offers the function of tracking oneself with goals like "I want not to overspend xyz".
+The Improvement Analyst gives one recommendations, where to save the most amount of money. It also offers the function of tracking oneself with goals like "I want not to overspend my monthly budget".
