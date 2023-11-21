@@ -20,7 +20,7 @@ Flow:
 Alternative flows:
 3a. The provided data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: ID, Name, Description, Category, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount
+Information Requirements: ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount
 ```
 
 ## Edit Income Source
