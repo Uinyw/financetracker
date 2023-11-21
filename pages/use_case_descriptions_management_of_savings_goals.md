@@ -94,3 +94,25 @@ Alternative flows:
 
 Information Requirements: -
 ```
+
+## View Savings Goal Status
+
+```
+Title: View Savings Goal Status
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: The savings goal to view the status for exists in the set of savings goals
+Postconditions: The saving goal status for the savings goal is displayed to the user
+
+Flow:
+1. The user enters the ID of the savings goal to view the status for.
+2. The system queries for the corresponding savings goal and finds it.
+3. The system displays the overall, current and all past stati of the savings goal. The current status is the status for the current period (according to the periodicity). The past stati are the stati for past periods.
+
+Alternative flows:
+3a. No savings goal with the given ID exists: The systems informs the user about the non-existense of the savings goal to display the status for.
+
+Information Requirements: ID of savings goal
+```
