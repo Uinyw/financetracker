@@ -1,9 +1,14 @@
 # Management of Inputs
 
-The Input manager allows the user to input date from various sources. One input method would be the camera. By taking pictures with the camera, the information of the bill is directly being transformed into billing entries.
+The `InputManager` allows a user to input data from various sources.
+One input method is the camera.
+By taking pictures with the camera, the information from the bill is directly converted into expense records.
 
-Another Input method is the Excel list. By Importing data using an excel list the billing entries are created automatically, also a excel list can be exported.
+Another input method is the Excel list.
+By importing data using an Excel list, the expense records are automatically created.
 
-The third method for data input is the API, the API allows developers to attach their own programs to the FinanceTracker and exchange data.
+The third data input method is the API, which allows developers to connect their own programs to FinanceTracker and exchange data.
 
-Lastly there also exists a manual option, the manual option allows the user to type in the data manually for every entry/expense, however the bank accounts are not created or edited via this feature.
+Lastly there is a manual option.
+This option allows users to manually enter the data for each expense.
+A limitation to this option is that bank accounts are not created or edited.

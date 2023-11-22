@@ -1,9 +1,13 @@
 # Capability Analysis of Data
 
-The Data Analyst is able to create data Reports, that show, how much was earned and spend in a specific timeframe for a certain account.
+`DataAnalyst` provides a user with the ability to generate data reports that show how much they have earned and spent in a given time period for a specific account.
 
-It also offers the function of Predictions, which predict the next expenses, and how much money has to be saved for that. Moreover, the predict function also is able to track how much is going to be spent in each category.
+It also offers a `Predication` feature that predicts the next expenses and how much money needs to be saved for them.
+In addition, the predication feature can also track how much is spent in each category.
 
-Another function is the Pattern&Trends option. This option shows current budgeting patterns, how much money is accumulated, how much is spend, and also for which product category. It also shows the saving rate.
+Another feature is `Pattern & Trends`.
+This feature shows current budgeting patterns, how much money is being saved, how much is being spent and also for which product category.
+It also shows the savings rate.
 
-The Improvement Analyst gives one recommendations, where to save the most amount of money. It also offers the function of tracking oneself with goals like "I want not to overspend my monthly budget".
+The `ImprovementAnalyst` gives recommendations on where a user can save the most money.
+It also provides the ability to track goals such as "I want to stay within my monthly budget".

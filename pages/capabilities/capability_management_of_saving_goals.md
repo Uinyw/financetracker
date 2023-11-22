@@ -1,3 +1,8 @@
 # Management of Savings Goals
 
-In order to create saving goals or not drop under a certain amount of money, the Saving Goals Management can keep track of every account. It tracks how much money was used in which category and also how much can still be spend. It is also able to send notifications to the user in order to remind him/her of the spending habits according to the goals. The goals can be added or removed for every category, group of categories or money in general.
+A user can manage their saving goals in FinanceTracker.
+They can add, edit and delete saving goals and display an saving goals overview.
+They can categorize saving goals into fixed-term and long-term saving goals.
+A user can view the current status of their savings goal and all statuses for previous periods.
+This helps them track whether it will be achieved.
+If a user has saved too little in past periods, the savings rate is changed for future periods.
