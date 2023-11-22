@@ -6,13 +6,21 @@
 
 [Story](./pages/story.md)
 
-[Capability Overview](./pages/capabilities.md)
+[Capability Overview](./pages/capabilities/capabilities.md)
 
-[Capability Management of Income Sources](./pages/capability_management_of_income_sources.md)
+[Capability Management of Bank Accounts](./pages/capabilities/capability_management_of_bank_accounts.md)
+
+[Capability Management of Income Sources](./pages/capabilities/capability_management_of_income_sources.md)
 
 [Capability Management of Expenses](./pages/capability_management_of_expenses.md)
 
 [Capability Management of Savings Goals](./pages/capability_management_of_savings_goals.md)
+
+[Capability Management of Purchases](./pages/capabilities/capability_management_of_purchases.md)
+
+[Capability Management of Inputs](./pages/capabilities/capability_management_of_inputs.md)
+
+[Capability Analysis of Data](./pages/capabilities/capability_analysis_of_data.md)
 
 ### Functional Requirements
 
