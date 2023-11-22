@@ -19,7 +19,7 @@ Flow:
 Alternative flows:
 2a. The provided data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: user-ID, account-name
+Information Requirements: UserID, Account name
 ```
 
 ## Delete Bank Account
@@ -42,5 +42,5 @@ Flow:
 Alternative flows:
 2a. No bank account with the given ID or name exists: The systems informs the user about the non-existence of the bank account to delete.
 
-Information Requirements: ID or name of the bank account, bank account user ID
+Information Requirements: ID or name of the bank account
 ```

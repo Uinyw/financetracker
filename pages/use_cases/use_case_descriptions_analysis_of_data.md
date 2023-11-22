@@ -1,26 +1,30 @@
 # Use Case Descriptions Analysis of Data
 
-## Generate Report
+## Generate Data Report
 
 ```
-Title: Generate Report
+Title: Generate Data Report
 
 Primary Actors: User
 Secondary Actors: -
 
 Preconditions: -
-Postconditions: A report data was generated
+Postconditions: A data report is generated and saved on the users device
 
 Flow:
-1. The user requests an data report, if he wishes, he also can specify filters, like the category, bank account and time frame for what the report should be generated.
-2. The system collects all the data it gathered, if a specified category was chosen only the relevant data stays there.
-3. The system returns the data present for the specified category.
+1. The user selects filters for the data report.
+2. The user requests a data report with the specified filters.
+3. The system collects the required data.
+4. The system generates the data report in the format of an Excel file.
+5. The user saves the data report on their device.
 
 
 Alternative flows:
-2a. The provided data is invalid: The systems informs the user about his invalid input.
+2a. The provided filter data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: UserID, optional Categories, stored data
+Information Requirements: 
+- Filters: Bank account, Timeframe, Categories
+- General: UserID, Stored data
 ```
 
 ## Generate Prediction
@@ -31,7 +35,7 @@ Title: Generate Prediction
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: Pretrained Prediction Model for the given categories
+Preconditions: Pretrained prediction model for the given categories
 Postconditions: A prediction is returned
 
 Flow:

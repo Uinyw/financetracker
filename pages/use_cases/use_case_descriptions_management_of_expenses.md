@@ -12,15 +12,16 @@ Preconditions: -
 Postconditions: The given expense is added to set of expenses
 
 Flow:
-1. The user enters the required data for an expense.
-2. The system validates the received data. A monetary amount can only be provided if the expense is static. If the expense is dynamic, expense records can be added later. OneTime expenses have to be static.
-3. The system creates a new expense and saves it.
+1. The user selects a bank account to create an expense for.
+2. The user enters the required data for an expense.
+3. The system validates the received data. A monetary amount can only be provided if the expense is static. If the expense is dynamic, expense records can be added later. OneTime expenses have to be static.
+4. The system creates a new expense and saves it.
 
 
 Alternative flows:
 3a. The provided data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount
+Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount
 ```
 
 ## Edit Expense
@@ -47,7 +48,7 @@ Alternative flows:
 3a. No expense with the given ID exists: The systems informs the user about the non-existense of the expense to edit.
 7a. The provided data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, Income Records
+Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, Income Records
 ```
 
 ## Categorize Expense

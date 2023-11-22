@@ -1,4 +1,4 @@
-# Use Case Descriptions Management of Shopping
+# Use Case Descriptions Management of Purchases
 
 ## Create Product Entry
 

@@ -3,7 +3,7 @@
 ## Manually Input Data
 
 ```
- Title: Manual Input Data
+Title: Manual Input Data
 
 Primary Actors: User
 Secondary Actors: -
