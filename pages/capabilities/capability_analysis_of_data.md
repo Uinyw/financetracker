@@ -1,4 +1,4 @@
-**Data Analyst**
+# Capability Analysis of Data
 
 The Data Analyst is able to create data Reports, that show, how much was earned and spend in a specific timeframe for a certain account.
 
