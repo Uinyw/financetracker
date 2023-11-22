@@ -1,4 +1,4 @@
-**Input Manager**
+# Management of Inputs
 
 The Input manager allows the user to input date from various sources. One input method would be the camera. By taking pictures with the camera, the information of the bill is directly being transformed into billing entries.
 
