@@ -43,7 +43,7 @@ Flow:
 Alternative flows:
 2a. The provided data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: UserID, timeframe, Categories, stored data, prediction mechanism
+Information Requirements: UserID, timeframe, Categories, stored data, prediction mechanism, Management of Expenses
 ```
 
 ## Generate Budgeting
