@@ -12,9 +12,9 @@
 
 [Capability Management of Income Sources](./pages/capabilities/capability_management_of_income_sources.md)
 
-[Capability Management of Expenses](./pages/capability_management_of_expenses.md)
+[Capability Management of Expenses](./pages/capabilities/capability_management_of_expenses.md)
 
-[Capability Management of Savings Goals](./pages/capability_management_of_savings_goals.md)
+[Capability Management of Savings Goals](./pages/capabilities/capability_management_of_savings_goals.md)
 
 [Capability Management of Purchases](./pages/capabilities/capability_management_of_purchases.md)
 
