@@ -1,5 +1,7 @@
 # Story FinanceTracker
 
+![Story Sketch](../figures/story_sketch.svg)
+
 Lars is a KIT student who recently moved out of his parents' house and into his first apartment of his own.
 To prevent losing control of his financial situation, he wants to track and manage his personal finances.
 A fellow student recommends the app FinanceTracker, which Lars installs and opens on his mobile phone.
