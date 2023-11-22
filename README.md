@@ -1,4 +1,4 @@
-# Finanzverwaltung
+# FinanceTracker
 
 ## Analysis
 
