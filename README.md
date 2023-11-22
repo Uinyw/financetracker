@@ -24,23 +24,47 @@
 
 ### Functional Requirements
 
+#### Management of Bank Accounts
+
+[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_bank_accounts.md)
+
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_bank_accounts.md)
+
 #### Management of Income Sources
 
-[Use Case Diagram](./pages/use_case_diagram_management_of_income_sources.md)
+[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_income_sources.md)
 
-[Use Case Descriptions](./pages/use_case_descriptions_management_of_income_sources.md)
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_income_sources.md)
 
 #### Management of Expenses
 
-[Use Case Diagram](./pages/use_case_diagram_management_of_expenses.md)
+[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_expenses.md)
 
-[Use Case Descriptions](./pages/use_case_descriptions_management_of_expenses.md)
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_expenses.md)
 
 #### Management of Savings Goals
 
-[Use Case Diagram](./pages/use_case_diagram_management_of_savings_goals.md)
+[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_savings_goals.md)
 
-[Use Case Descriptions](./pages/use_case_descriptions_management_of_savings_goals.md)
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_savings_goals.md)
+
+#### Management of Purchases
+
+[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_purchases.md)
+
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_purchases.md)
+
+#### Management of Inputs
+
+Use Case Diagram
+
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_inputs.md)
+
+#### Analysis of Data
+
+[Use Case Diagram](./pages/use_cases/use_case_diagram_analysis_of_data.md)
+
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_analysis_of_data.md)
 
 ## Architectural Design
 
