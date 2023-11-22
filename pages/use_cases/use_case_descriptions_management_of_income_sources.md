@@ -41,7 +41,7 @@ Flow:
 
 
 Alternative flows:
-2a. No income source with the given ID exists: The systems informs the user about the non-existense of the income source to delete.
+2a. No income source with the given ID exists: The systems informs the user about the non-existence of the income source to delete.
 
 Information Requirements: ID of income source
 ```
