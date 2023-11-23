@@ -27,7 +27,7 @@ Information Requirements: BankAccountID, ID, Name, Description, Categories, Peri
 ## Edit Transactions
 
 ```
-Title: Edit Income Source
+Title: Edit Transaction
 
 Primary Actors: User
 Secondary Actors: -
@@ -41,14 +41,14 @@ Flow:
 3. The system displays the transaction and the information currently associated with it.
 4. The user edits the transaction information.
 5. The user adds transaction records if transaction is dynamic. See use case "Add transaction Record".
-6. The system validates the edited data. A monetary amount can only be provided if the transaction is static. If the transaction is dynamic, transaction records can be added. OneTime income sources have to be static.
+6. The system validates the edited data. A monetary amount can only be provided if the transaction is static. If the transaction is dynamic, transaction records can be added. OneTime transaction have to be static.
 7. The system updates the transaction.
 
 Alternative flows:
-3a. No transaction with the given ID exists: The systems informs the user about the non-existense of the transaction source to edit.
+3a. No transaction with the given ID exists: The systems informs the user about the non-existense of the transaction to edit.
 7a. The provided data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, Income Records
+Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, transaction Records
 ```
 
 ## Categorize Transactions
