@@ -45,7 +45,7 @@ Flow:
 7. The system updates the transaction.
 
 Alternative flows:
-3a. No transaction with the given ID exists: The systems informs the user about the non-existense of the transaction to edit.
+3a. No transaction with the given ID exists: The systems informs the user about the non-existence of the transaction to edit.
 7a. The provided data is invalid: The systems informs the user about his invalid input.
 
 Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, transaction Records
@@ -87,7 +87,7 @@ Postconditions: A new notification is created for the given transaction.
 
 Flow:
 1. The user creates a new notification for the transaction
-2. The system saves the notication and assigns it to the transaction.
+2. The system saves the notification and assigns it to the transaction.
 
 Information Requirements: ID, Name, Priority (High, Medium, Low), Periodicity
 ```
@@ -132,7 +132,7 @@ Flow:
 
 
 Alternative flows:
-3a. No transaction with the given ID exists: The systems informs the user about the non-existense of the transaction to delete.
+3a. No transaction with the given ID exists: The systems informs the user about the non-existence of the transaction to delete.
 
 Information Requirements: ID of the transaction
 ```

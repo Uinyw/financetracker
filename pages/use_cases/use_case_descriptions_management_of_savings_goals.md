@@ -1,4 +1,4 @@
-# Use Case Descriptions Management of Saving Goals
+# existenseUse Case Descriptions Management of Saving Goals
 
 ## Add Savings Goal
 
@@ -43,10 +43,10 @@ Flow:
 7. The system updates the savings goal.
 
 Alternative flows:
-3a. No savings goal with the given ID exists: The systems informs the user about the non-existense of the savings goal to edit.
+3a. No savings goal with the given ID exists: The systems informs the user about the non-existence of the savings goal to edit.
 7a. The provided data is invalid: The systems informs the user about his invalid input.
 
-Information Requirements: ID, Name, Description, Category (Fixed-Term, Long-Term), Duration, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Current-Status (Not-Started, In-Progress, Not-Achieved, Achieved), Past-Stati, Type (Fixed, Percentage), Monetary Amount, Percentage Rate
+Information Requirements: ID, Name, Description, Category (Fixed-Term, Long-Term), Duration, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Current-Status (Not-Started, In-Progress, Not-Achieved, Achieved), Past-Stat, Type (Fixed, Percentage), Monetary Amount, Percentage Rate
 ```
 
 ## Delete Savings Goal
@@ -67,7 +67,7 @@ Flow:
 
 
 Alternative flows:
-3a. No savings goal with the given ID exists: The systems informs the user about the non-existense of the savings goal to delete.
+3a. No savings goal with the given ID exists: The systems informs the user about the non-existence of the savings goal to delete.
 
 Information Requirements: ID of savings goal
 ```
@@ -112,7 +112,7 @@ Flow:
 3. The system displays the overall, current and all past statuses of the savings goal. The current status is the status for the current period (according to the periodicity). The past statuses are the statuses for past periods.
 
 Alternative flows:
-3a. No savings goal with the given ID exists: The systems informs the user about the non-existense of the savings goal to display the status for.
+3a. No savings goal with the given ID exists: The systems informs the user about the non-existence of the savings goal to display the status for.
 
 Information Requirements: ID of savings goal
 ```
