@@ -1,4 +1,4 @@
-# existenseUse Case Descriptions Management of Saving Goals
+# Case Descriptions Management of Saving Goals
 
 ## Add Savings Goal
 
