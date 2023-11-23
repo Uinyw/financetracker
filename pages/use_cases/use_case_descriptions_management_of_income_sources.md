@@ -1,21 +1,21 @@
-# Use Case Descriptions Management of Income Sources
+# Use Case Descriptions Management of Transactions
 
-## Add Income Source
+## Add Transaction
 
 ```
-Title: Add Income Source
+Title: Add Transaction
 
 Primary Actors: User
 Secondary Actors: -
 
 Preconditions: -
-Postconditions: The given income source is added to set of income sources
+Postconditions: The given transaction is added to set of transactions
 
 Flow:
-1. The user selects a bank account to create an income source for.
-2. The user enters the required data for an income source.
-3. The system validates the received data. A monetary amount can only be provided if the income source is static. If the income source is dynamic, income records can be added later. OneTime income sources have to be static.
-4. The system creates a new income source and saves it.
+1. The user selects a bank account to create an transaction for.
+2. The user enters the required data for a Transaction.
+3. The system validates the received data. A monetary amount can only be provided if the transaction is static. If the transaction is dynamic, records can be added later. OneTime transaction have to be static.
+4. The system creates a new transaction and saves it.
 
 
 Alternative flows:
@@ -24,7 +24,7 @@ Alternative flows:
 Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount
 ```
 
-## Edit Income Source
+## Edit Transactions
 
 ```
 Title: Edit Income Source
@@ -32,29 +32,29 @@ Title: Edit Income Source
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The income source to edit exists in the set of income sources
-Postconditions: The income source data is updated
+Preconditions: The transaction to edit exists in the set of transactions
+Postconditions: The transaction data is updated
 
 Flow:
-1. The user enters the ID of the income source to edit.
-2. The system queries for the corresponding income source and finds it.
-3. The system displays the income source and the information currently associated with it.
-4. The user edits the income source information.
-5. The user adds income records if income source is dynamic. See use case "Add Income Record".
-6. The system validates the edited data. A monetary amount can only be provided if the income source is static. If the income source is dynamic, income records can be added. OneTime income sources have to be static.
-7. The system updates the income source.
+1. The user enters the ID of the transaction to edit.
+2. The system queries for the corresponding transaction and finds it.
+3. The system displays the transaction and the information currently associated with it.
+4. The user edits the transaction information.
+5. The user adds transaction records if transaction is dynamic. See use case "Add transaction Record".
+6. The system validates the edited data. A monetary amount can only be provided if the transaction is static. If the transaction is dynamic, transaction records can be added. OneTime income sources have to be static.
+7. The system updates the transaction.
 
 Alternative flows:
-3a. No income source with the given ID exists: The systems informs the user about the non-existense of the income source to edit.
+3a. No transaction with the given ID exists: The systems informs the user about the non-existense of the transaction source to edit.
 7a. The provided data is invalid: The systems informs the user about his invalid input.
 
 Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, Income Records
 ```
 
-## Categorize Income Source
+## Categorize Transactions
 
 ```
-Title: Categorize Income Source
+Title: Categorize Transactions
 
 Primary Actors: User
 Secondary Actors: -
