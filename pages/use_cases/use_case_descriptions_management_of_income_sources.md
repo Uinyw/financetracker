@@ -59,17 +59,17 @@ Title: Categorize Transactions
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The income source to categorize is currently added or edited
-Postconditions: The given income source is assigned to a category
+Preconditions: The transaction to categorize is currently added or edited
+Postconditions: The given transaction is assigned to a category
 
 Flow:
 1. The user selects an existing category.
-2. The system assigns the category to the icome source.
+2. The system assigns the category to the transaction.
 
 
 Alternative flows:
 1a. The user creates a new category and selects it.
-2a. The system saves the new category and assigns it to the income source.
+2a. The system saves the new category and assigns it to the transaction.
 
 Information Requirements: ID, Name
 ```
@@ -82,31 +82,31 @@ Title: Add Notification
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The income source to add a notification for is currently added or edited
-Postconditions: A new notification is created for the given income source
+Preconditions: The transaction to add a notification for is currently added or edited
+Postconditions: A new notification is created for the given transaction.
 
 Flow:
-1. The user creates a new notification for the income source
-2. The system saves the notication and assigns it to the icome source.
+1. The user creates a new notification for the transaction
+2. The system saves the notication and assigns it to the transaction.
 
 Information Requirements: ID, Name, Priority (High, Medium, Low), Periodicity
 ```
 
-## Add Income Record
+## Add Transaction Record
 
 ```
-Title: Add Income Record
+Title: Add Transaction Record
 
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The income source to add income records for is currently edited
-Postconditions: The income record is added to the income source
+Preconditions: The transaction to add transaction records for is currently edited
+Postconditions: The transaction record is added to the transaction source
 
 Flow:
-1. The user adds income records.
-2. The system validates the provided data. Income records can only be added if income source is dynamic and not OneTime.
-3. The system creates the income record and assigns it to the income source.
+1. The user adds transaction records.
+2. The system validates the provided data. Transaction records can only be added if transaction source is dynamic and not OneTime.
+3. The system creates the transaction record and assigns it to the transaction source.
 
 Alternative flows:
 3a. The provided data is invalid: The systems informs the user about his invalid input.
@@ -114,48 +114,48 @@ Alternative flows:
 Information Requirements: ID, Name, Date, Monetary Amount, Custom References
 ```
 
-## Delete Income Source
+## Delete Transaction
 
 ```
-Title: Delete Income Source
+Title: Delete Transaction
 
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The income source to delete exists in the set of income sources
-Postconditions: The given income source is removed from the set of income sources
+Preconditions: The transaction to delete exists in the set of transactions
+Postconditions: The given transaction is removed from the set of transactions
 
 Flow:
-1. The user enters the ID of the income source to delete.
-2. The system queries for the corresponding income source and finds it.
-3. The system removes the income source and all associated data from the set of income sources.
+1. The user enters the ID of the transaction to delete.
+2. The system queries for the corresponding transaction and finds it.
+3. The system removes the transaction and all associated data from the set of transactions.
 
 
 Alternative flows:
-3a. No income source with the given ID exists: The systems informs the user about the non-existense of the income source to delete.
+3a. No transaction with the given ID exists: The systems informs the user about the non-existense of the transaction to delete.
 
-Information Requirements: ID of income source
+Information Requirements: ID of the transaction
 ```
 
-## View Income Source Overview
+## View Transaction Overview
 
 ```
-Title: View Income Source Overview
+Title: View Transaction Overview
 
 Primary Actors: User
 Secondary Actors: -
 
 Preconditions: -
-Postconditions: All existing income sources are displayed to the user
+Postconditions: All existing transaction are displayed to the user
 
 Flow:
-1. The user requests to view an overview of his income sources.
-2. The system queries for all income sources.
-3. The system displays all found income sources.
+1. The user requests to view an overview of his transactions.
+2. The system queries for all transactions.
+3. The system displays all found transactions.
 
 
 Alternative flows:
-3a. No income sources exist: The systems informs the user about the fact, that no income sources exist.
+3a. No transaction exist: The systems informs the user about the fact, that no transactions exist.
 
 Information Requirements: -
 ```
