@@ -5,3 +5,8 @@ AccountID
 Pretrained
 timeframe
 budgetGoal
+TODO
+OneTime
+BankAccountID
+HalfYearly
+BankAccountManager
