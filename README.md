@@ -54,7 +54,7 @@
 
 #### Purchase Connector
 
-Use Case Diagram
+[Use Case Diagram](./pages/use_cases/use_case_diagram_purchase_connector.md)
 
 [Use Case Descriptions](./pages/use_cases/use_case_descriptions_purchase_connector.md)
 
