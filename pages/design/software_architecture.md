@@ -38,3 +38,6 @@ Uses Hibernate to persist data.
 Provides a Jersey REST API, which can be utilized to retrieve data from the domain *analytics*.
 Uses Hibernate to persist data.
 Consumes Kafka events sent by `TransactionManagement`, `SavingsGoalManagement` and `BankAccountManagement` to analyse the user data.
+
+**<\<database\>> Relational Database**
+Offers a Hibernate interface to persist data.
