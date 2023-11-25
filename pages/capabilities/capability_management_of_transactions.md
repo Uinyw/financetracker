@@ -1,4 +1,4 @@
-# Capability Management of Income Sources
+# Capability Management of Transactions
 
 A user can manage their income sources in FinanceTracker.
 They can add, edit and delete income sources and display an income source overview.

@@ -10,17 +10,15 @@
 
 [Capability Management of Bank Accounts](./pages/capabilities/capability_management_of_bank_accounts.md)
 
-[Capability Management of Income Sources](./pages/capabilities/capability_management_of_income_sources.md)
-
-[Capability Management of Expenses](./pages/capabilities/capability_management_of_expenses.md)
-
-[Capability Management of Savings Goals](./pages/capabilities/capability_management_of_savings_goals.md)
+[Capability Management of Transactions](./pages/capabilities/capability_management_of_transactions.md)
 
 [Capability Management of Purchases](./pages/capabilities/capability_management_of_purchases.md)
 
-[Capability Management of Inputs](./pages/capabilities/capability_management_of_inputs.md)
+[Capability Management of Savings Goals](./pages/capabilities/capability_management_of_savings_goals.md)
 
-[Capability Analysis of Data](./pages/capabilities/capability_analysis_of_data.md)
+[Capability Analytics](./pages/capabilities/capability_analytics.md)
+
+[Capability Purchase Connector](./pages/capabilities/capability_purchase_connector.md)
 
 ### Functional Requirements
 
@@ -30,23 +28,11 @@
 
 [Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_bank_accounts.md)
 
-#### Management of Income Sources
+#### Management of Transactions
 
-[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_income_sources.md)
+[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_transactions.md)
 
-[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_income_sources.md)
-
-#### Management of Expenses
-
-[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_expenses.md)
-
-[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_expenses.md)
-
-#### Management of Savings Goals
-
-[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_savings_goals.md)
-
-[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_savings_goals.md)
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_transactions.md)
 
 #### Management of Purchases
 
@@ -54,21 +40,25 @@
 
 [Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_purchases.md)
 
-#### Management of Inputs
+#### Management of Savings Goals
+
+[Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_savings_goals.md)
+
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_savings_goals.md)
+
+#### Analytics
+
+[Use Case Diagram](./pages/use_cases/use_case_diagram_analytics.md)
+
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_analytics.md)
+
+#### Purchase Connector
 
 Use Case Diagram
 
-[Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_inputs.md)
-
-#### Analysis of Data
-
-[Use Case Diagram](./pages/use_cases/use_case_diagram_analysis_of_data.md)
-
-[Use Case Descriptions](./pages/use_cases/use_case_descriptions_analysis_of_data.md)
+[Use Case Descriptions](./pages/use_cases/use_case_descriptions_purchase_connector.md)
 
 ## Architectural Design
 
-Software Architecture
-
-System Architecture
+[Software Architecture](./pages/design/software_architecture.md)
 
