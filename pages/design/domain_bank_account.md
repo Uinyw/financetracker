@@ -1,3 +1,3 @@
 # Domain Bank Account
 
-![Domain Bank Account](../../figures/domain_transaction.svg)
+![Domain Bank Account](../../figures/domain_bank_account.svg)
