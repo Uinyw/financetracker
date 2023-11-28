@@ -63,4 +63,5 @@
 [Software Architecture](./pages/design/software_architecture.md)
 
 [Domain Transaction](./pages/design/domain_transaction.md)
+[Domain Savings Goal](./pages/design/domain_transaction.md)
 
