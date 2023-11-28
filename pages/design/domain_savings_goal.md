@@ -1,3 +1,3 @@
 # Domain Savings Goal
 
-![Domain Savings Goal](../../figures/domain_transaction.svg)
+![Domain Savings Goal](../../figures/domain_savings_goal.svg)
