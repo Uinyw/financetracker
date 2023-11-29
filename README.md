@@ -62,5 +62,8 @@
 
 [Software Architecture](./pages/design/software_architecture.md)
 
+[Domain Bank Account](./pages/design/domain_bank_account.md)
+
 [Domain Transaction](./pages/design/domain_transaction.md)
 
+[Domain Savings Goal](./pages/design/domain_savings_goal.md)
