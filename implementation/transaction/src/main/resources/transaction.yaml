@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: RestAPI
+  version: 1.0.0
+  description: |
+    Welcome to the RestAPI, a comprehensive interface catering to various banking and financial management needs. This API acts as a central hub, facilitating communication between different components for seamless execution of RESTful operations.
+
+
+tags:
+  - name: Transaction
+
+paths:
+  /transactions:
+    get:
+      summary: Get all Transactions
+      tags:
+        - Transaction
+      responses:
+        '200':
+          description: Retrieve a list of all existing transactions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/RecurringTransaction'
+                    - $ref: '#/components/schemas/OneTimeTransaction'
+
+    post:
+      summary: Create a new Transaction
+      tags:
+        - Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/RecurringTransaction'
+                - $ref: '#/components/schemas/OneTimeTransaction'
+
+      responses:
+        '200':
+          description: Bank Account created.
+
+  /transactions/{id}:
+    get:
+      summary: Get Transaction by ID
+      tags:
+        - Transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Retrieve detailed information about a transaction account using its unique identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RecurringTransaction'
+                  - $ref: '#/components/schemas/OneTimeTransaction'
+        '404':
+          description: Transaction not found
+
+    patch:
+      summary: Update Transaction by ID
+      tags:
+        - Transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Retrieve detailed information about a transaction using its unique identifier.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/RecurringTransaction'
+                - $ref: '#/components/schemas/OneTimeTransaction'
+      responses:
+        '200':
+          description: Transaction updated successfully
+        '404':
+          description: Transaction not found
+
+    delete:
+      summary: Delete a Transaction
+      tags:
+        - Transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the transaction to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transaction deleted successfully
+        '404':
+          description: Transaction not found
+
+components:
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          example: {"message": "Resource not found"}
+
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          example: {"message": "Bad request"}
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum: [INCOME, EXPENSE]
+        labels:
+          type: array
+          items:
+            type: string
+        transfer:
+          oneOf:
+            - $ref: '#/components/schemas/InternalTransfer'
+            - $ref: '#/components/schemas/ExternalTransfer'
+
+    RecurringTransaction:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+        - properties:
+            startDate:
+              type: string
+              format: Date
+            fixedAmpunt:
+              type: boolean
+            periodicity:
+              $ref: '#/components/schemas/Periodicity'
+            transactionRecords:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionRecord'
+
+    OneTimeTransaction:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+        - $ref: '#/components/schemas/Transferable'
+
+    TransactionRecord:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Transferable'
+
+    Transferable:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/MonetaryAmount'
+        date:
+          type: string
+          format: Date
+
+    InternalTransfer:
+      type: object
+      properties:
+        sourceBankAccountId:
+          type: string
+          format: uuid
+        targetBankAccountId:
+          type: string
+          format: uuid
+
+    ExternalTransfer:
+      type: object
+      properties:
+        sourceId:
+          type: string
+        targetBankAccountId:
+          type: string
+          format: uuid
+
+    MonetaryAmount:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+
+    Periodicity:
+      type: string
+      enum: [MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY]
