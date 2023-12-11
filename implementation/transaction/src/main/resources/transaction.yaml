@@ -19,7 +19,7 @@ paths:
         '200':
           description: Retrieve a list of all existing transactions.
           content:
-            application/json:
+            application/xml:
               schema:
                 type: array
                 items:
@@ -34,7 +34,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/xml:
             schema:
               oneOf:
                 - $ref: '#/components/schemas/RecurringTransaction'
@@ -43,6 +43,12 @@ paths:
       responses:
         '200':
           description: Bank Account created.
+          content:
+            application/xml:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RecurringTransaction'
+                  - $ref: '#/components/schemas/OneTimeTransaction'
 
   /transactions/{id}:
     get:
@@ -60,7 +66,7 @@ paths:
         '200':
           description: Successful response
           content:
-            application/json:
+            application/xml:
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/RecurringTransaction'
@@ -82,7 +88,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          application/xml:
             schema:
               oneOf:
                 - $ref: '#/components/schemas/RecurringTransaction'
@@ -90,6 +96,12 @@ paths:
       responses:
         '200':
           description: Transaction updated successfully
+          content:
+            application/xml:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RecurringTransaction'
+                  - $ref: '#/components/schemas/OneTimeTransaction'
         '404':
           description: Transaction not found
 
@@ -107,6 +119,12 @@ paths:
       responses:
         '200':
           description: Transaction deleted successfully
+          content:
+            application/xml:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RecurringTransaction'
+                  - $ref: '#/components/schemas/OneTimeTransaction'
         '404':
           description: Transaction not found
 
@@ -115,17 +133,19 @@ components:
     NotFound:
       description: Resource not found
       content:
-        application/json:
+        application/xml:
           example: {"message": "Resource not found"}
 
     BadRequest:
       description: Bad request
       content:
-        application/json:
+        application/xml:
           example: {"message": "Bad request"}
   schemas:
     Transaction:
       type: object
+      xml:
+        name: 'Transaction'
       properties:
         id:
           type: string
@@ -148,6 +168,8 @@ components:
 
     RecurringTransaction:
       type: object
+      xml:
+        name: 'RecurringTransaction'
       allOf:
         - $ref: '#/components/schemas/Transaction'
         - properties:
@@ -165,17 +187,23 @@ components:
 
     OneTimeTransaction:
       type: object
+      xml:
+        name: 'OneTimeTransaction'
       allOf:
         - $ref: '#/components/schemas/Transaction'
         - $ref: '#/components/schemas/Transferable'
 
     TransactionRecord:
       type: object
+      xml:
+        name: 'TransactionRecord'
       allOf:
         - $ref: '#/components/schemas/Transferable'
 
     Transferable:
       type: object
+      xml:
+        name: 'Transferable'
       properties:
         amount:
           $ref: '#/components/schemas/MonetaryAmount'
@@ -185,6 +213,8 @@ components:
 
     InternalTransfer:
       type: object
+      xml:
+        name: 'InternalTransfer'
       properties:
         sourceBankAccountId:
           type: string
@@ -195,6 +225,8 @@ components:
 
     ExternalTransfer:
       type: object
+      xml:
+        name: 'ExternalTransfer'
       properties:
         sourceId:
           type: string
@@ -204,6 +236,8 @@ components:
 
     MonetaryAmount:
       type: object
+      xml:
+        name: 'MonetaryAmount'
       properties:
         amount:
           type: number
@@ -211,4 +245,6 @@ components:
 
     Periodicity:
       type: string
+      xml:
+        name: 'Periodicity'
       enum: [MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY]
