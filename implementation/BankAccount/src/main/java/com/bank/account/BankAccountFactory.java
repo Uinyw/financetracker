@@ -15,8 +15,6 @@ import java.util.List;
 @Component
 public class BankAccountFactory {
 
-    private final BankAccountService bankAccountService;
-
     public BankAccount createBankAccount(String name, String description) {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setId(UUID.randomUUID());
@@ -30,7 +28,7 @@ public class BankAccountFactory {
         List<String> labels = new ArrayList<String>();
         bankAccount.setLabels(labels);
 
-        bankAccountService.saveBankAccount(bankAccount);
+        //bankAccountService.saveBankAccount(bankAccount);
 
         return bankAccount;
     }
@@ -47,7 +45,7 @@ public class BankAccountFactory {
         bankAccount.setBalance(balance);
         bankAccount.setLabels(labels);
 
-        bankAccountService.saveBankAccount(bankAccount);
+        //bankAccountService.saveBankAccount(bankAccount);
 
         return bankAccount;
     }

@@ -16,7 +16,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class BankAccountService {
-    
+
+    private final BankAccountFactory bankAccountFactory;
     private final BankAccountRepository bankAccountRepository;
 
     private List<Transaction> transactions;
@@ -56,6 +57,5 @@ public class BankAccountService {
 
     public List<BankAccount> getBankAccounts() {
         return null;
-        //return bankAccountRepository.findAll();
     }
 }

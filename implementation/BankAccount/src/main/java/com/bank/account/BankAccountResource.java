@@ -32,18 +32,6 @@ public class BankAccountResource implements BankAccountsApi {
 
     private List<BankAccount> tempStorage = new ArrayList<BankAccount>();
 
-    @GetMapping("/test")
-    public ResponseEntity<Void> x() {
-        bankAccountService.saveBankAccount(null);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/test2")
-    public ResponseEntity<List<BankAccountEntity>> y() {
-        var x = bankAccountService.get();
-        var y = 1;
-        return new ResponseEntity<>(x, HttpStatus.OK);
-    }
 
     @Override
     public ResponseEntity<List<BankAccount>> bankAccountsGet() {
