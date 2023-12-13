@@ -40,7 +40,9 @@ public class BankAccountResource implements BankAccountsApi {
 
     @GetMapping("/test2")
     public ResponseEntity<List<BankAccountEntity>> y() {
-        return new ResponseEntity<>(bankAccountService.get(), HttpStatus.OK);
+        var x = bankAccountService.get();
+        var y = 1;
+        return new ResponseEntity<>(x, HttpStatus.OK);
     }
 
     @Override
