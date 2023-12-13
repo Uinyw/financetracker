@@ -1,5 +1,5 @@
 package com.financetracker.transaction;
-import org.openapitools.api.TransactionApi;
+import org.openapitools.api.TransactionsApi;
 import org.openapitools.model.TransactionsGet200ResponseInner;
 import org.springframework.stereotype.Component;
 
@@ -7,19 +7,17 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class TransactionResource implements TransactionApi {
+public class TransactionResource implements TransactionsApi {
 
 
     @Override
     public List<TransactionsGet200ResponseInner> transactionsGet() {
-        final var x = new TransactionsGet200ResponseInner();
-        x.setDescription("Hallo");
-        return List.of(x);
+        return Collections.emptyList();
     }
 
     @Override
-    public TransactionsGet200ResponseInner transactionsIdDelete(String id) {
-        return null;
+    public void transactionsIdDelete(String id) {
+
     }
 
     @Override
@@ -28,12 +26,12 @@ public class TransactionResource implements TransactionApi {
     }
 
     @Override
-    public TransactionsGet200ResponseInner transactionsIdPatch(String id, TransactionsGet200ResponseInner transactionsGet200ResponseInner) {
-        return null;
+    public void transactionsIdPatch(String id, TransactionsGet200ResponseInner transactionsGet200ResponseInner) {
+
     }
 
     @Override
-    public TransactionsGet200ResponseInner transactionsPost(TransactionsGet200ResponseInner transactionsGet200ResponseInner) {
-        return null;
+    public void transactionsPost(TransactionsGet200ResponseInner transactionsGet200ResponseInner) {
+
     }
 }

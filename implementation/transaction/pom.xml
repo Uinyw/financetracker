@@ -73,10 +73,9 @@
 						<configuration>
 							<skipValidateSpec>true</skipValidateSpec>
 							<inputSpec>./src/main/resources/transaction.yaml</inputSpec>
-							<generatorName>jaxrs-cxf</generatorName>
+							<generatorName>jaxrs-spec</generatorName>
 							<generateApiTests>false</generateApiTests>
 							<configOptions>
-								<withXml>true</withXml>
 								<useJakartaEe>true</useJakartaEe>
 								<openApiNullable>false</openApiNullable>
 								<interfaceOnly>true</interfaceOnly>
