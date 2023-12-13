@@ -6,12 +6,10 @@ import com.bank.account.model.BankAccountEntity;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.BankAccount;
 import org.openapitools.model.MonetaryAmount;
-import org.openapitools.model.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
@@ -20,11 +18,35 @@ public class BankAccountService {
     private final BankAccountFactory bankAccountFactory;
     private final BankAccountRepository bankAccountRepository;
 
-    private List<Transaction> transactions;
+    public List<BankAccountEntity> get() {
+        return bankAccountRepository.findAll();
+    }
+
+    public BankAccount getBankAccountById(String id) {
+        Optional<BankAccountEntity> bankAccountEntity = get().stream().filter(ba -> ba.getId().toString().equals(id))
+                .findFirst();
+        return BankAccountMapper.EntityToBankAccount(bankAccountEntity.get());
+    }
+
+    public List<BankAccount> getBankAccounts() {
+         List<BankAccount> bankAccountEntities = get().stream()
+                .map(ba -> BankAccountMapper.EntityToBankAccount(ba)).toList();
+        return bankAccountEntities;
+    }
+
+    public Boolean deleteBankAccountById(String id) {
+        Optional<BankAccountEntity> bankAccountEntity = get().stream().filter(ba -> ba.getId().toString().equals(id))
+                .findFirst();
+        if (bankAccountEntity.isPresent()) {
+            bankAccountRepository.delete(bankAccountEntity.get());
+            return true;
+        }
+        return false;
+    }
 
     public void updateBalance(BankAccount bankAccount) {
         MonetaryAmount monetaryAmount = new MonetaryAmount();
-        double totalAmount = transactions.stream()
+        double totalAmount = bankAccount.getTransactions().stream()
                 .mapToDouble(transaction -> transaction.getAmount().getAmount())
                 .sum();
         monetaryAmount.setAmount(totalAmount);
@@ -33,29 +55,23 @@ public class BankAccountService {
 
     public BankAccount saveBankAccount(BankAccount bankAccount) {
         final var x = BankAccountEntity.with()
-                .id(1)
-                .title("Test")
+                .id(UUID.randomUUID())
+                .name("Test")
                 .build();
         bankAccountRepository.save(x);
 
         return null;
-        //return bankAccountRepository.saveAndFlush(bankAccount);
     }
 
-    public List<BankAccountEntity> get() {
-        return bankAccountRepository.findAll();
-
-        //return null;
-        //return bankAccountRepository.saveAndFlush(bankAccount);
+    public BankAccount createAndSaveRandomAccount() {
+        BankAccount bankAccount = bankAccountFactory.createRandomAccount();
+        updateBalance(bankAccount);
+        bankAccountRepository.save(BankAccountEntity.with()
+                .id(UUID.randomUUID())
+                .name("Test")
+                .balance(Math.random())
+                .build());
+        return bankAccount;
     }
 
-    public BankAccount getBankAccountById(UUID id) {
-        //Optional<BankAccount> optionalBankAccount = bankAccountRepository.findById(id);
-        //return optionalBankAccount.orElse(null);
-        return null;
-    }
-
-    public List<BankAccount> getBankAccounts() {
-        return null;
-    }
 }

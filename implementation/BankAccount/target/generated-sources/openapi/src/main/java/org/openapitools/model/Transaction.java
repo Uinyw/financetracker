@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * Transaction
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-12-06T16:36:00.737662+01:00[Europe/Berlin]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-12-13T10:13:06.151214400+01:00[Europe/Berlin]")
 public class Transaction {
 
   @JsonProperty("referenceID")
