@@ -1,5 +1,7 @@
 package com.bank.account;
 
+import com.bank.account.model.BankAccountEntity;
+import lombok.RequiredArgsConstructor;
 import org.openapitools.api.BankAccountsApi;
 import org.openapitools.model.BankAccount;
 import org.openapitools.model.MonetaryAmount;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,16 +24,24 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+@RequiredArgsConstructor
 @RestController
 public class BankAccountResource implements BankAccountsApi {
-    /*
+
     private final BankAccountService bankAccountService;
 
-    @Autowired
-    public BankAccountResource(BankAccountService bankAccountService) {
-        this.bankAccountService = bankAccountService;
-    }*/
     private List<BankAccount> tempStorage = new ArrayList<BankAccount>();
+
+    @GetMapping("/test")
+    public ResponseEntity<Void> x() {
+        bankAccountService.saveBankAccount(null);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/test2")
+    public ResponseEntity<List<BankAccountEntity>> y() {
+        return new ResponseEntity<>(bankAccountService.get(), HttpStatus.OK);
+    }
 
     @Override
     public ResponseEntity<List<BankAccount>> bankAccountsGet() {

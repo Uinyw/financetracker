@@ -1,6 +1,9 @@
 package com.bank.account;
 
 import java.util.UUID;
+
+import com.bank.account.model.BankAccountEntity;
+import lombok.RequiredArgsConstructor;
 import org.openapitools.model.BankAccount;
 import org.openapitools.model.MonetaryAmount;
 import org.openapitools.model.Transaction;
@@ -9,16 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/*
+
+@RequiredArgsConstructor
 @Service
 public class BankAccountService {
     
     private final BankAccountRepository bankAccountRepository;
-
-    @Autowired
-    public BankAccountService(BankAccountRepository bankAccountRepository) {
-        this.bankAccountRepository = bankAccountRepository;
-    }
 
     private List<Transaction> transactions;
 
@@ -32,16 +31,31 @@ public class BankAccountService {
     }
 
     public BankAccount saveBankAccount(BankAccount bankAccount) {
-        return bankAccountRepository.saveAndFlush(bankAccount);
+        final var x = BankAccountEntity.with()
+                .id(1)
+                .title("Test")
+                .build();
+        bankAccountRepository.save(x);
+
+        return null;
+        //return bankAccountRepository.saveAndFlush(bankAccount);
+    }
+
+    public List<BankAccountEntity> get() {
+        return bankAccountRepository.findAll();
+
+        //return null;
+        //return bankAccountRepository.saveAndFlush(bankAccount);
     }
 
     public BankAccount getBankAccountById(UUID id) {
-        Optional<BankAccount> optionalBankAccount = bankAccountRepository.findById(id);
-        return optionalBankAccount.orElse(null);
+        //Optional<BankAccount> optionalBankAccount = bankAccountRepository.findById(id);
+        //return optionalBankAccount.orElse(null);
+        return null;
     }
 
     public List<BankAccount> getBankAccounts() {
-        return bankAccountRepository.findAll();
+        return null;
+        //return bankAccountRepository.findAll();
     }
 }
-*/

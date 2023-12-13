@@ -3,25 +3,19 @@ package com.bank.account;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import lombok.RequiredArgsConstructor;
 import org.openapitools.model.BankAccount;
 import org.openapitools.model.MonetaryAmount;
 import org.openapitools.model.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@RequiredArgsConstructor
+@Component
 public class BankAccountFactory {
 
-    
-    /*
     private final BankAccountService bankAccountService;
-
-    @Autowired
-    public BankAccountFactory(BankAccountService bankAccountService) {
-        this.bankAccountService = bankAccountService;
-    }*/
 
     public BankAccount createBankAccount(String name, String description) {
         BankAccount bankAccount = new BankAccount();
@@ -36,7 +30,7 @@ public class BankAccountFactory {
         List<String> labels = new ArrayList<String>();
         bankAccount.setLabels(labels);
 
-        //bankAccountService.saveBankAccount(bankAccount);
+        bankAccountService.saveBankAccount(bankAccount);
 
         return bankAccount;
     }
@@ -53,7 +47,7 @@ public class BankAccountFactory {
         bankAccount.setBalance(balance);
         bankAccount.setLabels(labels);
 
-        //bankAccountService.saveBankAccount(bankAccount);
+        bankAccountService.saveBankAccount(bankAccount);
 
         return bankAccount;
     }
