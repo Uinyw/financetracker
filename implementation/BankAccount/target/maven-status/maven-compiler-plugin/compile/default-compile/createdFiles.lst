@@ -1,0 +1,7 @@
+org/openapitools/model/Transaction$TypeEnum.class
+org/openapitools/api/BankAccountsApi.class
+org/openapitools/model/Transaction.class
+org/openapitools/api/ApiUtil.class
+org/openapitools/model/BankAccount.class
+org/openapitools/model/MonetaryAmount.class
+com/bank/account/Application.class
