@@ -1,17 +1,11 @@
 package com.financetracker.savingsgoal;
 
-import java.util.Set;
-import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public class SavingsGoalRepository{
+import com.financetracker.savingsgoal.model.SavingsGoalEntity;
 
-    public void saveSavingsGoal(SavingsGoal goal){
+@Repository
+public interface SavingsGoalRepository extends JpaRepository<SavingsGoalEntity, Long>{
 
-    }
-    public SavingsGoal getSavingsGoal(UUID id){
-        return null;
-    }
-    public Set<SavingsGoal> getAllSavingsGoals(){
-        return null;
-    }
 }
