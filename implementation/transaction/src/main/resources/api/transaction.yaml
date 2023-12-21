@@ -8,75 +8,70 @@ info:
 
 tags:
   - name: Transaction
+  - name: One Time Transaction
 
 paths:
-  /transactions:
+  /transactions/onetime:
     get:
-      summary: Get all Transactions
+      summary: Get all one-time Transactions
       tags:
-        - Transaction
+        - One Time Transaction
       responses:
         '200':
-          description: Retrieve a list of all existing transactions.
+          description: Successfully retrieved a list of all existing one-time transactions.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  oneOf:
-                    - $ref: '#/components/schemas/RecurringTransaction'
-                    - $ref: '#/components/schemas/OneTimeTransaction'
+                  $ref: '#/components/schemas/OneTimeTransactionDto'
 
     post:
-      summary: Create a new Transaction
+      summary: Create a new one-time Transaction
       tags:
-        - Transaction
+        - One Time Transaction
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/RecurringTransaction'
-                - $ref: '#/components/schemas/OneTimeTransaction'
+              $ref: '#/components/schemas/OneTimeTransactionDto'
 
       responses:
         '200':
-          description: Bank Account created.
+          description: Successfully created one-time transactions.
 
-  /transactions/{id}:
+  /transactions/onetime/{id}:
     get:
-      summary: Get Transaction by ID
+      summary: Get one-time Transaction by ID
       tags:
-        - Transaction
+        - One Time Transaction
       parameters:
         - name: id
           in: path
           required: true
-          description: Retrieve detailed information about a transaction account using its unique identifier.
+          description: Transaction ID
           schema:
             type: string
       responses:
         '200':
-          description: Successful response
+          description: Successfully retrieved one-time transactions.
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/RecurringTransaction'
-                  - $ref: '#/components/schemas/OneTimeTransaction'
+                $ref: '#/components/schemas/OneTimeTransactionDto'
         '404':
-          description: Transaction not found
+          description: One-Time transaction with given ID not found
 
     patch:
-      summary: Update Transaction by ID
+      summary: Update one-time Transaction by ID
       tags:
-        - Transaction
+        - One Time Transaction
       parameters:
         - name: id
           in: path
           required: true
-          description: Retrieve detailed information about a transaction using its unique identifier.
+          description: Transaction ID
           schema:
             type: string
       requestBody:
@@ -84,31 +79,29 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/RecurringTransaction'
-                - $ref: '#/components/schemas/OneTimeTransaction'
+              $ref: '#/components/schemas/OneTimeTransactionDto'
       responses:
         '200':
-          description: Transaction updated successfully
+          description: Successfully updated transaction
         '404':
-          description: Transaction not found
+          description: One-Time transaction with given ID not found
 
     delete:
-      summary: Delete a Transaction
+      summary: Delete one-time Transaction by ID
       tags:
-        - Transaction
+        - One Time Transaction
       parameters:
         - name: id
           in: path
           required: true
-          description: ID of the transaction to delete
+          description: Transaction ID
           schema:
             type: string
       responses:
         '200':
-          description: Transaction deleted successfully
+          description: Successfully deleted one-time transaction
         '404':
-          description: Transaction not found
+          description: One-Time transaction with given ID not found
 
 components:
   responses:
@@ -142,9 +135,7 @@ components:
           items:
             type: string
         transfer:
-          oneOf:
-            - $ref: '#/components/schemas/InternalTransfer'
-            - $ref: '#/components/schemas/ExternalTransfer'
+          $ref: '#/components/schemas/TransferDto'
 
     RecurringTransaction:
       type: object
@@ -163,7 +154,7 @@ components:
               items:
                 $ref: '#/components/schemas/TransactionRecord'
 
-    OneTimeTransaction:
+    OneTimeTransactionDto:
       type: object
       allOf:
         - $ref: '#/components/schemas/Transaction'
@@ -178,22 +169,12 @@ components:
       type: object
       properties:
         amount:
-          $ref: '#/components/schemas/MonetaryAmount'
+          $ref: '#/components/schemas/MonetaryAmountDto'
         date:
           type: string
           format: Date
 
-    InternalTransfer:
-      type: object
-      properties:
-        sourceBankAccountId:
-          type: string
-          format: uuid
-        targetBankAccountId:
-          type: string
-          format: uuid
-
-    ExternalTransfer:
+    TransferDto:
       type: object
       properties:
         sourceId:
@@ -202,7 +183,7 @@ components:
           type: string
           format: uuid
 
-    MonetaryAmount:
+    MonetaryAmountDto:
       type: object
       properties:
         amount:
