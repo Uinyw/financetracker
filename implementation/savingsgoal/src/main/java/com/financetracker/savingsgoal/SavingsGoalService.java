@@ -25,7 +25,7 @@ public class SavingsGoalService {
         return null;
     }
 
-    public List<SavingsGoal> getSavingsGoals() {
+    public List<SavingsGoalEntity> getSavingsGoals() {
          List<SavingsGoal> bankAccountEntities;
         return null;
     }
