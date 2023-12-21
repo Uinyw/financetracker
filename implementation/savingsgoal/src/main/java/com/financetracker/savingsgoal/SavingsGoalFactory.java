@@ -21,18 +21,19 @@ public class SavingsGoalFactory {
 
     public SavingsGoal createPeriodicalSavingsGoal(UUID bankAccountID){
         SavingsGoal savingsGoal = new PeriodicalSavingsGoal();
-        savingsGoal.setBankAccountID(bankAccountID);
+        /*savingsGoal.setBankAccountID(bankAccountID);
         MonetaryAmount monetaryAmount = new MonetaryAmount();
         monetaryAmount.setAmount(0);
         savingsGoal.setAmount(monetaryAmount);
         savingsGoal.setRecurringRate(0.0);
         savingsGoal.setRecurringAmount(1.0);
         savingsGoal.setDuration("month");
-        savingsGoal.setPeriodicity(Periodicity.MONTHLY);
+        savingsGoal.setPeriodicity(Periodicity.MONTHLY);*/
         return savingsGoal;
     }
 
     public SavingsGoal createRuleBasedSavingsRule(){
+        return null;
 
     }
 }

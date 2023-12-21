@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-public class SavingsGoalResource implements SavingsGoalsApi{
+public class SavingsGoalResource implements SavingsGoalsApi {
 
     private final SavingsGoalService savingsGoalService;
 
@@ -33,7 +33,7 @@ public class SavingsGoalResource implements SavingsGoalsApi{
     }
     
     @Override
-    public ResponseEntity<Void> savingsGoalsPost(@Valid @RequestBody SavingsGoal savingsGoal) {
+    public ResponseEntity<Void> savingsGoalsPost(@Valid @RequestBody SavingsGoalsGet200ResponseInner savingsGoal) {
         System.out.println("savings goal saved");
 
         return new ResponseEntity<>(HttpStatus.CREATED);
