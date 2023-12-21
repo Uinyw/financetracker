@@ -15,6 +15,13 @@ import java.util.List;
 @Component
 public class BankAccountFactory {
 
+    /**
+     * Creates a new BankAccount with a random UUID, a name, a description, an empty list of transactions, a balance of 0.0 and an empty list of labels.
+     * 
+     * @param name 
+     * @param description 
+     * @return BankAccount
+     */
     public BankAccount createBankAccount(String name, String description) {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setId(UUID.randomUUID());
@@ -28,11 +35,17 @@ public class BankAccountFactory {
         List<String> labels = new ArrayList<String>();
         bankAccount.setLabels(labels);
 
-        //bankAccountService.saveBankAccount(bankAccount);
-
         return bankAccount;
     }
 
+    /**
+     * Creates a new BankAccount with a random UUID, a name, a description, an empty list of transactions, a balance of 0.0 and a list of labels.
+     * 
+     * @param name
+     * @param description
+     * @param labels
+     * @return BankAccount
+     */
     public BankAccount createBankAccount(String name, String description, List<String> labels) {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setId(UUID.randomUUID());
@@ -45,7 +58,24 @@ public class BankAccountFactory {
         bankAccount.setBalance(balance);
         bankAccount.setLabels(labels);
 
-        //bankAccountService.saveBankAccount(bankAccount);
+        return bankAccount;
+    }
+
+    /**
+     * Creates a new BankAccount with a random UUID, a name, a description, a list of transactions, a balance of 0.0 and an empty list of labels.
+     * 
+     * @return BankAccount
+     */
+    public BankAccount createRandomAccount(){
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setId(UUID.randomUUID());
+
+        Transaction transaction = new Transaction();
+        MonetaryAmount money = new MonetaryAmount();
+        money.setAmount(Math.random());
+        transaction.amount(money);
+        
+        bankAccount.addTransactionsItem(transaction);
 
         return bankAccount;
     }
