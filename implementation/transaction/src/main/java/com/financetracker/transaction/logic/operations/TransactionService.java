@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -17,8 +18,21 @@ public class TransactionService {
         return oneTimeTransactionRepository.findAll();
     }
 
-    public void createOneTimeTransactions(final OneTimeTransaction oneTimeTransaction) {
+    public Optional<OneTimeTransaction> getOneTimeTransaction(final String transactionId) {
+        return oneTimeTransactionRepository.findById(transactionId);
+    }
+
+    public void createOneTimeTransaction(final OneTimeTransaction oneTimeTransaction) {
         oneTimeTransactionRepository.save(oneTimeTransaction);
+    }
+
+    public void updateOneTimeTransaction(final OneTimeTransaction oneTimeTransaction) {
+        oneTimeTransactionRepository.save(oneTimeTransaction);
+    }
+
+
+    public void deleteOneTimeTransaction(final String transactionId) {
+        oneTimeTransactionRepository.deleteById(transactionId);
     }
 
 

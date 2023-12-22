@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +23,7 @@ public class TransactionMapper implements DtoModelMapper {
         oneTimeTransactionDto.setName(oneTimeTransaction.getName());
         oneTimeTransactionDto.setDescription(oneTimeTransaction.getDescription());
         oneTimeTransactionDto.setType(mapTypeModelToDto(oneTimeTransaction.getType()));
-        oneTimeTransactionDto.setLabels(oneTimeTransaction.getLabels() != null ? oneTimeTransaction.getLabels().stream().map(Label::getName).toList() : new ArrayList<>());
+        oneTimeTransactionDto.setLabels(mapLabelModelToDto(oneTimeTransaction.getLabels()));
         oneTimeTransactionDto.setTransfer(mapTransferModelToDto(oneTimeTransaction.getTransfer()));
         oneTimeTransactionDto.setAmount(mapMonetaryAmountModelToDto(oneTimeTransaction.getAmount()));
         oneTimeTransactionDto.setDate(oneTimeTransaction.getDate().toString());
@@ -37,6 +35,14 @@ public class TransactionMapper implements DtoModelMapper {
             case INCOME -> OneTimeTransactionDto.TypeEnum.INCOME;
             case EXPENSE -> OneTimeTransactionDto.TypeEnum.EXPENSE;
         };
+    }
+
+    private List<String> mapLabelModelToDto(final Set<Label> labels) {
+        if (labels == null) {
+            return Collections.emptyList();
+        }
+
+        return labels.stream().map(Label::getName).toList();
     }
 
     private MonetaryAmountDto mapMonetaryAmountModelToDto(final MonetaryAmount amount) {
@@ -65,6 +71,13 @@ public class TransactionMapper implements DtoModelMapper {
                 .build();
     }
 
+    private Type mapTypeDtoToModel(final OneTimeTransactionDto.TypeEnum typeDto) {
+        return switch (typeDto) {
+            case INCOME -> Type.INCOME;
+            case EXPENSE -> Type.EXPENSE;
+        };
+    }
+
     private Set<Label> mapLabelDtoToModel(final String transactionId, final List<String> labels) {
         if (labels == null) {
             return Collections.emptySet();
@@ -73,13 +86,6 @@ public class TransactionMapper implements DtoModelMapper {
         return labels.stream()
                 .map(label -> new Label(transactionId, label))
                 .collect(Collectors.toSet());
-    }
-
-    private Type mapTypeDtoToModel(final OneTimeTransactionDto.TypeEnum typeDto) {
-        return switch (typeDto) {
-            case INCOME -> Type.INCOME;
-            case EXPENSE -> Type.EXPENSE;
-        };
     }
 
     private MonetaryAmount mapMonetaryAmountDtoToModel(final MonetaryAmountDto amountDto) {

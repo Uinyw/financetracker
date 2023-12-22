@@ -6,6 +6,7 @@ import org.openapitools.api.TransactionsApi;
 import org.openapitools.model.OneTimeTransactionDto;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.NotFoundException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,23 +24,32 @@ public class TransactionResource implements TransactionsApi {
     }
 
     @Override
-    public void transactionsOnetimePost(OneTimeTransactionDto oneTimeTransactionDto) {
-        transactionService.createOneTimeTransactions(transactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
+    public void transactionsOnetimePost(final OneTimeTransactionDto oneTimeTransactionDto) {
+        transactionService.createOneTimeTransaction(transactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
     }
 
     @Override
-    public void transactionsOnetimeIdDelete(String id) {
-
+    public void transactionsOnetimeIdDelete(final String id) {
+        if (transactionService.getOneTimeTransaction(id).isEmpty()) {
+            throw new NotFoundException();
+        }
+        transactionService.deleteOneTimeTransaction(id);
     }
 
     @Override
-    public OneTimeTransactionDto transactionsOnetimeIdGet(String id) {
-        return null;
+    public OneTimeTransactionDto transactionsOnetimeIdGet(final String id) {
+        return transactionMapper.mapOneTimeTransactionModelToDto(
+                transactionService.getOneTimeTransaction(id).orElseThrow(NotFoundException::new)
+        );
     }
 
     @Override
     public void transactionsOnetimeIdPatch(String id, OneTimeTransactionDto oneTimeTransactionDto) {
+        if (transactionService.getOneTimeTransaction(id).isEmpty()) {
+            throw new NotFoundException();
+        }
 
+        transactionService.updateOneTimeTransaction(transactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
     }
 
 
