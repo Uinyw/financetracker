@@ -104,10 +104,11 @@
 						</goals>
 						<configuration>
 							<skipValidateSpec>true</skipValidateSpec>
-							<inputSpec>implementation/transaction/src/main/resources/api/transaction.yaml</inputSpec>
+							<inputSpec>./src/main/resources/api/transaction.yaml</inputSpec>
 							<generatorName>jaxrs-spec</generatorName>
 							<generateApiTests>false</generateApiTests>
 							<configOptions>
+								<sourceFolder>src/main/java/main</sourceFolder>
 								<useJakartaEe>true</useJakartaEe>
 								<openApiNullable>false</openApiNullable>
 								<interfaceOnly>true</interfaceOnly>
