@@ -1,21 +1,25 @@
 package com.financetracker.transaction.api.mapping;
 
+import com.financetracker.transaction.api.exceptions.NotParseableException;
 import com.financetracker.transaction.logic.model.*;
 import com.financetracker.transaction.utils.UUIDGenerator;
 import org.openapitools.model.MonetaryAmountDto;
 import org.openapitools.model.OneTimeTransactionDto;
 import org.openapitools.model.TransferDto;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class TransactionMapper implements DtoModelMapper {
+public class TransactionMapper implements OneTimeTransactionMapper {
 
     public OneTimeTransactionDto mapOneTimeTransactionModelToDto(final OneTimeTransaction oneTimeTransaction) {
         final var oneTimeTransactionDto = new OneTimeTransactionDto();
@@ -38,11 +42,7 @@ public class TransactionMapper implements DtoModelMapper {
     }
 
     private List<String> mapLabelModelToDto(final Set<Label> labels) {
-        if (labels == null) {
-            return Collections.emptyList();
-        }
-
-        return labels.stream().map(Label::getName).toList();
+        return labels.stream().map(Label::name).toList();
     }
 
     private MonetaryAmountDto mapMonetaryAmountModelToDto(final MonetaryAmount amount) {
@@ -53,46 +53,63 @@ public class TransactionMapper implements DtoModelMapper {
 
     private TransferDto mapTransferModelToDto(final Transfer transfer) {
         final var result = new TransferDto();
-        result.setSourceId(transfer.sourceId());
-        result.setTargetBankAccountId(UUIDGenerator.fromString(transfer.targetBankAccountId()));
+        result.setSourceBankAccountId(UUID.fromString(transfer.sourceBankAccountId()));
+        result.setExternalSourceId(transfer.externalSourceId());
+        result.setTargetBankAccountId(UUID.fromString(transfer.targetBankAccountId()));
         return result;
     }
 
     public OneTimeTransaction mapOneTimeTransactionDtoToModel(final OneTimeTransactionDto oneTimeTransactionDto) {
         return OneTimeTransaction.with()
-                .id(UUIDGenerator.toString(oneTimeTransactionDto.getId()))
+                .id(oneTimeTransactionDto.getId().toString())
                 .name(oneTimeTransactionDto.getName())
                 .description(oneTimeTransactionDto.getDescription())
                 .type(mapTypeDtoToModel(oneTimeTransactionDto.getType()))
-                .labels(mapLabelDtoToModel(oneTimeTransactionDto.getId().toString(), oneTimeTransactionDto.getLabels()))
+                .labels(mapLabelDtoToModel(oneTimeTransactionDto.getLabels()))
                 .transfer(mapTransferDtoToModel(oneTimeTransactionDto.getTransfer()))
                 .amount(mapMonetaryAmountDtoToModel(oneTimeTransactionDto.getAmount()))
-                .date(LocalDate.parse(oneTimeTransactionDto.getDate()))
+                .date(mapDateDtoToModel(oneTimeTransactionDto.getDate()))
                 .build();
     }
 
-    private Type mapTypeDtoToModel(final OneTimeTransactionDto.TypeEnum typeDto) {
+    private Type mapTypeDtoToModel(@Nullable final OneTimeTransactionDto.TypeEnum typeDto) {
+        if (typeDto == null) {
+            throw new NotParseableException();
+        }
+
         return switch (typeDto) {
             case INCOME -> Type.INCOME;
             case EXPENSE -> Type.EXPENSE;
         };
     }
 
-    private Set<Label> mapLabelDtoToModel(final String transactionId, final List<String> labels) {
+    private Set<Label> mapLabelDtoToModel(final List<String> labels) {
         if (labels == null) {
             return Collections.emptySet();
         }
 
         return labels.stream()
-                .map(label -> new Label(transactionId, label))
+                .map(Label::new)
                 .collect(Collectors.toSet());
+    }
+
+    private Transfer mapTransferDtoToModel(final TransferDto transferDto) {
+        if (transferDto == null || (transferDto.getSourceBankAccountId() == null && transferDto.getExternalSourceId() == null)) {
+            throw new NotParseableException();
+        }
+        
+        return new Transfer(transferDto.getSourceBankAccountId() != null ? transferDto.getSourceBankAccountId().toString() : null, transferDto.getExternalSourceId(), transferDto.getTargetBankAccountId().toString());
     }
 
     private MonetaryAmount mapMonetaryAmountDtoToModel(final MonetaryAmountDto amountDto) {
         return new MonetaryAmount(BigDecimal.valueOf(amountDto.getAmount()));
     }
 
-    private Transfer mapTransferDtoToModel(final TransferDto transferDto) {
-        return new Transfer(transferDto.getSourceId(), UUIDGenerator.toString(transferDto.getTargetBankAccountId()));
+    private LocalDate mapDateDtoToModel(final String dateDto) {
+        try {
+            return LocalDate.parse(dateDto);
+        } catch (NullPointerException | DateTimeParseException e) {
+            throw new NotParseableException();
+        }
     }
 }

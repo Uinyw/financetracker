@@ -1,12 +1,12 @@
 package com.financetracker.transaction.api;
-import com.financetracker.transaction.api.mapping.DtoModelMapper;
+import com.financetracker.transaction.api.mapping.OneTimeTransactionMapper;
 import com.financetracker.transaction.logic.operations.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.TransactionsApi;
 import org.openapitools.model.OneTimeTransactionDto;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.NotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -14,18 +14,18 @@ import java.util.List;
 public class TransactionResource implements TransactionsApi {
 
     private final TransactionService transactionService;
-    private final DtoModelMapper transactionMapper;
+    private final OneTimeTransactionMapper oneTimeTransactionMapper;
 
     @Override
     public List<OneTimeTransactionDto> transactionsOnetimeGet() {
         return transactionService.getOneTimeTransactions().stream()
-                .map(transactionMapper::mapOneTimeTransactionModelToDto)
+                .map(oneTimeTransactionMapper::mapOneTimeTransactionModelToDto)
                 .toList();
     }
 
     @Override
     public void transactionsOnetimePost(final OneTimeTransactionDto oneTimeTransactionDto) {
-        transactionService.createOneTimeTransaction(transactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
+        transactionService.createOneTimeTransaction(oneTimeTransactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
     }
 
     @Override
@@ -38,9 +38,8 @@ public class TransactionResource implements TransactionsApi {
 
     @Override
     public OneTimeTransactionDto transactionsOnetimeIdGet(final String id) {
-        return transactionMapper.mapOneTimeTransactionModelToDto(
-                transactionService.getOneTimeTransaction(id).orElseThrow(NotFoundException::new)
-        );
+        final var oneTimeTransaction = transactionService.getOneTimeTransaction(id).orElseThrow(NotFoundException::new);
+        return oneTimeTransactionMapper.mapOneTimeTransactionModelToDto(oneTimeTransaction);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class TransactionResource implements TransactionsApi {
             throw new NotFoundException();
         }
 
-        transactionService.updateOneTimeTransaction(transactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
+        transactionService.updateOneTimeTransaction(oneTimeTransactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
     }
 
 

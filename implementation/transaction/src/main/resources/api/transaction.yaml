@@ -1,21 +1,18 @@
 openapi: 3.0.0
 info:
-  title: RestAPI
+  title: Transaction API
   version: 1.0.0
-  description: |
-    Welcome to the RestAPI, a comprehensive interface catering to various banking and financial management needs. This API acts as a central hub, facilitating communication between different components for seamless execution of RESTful operations.
-
+  description: Manage the lifecycle of one-time and recurring transactions.
 
 tags:
-  - name: Transaction
-  - name: One Time Transaction
+  - name: One-Time Transaction
 
 paths:
   /transactions/onetime:
     get:
-      summary: Get all one-time Transactions
+      summary: Get all one-time transactions
       tags:
-        - One Time Transaction
+        - One-Time Transaction
       responses:
         '200':
           description: Successfully retrieved a list of all existing one-time transactions.
@@ -27,9 +24,9 @@ paths:
                   $ref: '#/components/schemas/OneTimeTransactionDto'
 
     post:
-      summary: Create a new one-time Transaction
+      summary: Create new one-time transaction
       tags:
-        - One Time Transaction
+        - One-Time Transaction
       requestBody:
         required: true
         content:
@@ -39,13 +36,13 @@ paths:
 
       responses:
         '200':
-          description: Successfully created one-time transactions.
+          description: Successfully created a new one-time transactions.
 
   /transactions/onetime/{id}:
     get:
-      summary: Get one-time Transaction by ID
+      summary: Get one-time transaction by ID
       tags:
-        - One Time Transaction
+        - One-Time Transaction
       parameters:
         - name: id
           in: path
@@ -55,18 +52,18 @@ paths:
             type: string
       responses:
         '200':
-          description: Successfully retrieved one-time transactions.
+          description: Successfully retrieved one-time transaction.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/OneTimeTransactionDto'
         '404':
-          description: One-Time transaction with given ID not found
+          description: One-Time transaction with given ID not found.
 
     patch:
-      summary: Update one-time Transaction by ID
+      summary: Update one-time transaction by ID
       tags:
-        - One Time Transaction
+        - One-Time Transaction
       parameters:
         - name: id
           in: path
@@ -82,14 +79,14 @@ paths:
               $ref: '#/components/schemas/OneTimeTransactionDto'
       responses:
         '200':
-          description: Successfully updated transaction
+          description: Successfully updated transaction.
         '404':
-          description: One-Time transaction with given ID not found
+          description: One-Time transaction with given ID not found.
 
     delete:
       summary: Delete one-time Transaction by ID
       tags:
-        - One Time Transaction
+        - One-Time Transaction
       parameters:
         - name: id
           in: path
@@ -99,25 +96,13 @@ paths:
             type: string
       responses:
         '200':
-          description: Successfully deleted one-time transaction
+          description: Successfully deleted one-time transaction.
         '404':
-          description: One-Time transaction with given ID not found
+          description: One-Time transaction with given ID not found.
 
 components:
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          example: {"message": "Resource not found"}
-
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          example: {"message": "Bad request"}
   schemas:
-    Transaction:
+    TransactionDto:
       type: object
       properties:
         id:
@@ -137,35 +122,13 @@ components:
         transfer:
           $ref: '#/components/schemas/TransferDto'
 
-    RecurringTransaction:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Transaction'
-        - properties:
-            startDate:
-              type: string
-              format: Date
-            fixedAmpunt:
-              type: boolean
-            periodicity:
-              $ref: '#/components/schemas/Periodicity'
-            transactionRecords:
-              type: array
-              items:
-                $ref: '#/components/schemas/TransactionRecord'
-
     OneTimeTransactionDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/Transaction'
-        - $ref: '#/components/schemas/Transferable'
+        - $ref: '#/components/schemas/TransactionDto'
+        - $ref: '#/components/schemas/TransferableDto'
 
-    TransactionRecord:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Transferable'
-
-    Transferable:
+    TransferableDto:
       type: object
       properties:
         amount:
@@ -177,7 +140,10 @@ components:
     TransferDto:
       type: object
       properties:
-        sourceId:
+        sourceBankAccountId:
+          type: string
+          format: uuid
+        externalSourceId:
           type: string
         targetBankAccountId:
           type: string
@@ -190,6 +156,6 @@ components:
           type: number
           format: double
 
-    Periodicity:
+    PeriodicityDto:
       type: string
       enum: [MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY]
