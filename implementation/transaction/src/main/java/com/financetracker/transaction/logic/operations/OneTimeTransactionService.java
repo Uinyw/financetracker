@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class TransactionService {
+public class OneTimeTransactionService {
 
     private final TransactionRepository<OneTimeTransaction> oneTimeTransactionRepository;
 

@@ -6,6 +6,7 @@ info:
 
 tags:
   - name: One-Time Transaction
+  - name: Recurring Transaction
 
 paths:
   /transactions/onetime:
@@ -100,6 +101,98 @@ paths:
         '404':
           description: One-Time transaction with given ID not found.
 
+  /transactions/recurring:
+    get:
+      summary: Get all recurring transactions
+      tags:
+        - Recurring Transaction
+      responses:
+        '200':
+          description: Successfully retrieved a list of all existing recurring transactions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecurringTransactionDto'
+
+    post:
+      summary: Create new recurring transaction
+      tags:
+        - Recurring Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecurringTransactionDto'
+
+      responses:
+        '200':
+          description: Successfully created a new recurring transactions.
+
+  /transactions/recurring/{id}:
+    get:
+      summary: Get recurring transaction by ID
+      tags:
+        - Recurring Transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved recurring transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecurringTransactionDto'
+        '404':
+          description: Recurring transaction with given ID not found.
+
+    patch:
+      summary: Update recurring transaction by ID
+      tags:
+        - Recurring Transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecurringTransactionDto'
+      responses:
+        '200':
+          description: Successfully updated transaction.
+        '404':
+          description: Recurring transaction with given ID not found.
+
+    delete:
+      summary: Delete recurring transaction by ID
+      tags:
+        - Recurring Transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted recurring transaction.
+        '404':
+          description: Recurring transaction with given ID not found.
+
 components:
   schemas:
     TransactionDto:
@@ -113,8 +206,7 @@ components:
         description:
           type: string
         type:
-          type: string
-          enum: [INCOME, EXPENSE]
+          $ref: '#/components/schemas/TypeDto'
         labels:
           type: array
           items:
@@ -126,6 +218,28 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/TransactionDto'
+        - $ref: '#/components/schemas/TransferableDto'
+
+    RecurringTransactionDto:
+      type: object
+      allOf:
+        - properties:
+            periodicity:
+              $ref: '#/components/schemas/PeriodicityDto'
+            startDate:
+              type: string
+              format: Date
+            fixedAmount:
+              $ref: '#/components/schemas/MonetaryAmountDto'
+            transactionRecords:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionRecordDto'
+        - $ref: '#/components/schemas/TransactionDto'
+
+    TransactionRecordDto:
+      type: object
+      allOf:
         - $ref: '#/components/schemas/TransferableDto'
 
     TransferableDto:
@@ -159,3 +273,7 @@ components:
     PeriodicityDto:
       type: string
       enum: [MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY]
+
+    TypeDto:
+      type: string
+      enum: [ INCOME, EXPENSE ]

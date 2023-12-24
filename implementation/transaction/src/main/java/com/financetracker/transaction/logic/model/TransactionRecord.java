@@ -1,16 +1,28 @@
 package com.financetracker.transaction.logic.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
-
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "transaction_record")
+@Entity
 public class TransactionRecord implements Transferable {
 
-    private final LocalDate date;
-    private final MonetaryAmount amount;
+    @Id
+    private String id;
+
+    @Column(name = "transaction_id")
+    private String transactionId;
+
+    private LocalDate date;
+
+    @Embedded
+    @AttributeOverride(name = "amount", column = @Column(name = "amount", precision = 27, scale = 6))
+    private MonetaryAmount amount;
 }
