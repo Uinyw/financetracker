@@ -1,6 +1,7 @@
 package com.financetracker.transaction;
 
 import com.financetracker.transaction.api.mapping.OneTimeTransactionMapper;
+import com.financetracker.transaction.api.mapping.RecurringTransactionMapper;
 import com.financetracker.transaction.infrastructure.TransactionRepository;
 import com.financetracker.transaction.logic.model.OneTimeTransaction;
 import org.junit.jupiter.api.AfterEach;
@@ -21,6 +22,8 @@ public class IntegrationTestBase {
 
     @Autowired
     public OneTimeTransactionMapper oneTimeTransactionMapper;
+    @Autowired
+    public RecurringTransactionMapper recurringTransactionMapper;
 
     @AfterEach
     void tearDown() {

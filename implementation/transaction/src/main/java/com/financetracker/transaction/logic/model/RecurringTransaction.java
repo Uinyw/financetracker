@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Entity
 public class RecurringTransaction extends Transaction {
 
-    private Date startDate;
+    private LocalDate startDate;
     private Periodicity periodicity;
 
     @Embedded
@@ -33,7 +34,7 @@ public class RecurringTransaction extends Transaction {
                                 final Type type,
                                 final Set<Label> labels,
                                 final Transfer transfer,
-                                final Date startDate,
+                                final LocalDate startDate,
                                 final Periodicity periodicity,
                                 final MonetaryAmount fixedAmount,
                                 final Set<TransactionRecord> transactionRecords) {

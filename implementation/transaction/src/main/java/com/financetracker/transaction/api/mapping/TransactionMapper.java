@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -69,9 +66,9 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
 
     @Override
     public RecurringTransaction mapRecurringTransactionDtoToModel(final RecurringTransactionDto recurringTransactionDto) {
-        final var transactionRecords = recurringTransactionDto.getTransactionRecords().stream()
+        final var transactionRecords = recurringTransactionDto.getTransactionRecords() != null ? recurringTransactionDto.getTransactionRecords().stream()
                 .map(dto -> mapTransactionRecordDtoToModel(recurringTransactionDto.getId().toString(), dto))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet()) : new HashSet<TransactionRecord>();
 
         return RecurringTransaction.with()
                 .id(recurringTransactionDto.getId().toString())
@@ -80,8 +77,9 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
                 .type(mapTypeDtoToModel(recurringTransactionDto.getType()))
                 .labels(mapLabelDtoToModel(recurringTransactionDto.getLabels()))
                 .transfer(mapTransferDtoToModel(recurringTransactionDto.getTransfer()))
+                .startDate(mapDateDtoToModel(recurringTransactionDto.getStartDate()))
                 .periodicity(mapRecurringTypeModelToDto(recurringTransactionDto.getPeriodicity()))
-                .fixedAmount(mapMonetaryAmountDtoToModel(recurringTransactionDto.getFixedAmount()))
+                .fixedAmount(recurringTransactionDto.getFixedAmount() != null ? mapMonetaryAmountDtoToModel(recurringTransactionDto.getFixedAmount()) : null)
                 .transactionRecords(transactionRecords)
                 .build();
     }

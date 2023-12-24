@@ -7,15 +7,19 @@ import java.util.UUID;
 
 public class TestRecurringTransactionFactory {
 
-    public static RecurringTransactionDto createDto() {
-        final double amount = 10.0;
-        final String date = "2023-10-03";
-
+    public static TransactionRecordDto createTransactionRecordDto(final double amount, final String date) {
         final var amountDto = new MonetaryAmountDto();
         amountDto.setAmount(amount);
         final TransactionRecordDto transactionRecordDto = new TransactionRecordDto();
         transactionRecordDto.setAmount(amountDto);
         transactionRecordDto.setDate(date);
+
+        return transactionRecordDto;
+    }
+
+    public static RecurringTransactionDto createDto() {
+        final double amount = 10.0;
+        final String date = "2023-10-03";
 
         return createDto(null,
                 null,
@@ -26,7 +30,7 @@ public class TestRecurringTransactionFactory {
                 PeriodicityDto.MONTHLY,
                 date,
                 amount,
-                List.of(transactionRecordDto));
+                List.of(createTransactionRecordDto(amount, date)));
     }
 
     public static RecurringTransactionDto createDto(final String name,
@@ -37,7 +41,7 @@ public class TestRecurringTransactionFactory {
                                                     final String externalSourceId,
                                                     final PeriodicityDto periodicity,
                                                     final String startDate,
-                                                    final double fixedAmount,
+                                                    final Double fixedAmount,
                                                     final List<TransactionRecordDto> transactionRecords) {
         final var result = new RecurringTransactionDto();
         result.setId(UUID.randomUUID());
@@ -52,9 +56,11 @@ public class TestRecurringTransactionFactory {
         transferDto.setTargetBankAccountId(UUID.randomUUID());
         result.setTransfer(transferDto);
 
-        final var fixedAmountDto = new MonetaryAmountDto();
-        fixedAmountDto.setAmount(fixedAmount);
-        result.setFixedAmount(fixedAmountDto);
+        if (fixedAmount != null) {
+            final var fixedAmountDto = new MonetaryAmountDto();
+            fixedAmountDto.setAmount(fixedAmount);
+            result.setFixedAmount(fixedAmountDto);
+        }
 
         result.setPeriodicity(periodicity);
         result.setStartDate(startDate);
