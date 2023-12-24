@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -24,7 +24,7 @@ public class RecurringTransaction extends Transaction {
 
     @JoinColumn(name = "transaction_id", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<TransactionRecord> transactionRecords = Collections.emptySet();
+    private Set<TransactionRecord> transactionRecords = new HashSet<>();
 
     @Builder(builderMethodName = "with")
     public RecurringTransaction(final String id,

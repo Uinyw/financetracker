@@ -116,7 +116,11 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
         };
     }
 
-    private Periodicity mapRecurringTypeModelToDto(final PeriodicityDto periodicityDto) {
+    private Periodicity mapRecurringTypeModelToDto(@Nullable final PeriodicityDto periodicityDto) {
+        if (periodicityDto == null) {
+            throw new NotParseableException();
+        }
+
         return switch (periodicityDto) {
             case MONTHLY -> Periodicity.MONTHLY;
             case QUARTERLY -> Periodicity.QUARTERLY;

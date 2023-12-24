@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
 
 public class TestOneTimeTransactionFactory {
 
+    public static OneTimeTransactionDto createDto() {
+        return createDto(null, null, TypeDto.INCOME, null, UUID.randomUUID(), null, 10.0, "2023-10-03");
+    }
+
     public static OneTimeTransactionDto createDto(final String name,
                                                   final String description,
                                                   final TypeDto type,
@@ -42,10 +46,6 @@ public class TestOneTimeTransactionFactory {
         result.setDate(date);
 
         return result;
-    }
-
-    public static OneTimeTransactionDto createDto() {
-        return createDto(null, null, TypeDto.INCOME, null, UUID.randomUUID(), null, 10.0, "2023-10-03");
     }
 
     public static OneTimeTransaction createModel(final String name,
