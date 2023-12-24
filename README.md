@@ -2,7 +2,8 @@
 
 ## Code Coverage
 
-![coverage](./.github/badges/jacoco.svg)
+![coverage](../badges/jacoco.svg)
+![branches coverage](../badges/branches.svg)
 
 
 ## Analysis
