@@ -2,10 +2,7 @@ package com.financetracker.transaction.api.mapping;
 
 import com.financetracker.transaction.api.exceptions.NotParseableException;
 import com.financetracker.transaction.logic.model.*;
-import com.financetracker.transaction.utils.UUIDGenerator;
-import org.openapitools.model.MonetaryAmountDto;
-import org.openapitools.model.OneTimeTransactionDto;
-import org.openapitools.model.TransferDto;
+import org.openapitools.model.*;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +16,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class TransactionMapper implements OneTimeTransactionMapper {
+public class TransactionMapper implements OneTimeTransactionMapper, RecurringTransactionMapper {
 
+    @Override
     public OneTimeTransactionDto mapOneTimeTransactionModelToDto(final OneTimeTransaction oneTimeTransaction) {
         final var oneTimeTransactionDto = new OneTimeTransactionDto();
-        oneTimeTransactionDto.setId(UUIDGenerator.fromString(oneTimeTransaction.getId()));
+        oneTimeTransactionDto.setId(UUID.fromString(oneTimeTransaction.getId()));
         oneTimeTransactionDto.setName(oneTimeTransaction.getName());
         oneTimeTransactionDto.setDescription(oneTimeTransaction.getDescription());
         oneTimeTransactionDto.setType(mapTypeModelToDto(oneTimeTransaction.getType()));
@@ -34,10 +32,96 @@ public class TransactionMapper implements OneTimeTransactionMapper {
         return oneTimeTransactionDto;
     }
 
-    private OneTimeTransactionDto.TypeEnum mapTypeModelToDto(final Type type) {
+    @Override
+    public OneTimeTransaction mapOneTimeTransactionDtoToModel(final OneTimeTransactionDto oneTimeTransactionDto) {
+        return OneTimeTransaction.with()
+                .id(oneTimeTransactionDto.getId().toString())
+                .name(oneTimeTransactionDto.getName())
+                .description(oneTimeTransactionDto.getDescription())
+                .type(mapTypeDtoToModel(oneTimeTransactionDto.getType()))
+                .labels(mapLabelDtoToModel(oneTimeTransactionDto.getLabels()))
+                .transfer(mapTransferDtoToModel(oneTimeTransactionDto.getTransfer()))
+                .amount(mapMonetaryAmountDtoToModel(oneTimeTransactionDto.getAmount()))
+                .date(mapDateDtoToModel(oneTimeTransactionDto.getDate()))
+                .build();
+    }
+
+    @Override
+    public RecurringTransactionDto mapRecurringTransactionModelToDto(final RecurringTransaction recurringTransaction) {
+        final var recurringTransactionDto = new RecurringTransactionDto();
+        recurringTransactionDto.setId(UUID.fromString(recurringTransaction.getId()));
+        recurringTransactionDto.setName(recurringTransaction.getName());
+        recurringTransactionDto.setDescription(recurringTransaction.getDescription());
+        recurringTransactionDto.setType(mapTypeModelToDto(recurringTransaction.getType()));
+        recurringTransactionDto.setLabels(mapLabelModelToDto(recurringTransaction.getLabels()));
+        recurringTransactionDto.setTransfer(mapTransferModelToDto(recurringTransaction.getTransfer()));
+
+        recurringTransactionDto.setPeriodicity(mapRecurringTypeModelToDto(recurringTransaction.getPeriodicity()));
+        recurringTransactionDto.setFixedAmount(mapMonetaryAmountModelToDto(recurringTransaction.getFixedAmount()));
+
+        final var transactionRecordDtoList = recurringTransaction.getTransactionRecords().stream()
+                        .map(this::mapTransactionRecordModelToDto)
+                        .toList();
+        recurringTransactionDto.setTransactionRecords(transactionRecordDtoList);
+
+        return recurringTransactionDto;
+    }
+
+    @Override
+    public RecurringTransaction mapRecurringTransactionDtoToModel(final RecurringTransactionDto recurringTransactionDto) {
+        final var transactionRecords = recurringTransactionDto.getTransactionRecords().stream()
+                .map(dto -> mapTransactionRecordDtoToModel(recurringTransactionDto.getId().toString(), dto))
+                .collect(Collectors.toSet());
+
+        return RecurringTransaction.with()
+                .id(recurringTransactionDto.getId().toString())
+                .name(recurringTransactionDto.getName())
+                .description(recurringTransactionDto.getDescription())
+                .type(mapTypeDtoToModel(recurringTransactionDto.getType()))
+                .labels(mapLabelDtoToModel(recurringTransactionDto.getLabels()))
+                .transfer(mapTransferDtoToModel(recurringTransactionDto.getTransfer()))
+                .periodicity(mapRecurringTypeModelToDto(recurringTransactionDto.getPeriodicity()))
+                .fixedAmount(mapMonetaryAmountDtoToModel(recurringTransactionDto.getFixedAmount()))
+                .transactionRecords(transactionRecords)
+                .build();
+    }
+
+    private TransactionRecordDto mapTransactionRecordModelToDto(final TransactionRecord transactionRecord) {
+        final var result = new TransactionRecordDto();
+        result.setAmount(mapMonetaryAmountModelToDto(transactionRecord.getAmount()));
+        result.setDate(transactionRecord.getDate().toString());
+        return result;
+    }
+
+    private TransactionRecord mapTransactionRecordDtoToModel(final String transactionId, final TransactionRecordDto transactionRecordDto) {
+        return new TransactionRecord(UUID.randomUUID().toString(),
+                transactionId,
+                mapDateDtoToModel(transactionRecordDto.getDate()),
+                mapMonetaryAmountDtoToModel(transactionRecordDto.getAmount()));
+    }
+
+    private TypeDto mapTypeModelToDto(final Type type) {
         return switch (type) {
-            case INCOME -> OneTimeTransactionDto.TypeEnum.INCOME;
-            case EXPENSE -> OneTimeTransactionDto.TypeEnum.EXPENSE;
+            case INCOME -> TypeDto.INCOME;
+            case EXPENSE -> TypeDto.EXPENSE;
+        };
+    }
+
+    private PeriodicityDto mapRecurringTypeModelToDto(final Periodicity periodicity) {
+        return switch (periodicity) {
+            case MONTHLY -> PeriodicityDto.MONTHLY;
+            case QUARTERLY -> PeriodicityDto.QUARTERLY;
+            case HALF_YEARLY -> PeriodicityDto.HALF_YEARLY;
+            case YEARLY -> PeriodicityDto.YEARLY;
+        };
+    }
+
+    private Periodicity mapRecurringTypeModelToDto(final PeriodicityDto periodicityDto) {
+        return switch (periodicityDto) {
+            case MONTHLY -> Periodicity.MONTHLY;
+            case QUARTERLY -> Periodicity.QUARTERLY;
+            case HALF_YEARLY -> Periodicity.HALF_YEARLY;
+            case YEARLY -> Periodicity.YEARLY;
         };
     }
 
@@ -59,20 +143,7 @@ public class TransactionMapper implements OneTimeTransactionMapper {
         return result;
     }
 
-    public OneTimeTransaction mapOneTimeTransactionDtoToModel(final OneTimeTransactionDto oneTimeTransactionDto) {
-        return OneTimeTransaction.with()
-                .id(oneTimeTransactionDto.getId().toString())
-                .name(oneTimeTransactionDto.getName())
-                .description(oneTimeTransactionDto.getDescription())
-                .type(mapTypeDtoToModel(oneTimeTransactionDto.getType()))
-                .labels(mapLabelDtoToModel(oneTimeTransactionDto.getLabels()))
-                .transfer(mapTransferDtoToModel(oneTimeTransactionDto.getTransfer()))
-                .amount(mapMonetaryAmountDtoToModel(oneTimeTransactionDto.getAmount()))
-                .date(mapDateDtoToModel(oneTimeTransactionDto.getDate()))
-                .build();
-    }
-
-    private Type mapTypeDtoToModel(@Nullable final OneTimeTransactionDto.TypeEnum typeDto) {
+    private Type mapTypeDtoToModel(@Nullable final TypeDto typeDto) {
         if (typeDto == null) {
             throw new NotParseableException();
         }
@@ -112,4 +183,5 @@ public class TransactionMapper implements OneTimeTransactionMapper {
             throw new NotParseableException();
         }
     }
+
 }

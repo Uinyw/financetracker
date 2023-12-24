@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class TransactionService {
+public class OneTimeTransactionService {
 
     private final TransactionRepository<OneTimeTransaction> oneTimeTransactionRepository;
 
@@ -19,7 +19,6 @@ public class TransactionService {
     }
 
     public Optional<OneTimeTransaction> getOneTimeTransaction(final String transactionId) {
-        var x = 0;
         return oneTimeTransactionRepository.findById(transactionId);
     }
 
