@@ -1,5 +1,10 @@
 # FinanceTracker
 
+## Code Coverage
+
+![coverage](./.github/badges/jacoco.svg)
+
+
 ## Analysis
 
 ### General
