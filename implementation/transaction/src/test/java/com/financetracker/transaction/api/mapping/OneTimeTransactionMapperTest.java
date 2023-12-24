@@ -8,6 +8,7 @@ import com.financetracker.transaction.logic.model.OneTimeTransaction;
 import com.financetracker.transaction.logic.model.Type;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.OneTimeTransactionDto;
+import org.openapitools.model.TypeDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
         final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
                 "Transaction",
                 "Transaction Description",
-                OneTimeTransactionDto.TypeEnum.INCOME,
+                TypeDto.INCOME,
                 List.of("Label1", "Label2"),
                 UUID.randomUUID(),
                 null,
@@ -59,7 +60,7 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
         final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
                 null,
                 null,
-                OneTimeTransactionDto.TypeEnum.INCOME,
+                TypeDto.INCOME,
                 null,
                 UUID.randomUUID(),
                 null,
@@ -106,7 +107,7 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
         final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
                 null,
                 null,
-                OneTimeTransactionDto.TypeEnum.INCOME,
+                TypeDto.INCOME,
                 null,
                 null,
                 null,
@@ -123,7 +124,7 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
         final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
                 null,
                 null,
-                OneTimeTransactionDto.TypeEnum.INCOME,
+                TypeDto.INCOME,
                 null,
                 null,
                 "External ID",
@@ -152,7 +153,7 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
         assertThat(oneTimeTransactionDto.getId(), is(UUID.fromString(oneTimeTransaction.getId())));
         assertThat(oneTimeTransactionDto.getName(), is(oneTimeTransaction.getName()));
         assertThat(oneTimeTransactionDto.getDescription(), is(oneTimeTransaction.getDescription()));
-        assertThat(oneTimeTransactionDto.getType(), is(OneTimeTransactionDto.TypeEnum.INCOME));
+        assertThat(oneTimeTransactionDto.getType(), is(TypeDto.INCOME));
 
         assertThat(oneTimeTransactionDto.getLabels(), hasItems("Label1", "Label2"));
 

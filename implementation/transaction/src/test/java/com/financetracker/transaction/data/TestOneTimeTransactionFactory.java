@@ -4,6 +4,7 @@ import com.financetracker.transaction.logic.model.*;
 import org.openapitools.model.MonetaryAmountDto;
 import org.openapitools.model.OneTimeTransactionDto;
 import org.openapitools.model.TransferDto;
+import org.openapitools.model.TypeDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public class TestOneTimeTransactionFactory {
 
     public static OneTimeTransactionDto createDto(final String name,
                                                   final String description,
-                                                  final OneTimeTransactionDto.TypeEnum type,
+                                                  final TypeDto type,
                                                   final List<String> labels,
                                                   final UUID sourceBankAccountId,
                                                   final String externalSourceId,
@@ -44,7 +45,7 @@ public class TestOneTimeTransactionFactory {
     }
 
     public static OneTimeTransactionDto createDto() {
-        return createDto(null, null, OneTimeTransactionDto.TypeEnum.INCOME, null, UUID.randomUUID(), null, 10.0, "2023-10-03");
+        return createDto(null, null, TypeDto.INCOME, null, UUID.randomUUID(), null, 10.0, "2023-10-03");
     }
 
     public static OneTimeTransaction createModel(final String name,

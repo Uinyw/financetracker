@@ -6,8 +6,6 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import java.util.UUID;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
