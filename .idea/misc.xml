@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/implementation/transaction/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/BankAccount/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/bankaccount/target/generated-sources/openapi/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/transaction/target/generated-sources/openapi/pom.xml" />
       </list>
     </option>
   </component>

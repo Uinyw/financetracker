@@ -1,6 +1,6 @@
 package com.financetracker.transaction.logic.model;
 
-import com.financetracker.transaction.infrastructure.converter.LabelSetConverter;
+import com.financetracker.transaction.infrastructure.db.converter.LabelSetConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,5 +33,9 @@ public abstract class Transaction {
     @AttributeOverride(name = "sourceId", column = @Column(name = "transfer_source_id"))
     @AttributeOverride(name = "targetBankAccountId", column = @Column(name = "transfer_target_bank_account_id"))
     protected Transfer transfer;
+
+    public boolean isInternalTransfer() {
+        return transfer.sourceBankAccountId() != null;
+    }
 
 }

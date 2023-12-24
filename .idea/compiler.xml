@@ -10,6 +10,7 @@
         <module name="bankaccount" />
         <module name="transaction" />
         <module name="openapi-spring" />
+        <module name="openapi-java-client" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,6 +21,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="bankaccount" options="-parameters" />
       <module name="demo" options="-parameters" />
+      <module name="openapi-java-client" options="-Xlint:all -J-Xss4m" />
       <module name="openapi-spring" options="-parameters" />
       <module name="transaction" options="-parameters" />
     </option>

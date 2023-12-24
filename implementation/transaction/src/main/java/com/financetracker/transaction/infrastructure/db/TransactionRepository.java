@@ -1,4 +1,4 @@
-package com.financetracker.transaction.infrastructure;
+package com.financetracker.transaction.infrastructure.db;
 
 import com.financetracker.transaction.logic.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;

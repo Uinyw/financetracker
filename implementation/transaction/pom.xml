@@ -176,6 +176,7 @@
 							<skipValidateSpec>true</skipValidateSpec>
 							<inputSpec>implementation/bankaccount/src/main/resources/api/bankAccount.yaml</inputSpec>
 							<generatorName>java</generatorName>
+							<generateModelTests>false</generateModelTests>
 							<generateApiTests>false</generateApiTests>
 							<configOptions>
 								<sourceFolder>src/main/java/main</sourceFolder>

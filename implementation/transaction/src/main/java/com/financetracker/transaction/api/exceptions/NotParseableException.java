@@ -1,12 +1,5 @@
 package com.financetracker.transaction.api.exceptions;
 
-import jakarta.ws.rs.core.Response;
+public class NotParseableException extends CustomException {
 
-import javax.ws.rs.WebApplicationException;
-
-public class NotParseableException extends WebApplicationException {
-
-    public NotParseableException() {
-        super(Response.Status.BAD_REQUEST.getStatusCode());
-    }
 }

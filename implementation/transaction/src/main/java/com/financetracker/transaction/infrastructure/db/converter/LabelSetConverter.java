@@ -1,4 +1,4 @@
-package com.financetracker.transaction.infrastructure.converter;
+package com.financetracker.transaction.infrastructure.db.converter;
 
 import com.financetracker.transaction.logic.model.Label;
 import jakarta.persistence.AttributeConverter;

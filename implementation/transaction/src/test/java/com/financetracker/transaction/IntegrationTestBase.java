@@ -2,7 +2,7 @@ package com.financetracker.transaction;
 
 import com.financetracker.transaction.api.mapping.OneTimeTransactionMapper;
 import com.financetracker.transaction.api.mapping.RecurringTransactionMapper;
-import com.financetracker.transaction.infrastructure.TransactionRepository;
+import com.financetracker.transaction.infrastructure.db.TransactionRepository;
 import com.financetracker.transaction.logic.model.OneTimeTransaction;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
