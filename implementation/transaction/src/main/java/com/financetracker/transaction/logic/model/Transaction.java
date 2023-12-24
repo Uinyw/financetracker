@@ -1,10 +1,12 @@
 package com.financetracker.transaction.logic.model;
 
+import com.financetracker.transaction.infrastructure.converter.LabelSetConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -23,9 +25,9 @@ public abstract class Transaction {
 
     protected Type type;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
-    protected Set<Label> labels;
+    @Convert(converter = LabelSetConverter.class)
+    @Column(name = "labels", nullable = false)
+    protected Set<Label> labels = new HashSet<>();
 
     @Embedded
     @AttributeOverride(name = "sourceId", column = @Column(name = "transfer_source_id"))
