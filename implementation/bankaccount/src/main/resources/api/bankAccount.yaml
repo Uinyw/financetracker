@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  title: Bank Account API
+  version: 1.0.0
+  description: Manage the lifecycle of bank accounts.
+
+
+tags:
+  - name: Bank Account
+
+paths:
+  /bankAccounts:
+    get:
+      summary: Get all existing bank accounts
+      tags:
+        - Bank Account
+      responses:
+        '200':
+          description: Retrieve a list of all existing bank accounts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccountDto'
+
+    post:
+      summary: Create a new bank account
+      tags:
+        - Bank Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccountDto'
+
+      responses:
+        '200':
+          description: Successfully created bank account.
+
+  /bankAccounts/{id}:
+    get:
+      summary: Get bank account by ID
+      tags:
+        - Bank Account
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Bank Account ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved bank account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountDto'
+        '404':
+          description: Bank account not found
+
+    patch:
+      summary: Update bank account by ID
+      tags:
+        - Bank Account
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Bank Account ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccountDto'
+      responses:
+        '200':
+          description: Successfully updated bank account.
+        '404':
+          description: Bank account not found
+
+    delete:
+      summary: Delete a bank account by ID
+      tags:
+        - Bank Account
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Bank Account ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted bank account.
+        '404':
+          description: Bank Account not found
+
+
+components:
+  schemas:
+    BankAccountDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        balance:
+          $ref: '#/components/schemas/MonetaryAmountDto'
+        dispositionLimit:
+          $ref: '#/components/schemas/MonetaryAmountDto'
+        labels:
+          type: array
+          items:
+            type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDto'
+    TransactionDto:
+      type: object
+      properties:
+        referenceID:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        amount:
+          $ref: '#/components/schemas/MonetaryAmountDto'
+        type:
+          $ref: '#/components/schemas/TypeDto'
+
+    TypeDto:
+      type: string
+      enum: [ INCOMING, OUTGOING]
+
+    MonetaryAmountDto:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double

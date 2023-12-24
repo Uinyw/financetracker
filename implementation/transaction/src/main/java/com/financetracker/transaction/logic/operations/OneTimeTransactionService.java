@@ -1,8 +1,10 @@
 package com.financetracker.transaction.logic.operations;
 
 import com.financetracker.transaction.infrastructure.TransactionRepository;
+import com.financetracker.transaction.infrastructure.client.BankAccountProvider;
 import com.financetracker.transaction.logic.model.OneTimeTransaction;
 import lombok.RequiredArgsConstructor;
+import org.openapitools.client.api.BankAccountApi;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.Optional;
 @Service
 public class OneTimeTransactionService {
 
+    private final BankAccountProvider bankAccountProvider;
     private final TransactionRepository<OneTimeTransaction> oneTimeTransactionRepository;
 
     public List<OneTimeTransaction> getOneTimeTransactions() {
@@ -23,6 +26,7 @@ public class OneTimeTransactionService {
     }
 
     public void createOneTimeTransaction(final OneTimeTransaction oneTimeTransaction) {
+        bankAccountProvider.getBankAccount(oneTimeTransaction.getTransfer().sourceBankAccountId());
         oneTimeTransactionRepository.save(oneTimeTransaction);
     }
 

@@ -21,7 +21,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RecurringTransactionMapperTest extends IntegrationTestBase {
+class RecurringTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenValidRecurringTransactionDto_whenMappingToModel_thenNoExceptionIsThrownAndResultingModelIsValid() {
