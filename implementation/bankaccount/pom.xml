@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.bank.account</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>bankaccount</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
 	<description>MS Bank Account</description>
