@@ -122,31 +122,6 @@ components:
           type: array
           items:
             type: string
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionDto'
-    TransactionDto:
-      type: object
-      properties:
-        referenceID:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        labels:
-          type: array
-          items:
-            type: string
-        amount:
-          $ref: '#/components/schemas/MonetaryAmountDto'
-        type:
-          $ref: '#/components/schemas/TypeDto'
-
-    TypeDto:
-      type: string
-      enum: [ INCOMING, OUTGOING]
 
     MonetaryAmountDto:
       type: object

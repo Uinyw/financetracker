@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-12-24T18:23:13.611585+01:00[Europe/Berlin]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-12-25T10:13:24.809274+01:00[Europe/Berlin]")
 @Validated
 @Tag(name = "bankAccounts", description = "the bankAccounts API")
 public interface BankAccountsApi {
@@ -64,7 +64,7 @@ public interface BankAccountsApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dispositionLimit\" : { \"amount\" : 0.8008281904610115 }, \"balance\" : { \"amount\" : 0.8008281904610115 }, \"name\" : \"name\", \"description\" : \"description\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"transactions\" : [ { \"amount\" : { \"amount\" : 0.8008281904610115 }, \"name\" : \"name\", \"description\" : \"description\", \"referenceID\" : \"referenceID\", \"labels\" : [ \"labels\", \"labels\" ] }, { \"amount\" : { \"amount\" : 0.8008281904610115 }, \"name\" : \"name\", \"description\" : \"description\", \"referenceID\" : \"referenceID\", \"labels\" : [ \"labels\", \"labels\" ] } ], \"labels\" : [ \"labels\", \"labels\" ] }";
+                    String exampleString = "{ \"dispositionLimit\" : { \"amount\" : 0.8008281904610115 }, \"balance\" : { \"amount\" : 0.8008281904610115 }, \"name\" : \"name\", \"description\" : \"description\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"labels\" : [ \"labels\", \"labels\" ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -132,7 +132,7 @@ public interface BankAccountsApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dispositionLimit\" : { \"amount\" : 0.8008281904610115 }, \"balance\" : { \"amount\" : 0.8008281904610115 }, \"name\" : \"name\", \"description\" : \"description\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"transactions\" : [ { \"amount\" : { \"amount\" : 0.8008281904610115 }, \"name\" : \"name\", \"description\" : \"description\", \"referenceID\" : \"referenceID\", \"labels\" : [ \"labels\", \"labels\" ] }, { \"amount\" : { \"amount\" : 0.8008281904610115 }, \"name\" : \"name\", \"description\" : \"description\", \"referenceID\" : \"referenceID\", \"labels\" : [ \"labels\", \"labels\" ] } ], \"labels\" : [ \"labels\", \"labels\" ] }";
+                    String exampleString = "{ \"dispositionLimit\" : { \"amount\" : 0.8008281904610115 }, \"balance\" : { \"amount\" : 0.8008281904610115 }, \"name\" : \"name\", \"description\" : \"description\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"labels\" : [ \"labels\", \"labels\" ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
