@@ -34,8 +34,4 @@ public abstract class Transaction {
     @AttributeOverride(name = "targetBankAccountId", column = @Column(name = "transfer_target_bank_account_id"))
     protected Transfer transfer;
 
-    public boolean isInternalTransfer() {
-        return transfer.sourceBankAccountId() != null;
-    }
-
 }

@@ -101,6 +101,24 @@ paths:
         '404':
           description: One-Time transaction with given ID not found.
 
+  /transactions/onetime/{id}/transfer:
+    post:
+      summary: Transfer one time transaction
+      tags:
+        - One-Time Transaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully transferred one-time transaction.
+        '404':
+          description: One-Time transaction with given ID not found.
+
   /transactions/recurring:
     get:
       summary: Get all recurring transactions
@@ -250,6 +268,8 @@ components:
         date:
           type: string
           format: Date
+        transferStatus:
+          $ref: '#/components/schemas/TransferStatusDto'
 
     TransferDto:
       type: object
@@ -277,3 +297,7 @@ components:
     TypeDto:
       type: string
       enum: [ INCOME, EXPENSE ]
+
+    TransferStatusDto:
+      type: string
+      enum: [ INITIAL, FAILED, SUCCESSFUL ]

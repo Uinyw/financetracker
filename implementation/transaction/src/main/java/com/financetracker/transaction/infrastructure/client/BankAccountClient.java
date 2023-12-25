@@ -1,8 +1,10 @@
 package com.financetracker.transaction.infrastructure.client;
 
+import com.financetracker.transaction.api.exceptions.TransferFailedException;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.BankAccountApi;
 import org.openapitools.client.model.BankAccountDto;
+import org.openapitools.client.model.MonetaryAmountDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -27,4 +29,19 @@ public class BankAccountClient implements BankAccountProvider {
             return Optional.empty();
         }
     }
+
+    @Override
+    public boolean updateBankAccountBalance(BankAccountDto bankAccountDto, Double deltaAmount) {
+        final MonetaryAmountDto balance = new MonetaryAmountDto();
+        balance.setAmount(bankAccountDto.getBalance().getAmount() + deltaAmount);
+        bankAccountDto.setBalance(balance);
+
+        try {
+            bankAccountApi.bankAccountsIdPatch(bankAccountDto.getId().toString(), bankAccountDto);
+            return true;
+        } catch (ApiException e) {
+            return false;
+        }
+    }
+
 }

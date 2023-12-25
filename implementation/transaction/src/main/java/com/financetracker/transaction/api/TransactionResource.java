@@ -1,8 +1,12 @@
 package com.financetracker.transaction.api;
+import com.financetracker.transaction.api.exceptions.TransferFailedException;
 import com.financetracker.transaction.api.mapping.OneTimeTransactionMapper;
 import com.financetracker.transaction.api.mapping.RecurringTransactionMapper;
+import com.financetracker.transaction.logic.model.OneTimeTransaction;
+import com.financetracker.transaction.logic.model.TransferStatus;
 import com.financetracker.transaction.logic.operations.OneTimeTransactionService;
 import com.financetracker.transaction.logic.operations.RecurringTransactionService;
+import com.financetracker.transaction.logic.operations.TransferService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.TransactionsApi;
 import org.openapitools.model.OneTimeTransactionDto;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.ws.rs.NotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -21,6 +26,8 @@ public class TransactionResource implements TransactionsApi {
 
     private final RecurringTransactionService recurringTransactionService;
     private final RecurringTransactionMapper recurringTransactionMapper;
+
+    private final TransferService transferService;
 
     @Override
     public List<OneTimeTransactionDto> transactionsOnetimeGet() {
@@ -36,9 +43,6 @@ public class TransactionResource implements TransactionsApi {
 
     @Override
     public void transactionsOnetimeIdDelete(final String id) {
-        if (oneTimeTransactionService.getOneTimeTransaction(id).isEmpty()) {
-            throw new NotFoundException();
-        }
         oneTimeTransactionService.deleteOneTimeTransaction(id);
     }
 
@@ -50,11 +54,12 @@ public class TransactionResource implements TransactionsApi {
 
     @Override
     public void transactionsOnetimeIdPatch(String id, OneTimeTransactionDto oneTimeTransactionDto) {
-        if (oneTimeTransactionService.getOneTimeTransaction(id).isEmpty()) {
-            throw new NotFoundException();
-        }
-
         oneTimeTransactionService.updateOneTimeTransaction(oneTimeTransactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
+    }
+
+    @Override
+    public void transactionsOnetimeIdTransferPost(String id) {
+        oneTimeTransactionService.transferOneTimeTransactionAndSetStatus(id);
     }
 
     @Override

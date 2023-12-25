@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -25,4 +26,7 @@ public class TransactionRecord implements Transferable {
     @Embedded
     @AttributeOverride(name = "amount", column = @Column(name = "amount", precision = 27, scale = 6))
     private MonetaryAmount amount;
+
+    @Setter
+    private TransferStatus transferStatus;
 }

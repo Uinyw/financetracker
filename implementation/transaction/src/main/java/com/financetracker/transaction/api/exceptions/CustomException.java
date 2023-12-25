@@ -7,4 +7,8 @@ public class CustomException extends WebApplicationException {
     public CustomException() {
         super(Response.Status.BAD_REQUEST.getStatusCode());
     }
+
+    public CustomException(final String message) {
+        super(message, Response.Status.BAD_REQUEST.getStatusCode());
+    }
 }

@@ -26,6 +26,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
         oneTimeTransactionDto.setTransfer(mapTransferModelToDto(oneTimeTransaction.getTransfer()));
         oneTimeTransactionDto.setAmount(mapMonetaryAmountModelToDto(oneTimeTransaction.getAmount()));
         oneTimeTransactionDto.setDate(oneTimeTransaction.getDate().toString());
+        oneTimeTransactionDto.setTransferStatus(mapTransferStatusModelToDto(oneTimeTransaction.getTransferStatus()));
         return oneTimeTransactionDto;
     }
 
@@ -88,6 +89,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
         final var result = new TransactionRecordDto();
         result.setAmount(mapMonetaryAmountModelToDto(transactionRecord.getAmount()));
         result.setDate(transactionRecord.getDate().toString());
+        result.setTransferStatus(mapTransferStatusModelToDto(transactionRecord.getTransferStatus()));
         return result;
     }
 
@@ -95,7 +97,8 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
         return new TransactionRecord(UUID.randomUUID().toString(),
                 transactionId,
                 mapDateDtoToModel(transactionRecordDto.getDate()),
-                mapMonetaryAmountDtoToModel(transactionRecordDto.getAmount()));
+                mapMonetaryAmountDtoToModel(transactionRecordDto.getAmount()),
+                TransferStatus.INITIAL);
     }
 
     private TypeDto mapTypeModelToDto(final Type type) {
@@ -124,6 +127,14 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
             case QUARTERLY -> Periodicity.QUARTERLY;
             case HALF_YEARLY -> Periodicity.HALF_YEARLY;
             case YEARLY -> Periodicity.YEARLY;
+        };
+    }
+
+    private TransferStatusDto mapTransferStatusModelToDto(final TransferStatus transferStatus) {
+        return switch (transferStatus) {
+            case INITIAL -> TransferStatusDto.INITIAL;
+            case SUCCESSFUL -> TransferStatusDto.SUCCESSFUL;
+            case FAILED -> TransferStatusDto.FAILED;
         };
     }
 
