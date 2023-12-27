@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
-class TransactionResourceRecurringTest extends IntegrationTestBase {
+class RecurringTransactionCRUDTest extends IntegrationTestBase {
 
     @Test
     void givenRecurringTransactionDto_whenCreateRecurringTransaction_thenRecurringTransactionExists() {

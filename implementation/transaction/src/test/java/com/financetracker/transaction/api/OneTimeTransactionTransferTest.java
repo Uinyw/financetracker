@@ -6,8 +6,6 @@ import com.financetracker.transaction.data.TestOneTimeTransactionFactory;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openapitools.client.model.BankAccountDto;
-import org.openapitools.client.model.MonetaryAmountDto;
 import org.openapitools.model.OneTimeTransactionDto;
 import org.springframework.http.HttpStatus;
 
@@ -19,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class TransactionTransferTest extends IntegrationTestBase {
+class OneTimeTransactionTransferTest extends IntegrationTestBase {
 
     private OneTimeTransactionDto oneTimeTransactionDto;
 
