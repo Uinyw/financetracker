@@ -46,9 +46,9 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
         assertThat(oneTimeTransaction.getLabels().stream().map(Label::name).collect(Collectors.toSet()), hasItems("Label1", "Label2"));
 
-        assertThat(oneTimeTransaction.getTransfer().sourceBankAccountId(), is(oneTimeTransactionDto.getTransfer().getSourceBankAccountId().toString()));
-        assertNull(oneTimeTransaction.getTransfer().externalSourceId());
-        assertThat(oneTimeTransaction.getTransfer().targetBankAccountId(), is(oneTimeTransactionDto.getTransfer().getTargetBankAccountId().toString()));
+        assertThat(oneTimeTransaction.getTransfer().getSourceBankAccountId(), is(oneTimeTransactionDto.getTransfer().getSourceBankAccountId().toString()));
+        assertNull(oneTimeTransaction.getTransfer().getExternalSourceId());
+        assertThat(oneTimeTransaction.getTransfer().getTargetBankAccountId(), is(oneTimeTransactionDto.getTransfer().getTargetBankAccountId().toString()));
 
         assertThat(oneTimeTransaction.getAmount().amount(), equalTo(new BigDecimal("10.0")));
 
@@ -77,9 +77,9 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
         assertThat(oneTimeTransaction.getLabels().size(), is(0));
 
-        assertThat(oneTimeTransaction.getTransfer().sourceBankAccountId(), is(oneTimeTransactionDto.getTransfer().getSourceBankAccountId().toString()));
-        assertNull(oneTimeTransaction.getTransfer().externalSourceId());
-        assertThat(oneTimeTransaction.getTransfer().targetBankAccountId(), is(oneTimeTransactionDto.getTransfer().getTargetBankAccountId().toString()));
+        assertThat(oneTimeTransaction.getTransfer().getSourceBankAccountId(), is(oneTimeTransactionDto.getTransfer().getSourceBankAccountId().toString()));
+        assertNull(oneTimeTransaction.getTransfer().getExternalSourceId());
+        assertThat(oneTimeTransaction.getTransfer().getTargetBankAccountId(), is(oneTimeTransactionDto.getTransfer().getTargetBankAccountId().toString()));
 
         assertThat(oneTimeTransaction.getAmount().amount(), equalTo(new BigDecimal("10.0")));
 
@@ -157,9 +157,9 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
         assertThat(oneTimeTransactionDto.getLabels(), hasItems("Label1", "Label2"));
 
-        assertThat(oneTimeTransactionDto.getTransfer().getSourceBankAccountId(), is(UUID.fromString(oneTimeTransaction.getTransfer().sourceBankAccountId())));
+        assertThat(oneTimeTransactionDto.getTransfer().getSourceBankAccountId(), is(UUID.fromString(oneTimeTransaction.getTransfer().getSourceBankAccountId())));
         assertNull(oneTimeTransactionDto.getTransfer().getExternalSourceId());
-        assertThat(oneTimeTransactionDto.getTransfer().getTargetBankAccountId(), is(UUID.fromString(oneTimeTransaction.getTransfer().targetBankAccountId())));
+        assertThat(oneTimeTransactionDto.getTransfer().getTargetBankAccountId(), is(UUID.fromString(oneTimeTransaction.getTransfer().getTargetBankAccountId())));
 
         assertThat(oneTimeTransactionDto.getAmount().getAmount(), equalTo(10.0));
 

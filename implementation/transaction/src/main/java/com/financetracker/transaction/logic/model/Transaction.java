@@ -30,7 +30,8 @@ public abstract class Transaction {
     protected Set<Label> labels = new HashSet<>();
 
     @Embedded
-    @AttributeOverride(name = "sourceId", column = @Column(name = "transfer_source_id"))
+    @AttributeOverride(name = "externalSourceId", column = @Column(name = "transfer_external_source_id"))
+    @AttributeOverride(name = "sourceBankAccountId", column = @Column(name = "transfer_source_bank_account_id"))
     @AttributeOverride(name = "targetBankAccountId", column = @Column(name = "transfer_target_bank_account_id"))
     protected Transfer transfer;
 

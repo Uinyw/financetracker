@@ -1,9 +1,20 @@
 package com.financetracker.transaction.logic.model;
 
-public record Transfer(String sourceBankAccountId, String externalSourceId, String targetBankAccountId) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Transfer {
+
+    private String sourceBankAccountId;
+    private String externalSourceId;
+    private String targetBankAccountId;
 
     public boolean isInternalTransfer() {
-        return sourceBankAccountId() != null;
+        return sourceBankAccountId != null;
     }
 
     public Transfer invert() {

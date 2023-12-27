@@ -150,9 +150,9 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
 
     private TransferDto mapTransferModelToDto(final Transfer transfer) {
         final var result = new TransferDto();
-        result.setSourceBankAccountId(UUID.fromString(transfer.sourceBankAccountId()));
-        result.setExternalSourceId(transfer.externalSourceId());
-        result.setTargetBankAccountId(UUID.fromString(transfer.targetBankAccountId()));
+        result.setSourceBankAccountId(UUID.fromString(transfer.getSourceBankAccountId()));
+        result.setExternalSourceId(transfer.getExternalSourceId());
+        result.setTargetBankAccountId(UUID.fromString(transfer.getTargetBankAccountId()));
         return result;
     }
 

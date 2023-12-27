@@ -47,9 +47,9 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
         assertThat(recurringTransaction.getLabels().stream().map(Label::name).collect(Collectors.toSet()), hasItems("Label1", "Label2"));
 
-        assertThat(recurringTransaction.getTransfer().sourceBankAccountId(), is(recurringTransactionDto.getTransfer().getSourceBankAccountId().toString()));
-        assertNull(recurringTransaction.getTransfer().externalSourceId());
-        assertThat(recurringTransaction.getTransfer().targetBankAccountId(), is(recurringTransactionDto.getTransfer().getTargetBankAccountId().toString()));
+        assertThat(recurringTransaction.getTransfer().getSourceBankAccountId(), is(recurringTransactionDto.getTransfer().getSourceBankAccountId().toString()));
+        assertNull(recurringTransaction.getTransfer().getExternalSourceId());
+        assertThat(recurringTransaction.getTransfer().getTargetBankAccountId(), is(recurringTransactionDto.getTransfer().getTargetBankAccountId().toString()));
 
         assertThat(recurringTransaction.getPeriodicity(), is(Periodicity.MONTHLY));
         assertThat(recurringTransaction.getStartDate(), equalTo(LocalDate.of(2023, 10, 3)));
@@ -83,9 +83,9 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
         assertThat(recurringTransaction.getLabels().size(), is(0));
 
-        assertThat(recurringTransaction.getTransfer().sourceBankAccountId(), is(recurringTransactionDto.getTransfer().getSourceBankAccountId().toString()));
-        assertNull(recurringTransaction.getTransfer().externalSourceId());
-        assertThat(recurringTransaction.getTransfer().targetBankAccountId(), is(recurringTransactionDto.getTransfer().getTargetBankAccountId().toString()));
+        assertThat(recurringTransaction.getTransfer().getSourceBankAccountId(), is(recurringTransactionDto.getTransfer().getSourceBankAccountId().toString()));
+        assertNull(recurringTransaction.getTransfer().getExternalSourceId());
+        assertThat(recurringTransaction.getTransfer().getTargetBankAccountId(), is(recurringTransactionDto.getTransfer().getTargetBankAccountId().toString()));
 
         assertThat(recurringTransaction.getPeriodicity(), is(Periodicity.MONTHLY));
         assertThat(recurringTransaction.getStartDate(), equalTo(LocalDate.of(2023, 10, 3)));

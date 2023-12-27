@@ -14,6 +14,12 @@ import java.util.stream.Collectors;
 
 public class TestOneTimeTransactionFactory {
 
+    public static MonetaryAmountDto createMonetaryAmount(final double amount) {
+        final var monetaryAmountDto = new MonetaryAmountDto();
+        monetaryAmountDto.setAmount(amount);
+        return monetaryAmountDto;
+    }
+
     public static OneTimeTransactionDto createDto() {
         return createDto(null, null, TypeDto.INCOME, null, UUID.randomUUID(), null, 10.0, "2023-10-03");
     }

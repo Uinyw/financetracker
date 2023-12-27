@@ -38,12 +38,12 @@ public class OneTimeTransactionService {
         oneTimeTransactionRepository.save(oneTimeTransaction);
     }
 
-    public void updateOneTimeTransaction(final OneTimeTransaction oneTimeTransaction) {
+    public void updateOneTimeTransaction(final String transactionId, final OneTimeTransaction oneTimeTransaction) {
         if (sourceAndTargetBankAccountDoNotExist(oneTimeTransaction.getTransfer())) {
             throw new NotParseableException();
         }
 
-        final Optional<OneTimeTransaction> originalOneTimeTransaction = getOneTimeTransaction(oneTimeTransaction.getId());
+        final Optional<OneTimeTransaction> originalOneTimeTransaction = getOneTimeTransaction(transactionId);
         if (originalOneTimeTransaction.isEmpty()) {
             throw new NotFoundException();
         }
@@ -53,8 +53,8 @@ public class OneTimeTransactionService {
     }
 
     private boolean sourceAndTargetBankAccountDoNotExist(final Transfer transfer) {
-        return (transfer.isInternalTransfer() && bankAccountProvider.getBankAccount(transfer.sourceBankAccountId()).isEmpty())
-                || bankAccountProvider.getBankAccount(transfer.targetBankAccountId()).isEmpty();
+        return (transfer.isInternalTransfer() && bankAccountProvider.getBankAccount(transfer.getSourceBankAccountId()).isEmpty())
+                || bankAccountProvider.getBankAccount(transfer.getTargetBankAccountId()).isEmpty();
     }
 
     public void deleteOneTimeTransaction(final String transactionId) {
@@ -79,6 +79,7 @@ public class OneTimeTransactionService {
         } catch (TransferFailedException e) {
             oneTimeTransaction.get().setTransferStatus(TransferStatus.FAILED);
             oneTimeTransactionRepository.save(oneTimeTransaction.get());
+            throw e;
         }
 
         oneTimeTransaction.get().setTransferStatus(TransferStatus.SUCCESSFUL);

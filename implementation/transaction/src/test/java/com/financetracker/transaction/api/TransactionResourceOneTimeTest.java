@@ -3,14 +3,25 @@ package com.financetracker.transaction.api;
 import com.financetracker.transaction.IntegrationTestBase;
 import com.financetracker.transaction.data.TestOneTimeTransactionFactory;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.client.model.BankAccountDto;
 import org.springframework.http.HttpStatus;
+
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 
 class TransactionResourceOneTimeTest extends IntegrationTestBase {
+
+	@BeforeEach
+	void setUp() {
+		when(bankAccountProvider.getBankAccount(anyString())).thenReturn(Optional.of(new BankAccountDto()));
+	}
 
 	@Test
 	void givenOneTimeTransactionDto_whenCreateOneTimeTransaction_thenOneTimeTransactionExists() {

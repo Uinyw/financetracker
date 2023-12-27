@@ -27,8 +27,6 @@ public class TransactionResource implements TransactionsApi {
     private final RecurringTransactionService recurringTransactionService;
     private final RecurringTransactionMapper recurringTransactionMapper;
 
-    private final TransferService transferService;
-
     @Override
     public List<OneTimeTransactionDto> transactionsOnetimeGet() {
         return oneTimeTransactionService.getOneTimeTransactions().stream()
@@ -54,7 +52,7 @@ public class TransactionResource implements TransactionsApi {
 
     @Override
     public void transactionsOnetimeIdPatch(String id, OneTimeTransactionDto oneTimeTransactionDto) {
-        oneTimeTransactionService.updateOneTimeTransaction(oneTimeTransactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
+        oneTimeTransactionService.updateOneTimeTransaction(id, oneTimeTransactionMapper.mapOneTimeTransactionDtoToModel(oneTimeTransactionDto));
     }
 
     @Override

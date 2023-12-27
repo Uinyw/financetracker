@@ -20,19 +20,14 @@ public class TransferService {
 
     public void transfer(final Transfer transfer, final Transferable transferable) {
         if (transferable.getTransferStatus().equals(TransferStatus.SUCCESSFUL)) {
-            throw new TransferFailedException("Transfer was already successful.");
+            return;
         }
 
         if (transfer.isInternalTransfer()) {
-            withdrawFromBankAccount(transfer.sourceBankAccountId(), transferable.getAmount().amount());
+            withdrawFromBankAccount(transfer.getSourceBankAccountId(), transferable.getAmount().amount());
         }
 
-        try {
-            depositToBankAccount(transfer.targetBankAccountId(), transferable.getAmount().amount());
-        } catch (TransferFailedException e) {
-            depositToBankAccount(transfer.sourceBankAccountId(), transferable.getAmount().amount());
-            throw e;
-        }
+        depositToBankAccount(transfer.getTargetBankAccountId(), transferable.getAmount().amount());
     }
 
     public void rollbackTransfer(final Transfer transfer, final Transferable transferable) {
@@ -41,7 +36,7 @@ public class TransferService {
         }
 
         if (!transfer.isInternalTransfer()) {
-            withdrawFromBankAccount(transfer.targetBankAccountId(), transferable.getAmount().amount());
+            withdrawFromBankAccount(transfer.getTargetBankAccountId(), transferable.getAmount().amount());
             return;
         }
 
@@ -81,8 +76,8 @@ public class TransferService {
     }
 
     private double getAvailableBalance(final BankAccountDto bankAccountDto) {
-        final double balance = bankAccountDto.getBalance() == null && bankAccountDto.getBalance().getAmount() == null ? bankAccountDto.getBalance().getAmount() : 0.0;
-        final double dispositionLimit = bankAccountDto.getDispositionLimit() == null && bankAccountDto.getDispositionLimit().getAmount() == null ? bankAccountDto.getDispositionLimit().getAmount() : 0.0;
+        final double balance = bankAccountDto.getBalance() != null && bankAccountDto.getBalance().getAmount() != null ? bankAccountDto.getBalance().getAmount() : 0.0;
+        final double dispositionLimit = bankAccountDto.getDispositionLimit() != null && bankAccountDto.getDispositionLimit().getAmount() != null ? bankAccountDto.getDispositionLimit().getAmount() : 0.0;
         return balance + dispositionLimit;
     }
 }
