@@ -2,17 +2,18 @@ package com.financetracker.transaction.api.mapping;
 
 import com.financetracker.transaction.IntegrationTestBase;
 import com.financetracker.transaction.api.exceptions.NotParseableException;
-import com.financetracker.transaction.data.TestOneTimeTransactionFactory;
-import com.financetracker.transaction.logic.model.Label;
-import com.financetracker.transaction.logic.model.OneTimeTransaction;
-import com.financetracker.transaction.logic.model.Type;
+import com.financetracker.transaction.data.TestOneTimeTransactionBuilder;
+import com.financetracker.transaction.logic.model.*;
 import org.junit.jupiter.api.Test;
+import org.openapitools.model.MonetaryAmountDto;
 import org.openapitools.model.OneTimeTransactionDto;
+import org.openapitools.model.TransferDto;
 import org.openapitools.model.TypeDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,14 +27,13 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenValidOneTimeTransactionDto_whenMappingToModel_thenNoExceptionIsThrownAndResultingModelIsValid() {
-        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
+        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionBuilder.build(
                 "Transaction",
                 "Transaction Description",
                 TypeDto.INCOME,
                 List.of("Label1", "Label2"),
-                UUID.randomUUID(),
-                null,
-                10.0,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
+                MonetaryAmountDto.builder().amount(10.0).build(),
                 "2023-10-03"
         );
 
@@ -57,14 +57,13 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenOneTimeTransactionDtoWithOnlyRequiredProperties_whenMappingToModel_thenNoExceptionIsThrownAndResultingModelIsValid() {
-        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
+        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionBuilder.build(
                 null,
                 null,
                 TypeDto.INCOME,
                 null,
-                UUID.randomUUID(),
-                null,
-                10.0,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
+                MonetaryAmountDto.builder().amount(10.0).build(),
                 "2023-10-03"
         );
 
@@ -88,14 +87,13 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenOneTimeTransactionDtoWithInvalidTransactionType_whenMappingToModel_thenExceptionIsThrown() {
-        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
+        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionBuilder.build(
                 null,
                 null,
                 null,
                 null,
-                UUID.randomUUID(),
-                null,
-                10.0,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
+                MonetaryAmountDto.builder().amount(10.0).build(),
                 "2023-10-03"
         );
 
@@ -104,14 +102,13 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenOneTimeTransactionDtoWithInvalidTransfer_whenMappingToModel_thenExceptionIsThrown() {
-        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
+        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionBuilder.build(
                 null,
                 null,
                 TypeDto.INCOME,
                 null,
                 null,
-                null,
-                10.0,
+                MonetaryAmountDto.builder().amount(10.0).build(),
                 "2023-10-03"
         );
 
@@ -121,14 +118,13 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenOneTimeTransactionDtoWithInvalidDate_whenMappingToModel_thenExceptionIsThrown() {
-        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto(
+        final OneTimeTransactionDto oneTimeTransactionDto = TestOneTimeTransactionBuilder.build(
                 null,
                 null,
                 TypeDto.INCOME,
                 null,
-                null,
-                "External ID",
-                10.0,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
+                MonetaryAmountDto.builder().amount(10.0).build(),
                 "2023"
         );
 
@@ -137,16 +133,16 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenValidOneTimeTransactionModel_whenMappingToDto_thenNoExceptionIsThrownAndResultingDtoIsValid() {
-        final OneTimeTransaction oneTimeTransaction = TestOneTimeTransactionFactory.createModel(
-                "Transaction",
-                "Transaction Description",
-                Type.INCOME,
-                List.of("Label1", "Label2"),
-                UUID.randomUUID().toString(),
-                null,
-                10.0,
-                LocalDate.of(2023, 10, 3)
-        );
+        final OneTimeTransaction oneTimeTransaction = OneTimeTransaction.with()
+                .id(UUID.randomUUID().toString())
+                .name("Transaction")
+                .description("Transaction Description")
+                .type(Type.INCOME)
+                .labels(Set.of(new Label("Label1"), new Label("Label2")))
+                .transfer(new Transfer(UUID.randomUUID().toString(), null, UUID.randomUUID().toString(), null))
+                .amount(new MonetaryAmount(new BigDecimal("10.0")))
+                .date(LocalDate.of(2023, 10, 3))
+                .build();
 
         final OneTimeTransactionDto oneTimeTransactionDto = oneTimeTransactionMapper.mapOneTimeTransactionModelToDto(oneTimeTransaction);
 
@@ -160,6 +156,7 @@ class OneTimeTransactionMapperTest extends IntegrationTestBase {
         assertThat(oneTimeTransactionDto.getTransfer().getSourceBankAccountId(), is(UUID.fromString(oneTimeTransaction.getTransfer().getSourceBankAccountId())));
         assertNull(oneTimeTransactionDto.getTransfer().getExternalSourceId());
         assertThat(oneTimeTransactionDto.getTransfer().getTargetBankAccountId(), is(UUID.fromString(oneTimeTransaction.getTransfer().getTargetBankAccountId())));
+        assertNull(oneTimeTransactionDto.getTransfer().getExternalTargetId());
 
         assertThat(oneTimeTransactionDto.getAmount().getAmount(), equalTo(10.0));
 

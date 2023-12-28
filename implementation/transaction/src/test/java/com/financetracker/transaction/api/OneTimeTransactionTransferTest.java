@@ -1,11 +1,12 @@
 package com.financetracker.transaction.api;
 
 import com.financetracker.transaction.IntegrationTestBase;
-import com.financetracker.transaction.data.TestBankAccountFactory;
-import com.financetracker.transaction.data.TestOneTimeTransactionFactory;
+import com.financetracker.transaction.data.TestOneTimeTransactionBuilder;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.client.model.BankAccountDto;
+import org.openapitools.client.model.MonetaryAmountDto;
 import org.openapitools.model.OneTimeTransactionDto;
 import org.springframework.http.HttpStatus;
 
@@ -23,12 +24,12 @@ class OneTimeTransactionTransferTest extends IntegrationTestBase {
 
     @BeforeEach
     void setUp() {
-        oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+        oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
     }
 
     @Test
     void givenBankAccountWithEnoughBalanceAndOneTimeTransaction_whenTransfer_thenTransferSucceeds() {
-        doReturn(Optional.of(TestBankAccountFactory.createDto(100.0))).when(bankAccountProvider).getBankAccount(anyString());
+        doReturn(Optional.of(createBankAccount(100.0))).when(bankAccountProvider).getBankAccount(anyString());
         doReturn(true).when(bankAccountProvider).updateBankAccountBalance(any(), any());
 
         given().port(port)
@@ -63,7 +64,7 @@ class OneTimeTransactionTransferTest extends IntegrationTestBase {
 
     @Test
     void givenBankAccountWithNotEnoughBalanceAndOneTimeTransaction_whenTransfer_thenTransferFails() {
-        doReturn(Optional.of(TestBankAccountFactory.createDto(0.0))).when(bankAccountProvider).getBankAccount(anyString());
+        doReturn(Optional.of(createBankAccount(0.0))).when(bankAccountProvider).getBankAccount(anyString());
         doReturn(true).when(bankAccountProvider).updateBankAccountBalance(any(), any());
 
         given().port(port)
@@ -98,7 +99,7 @@ class OneTimeTransactionTransferTest extends IntegrationTestBase {
 
     @Test
     void givenNotExistingBankAccount_whenTransfer_thenTransferFails() {
-        doReturn(Optional.of(TestBankAccountFactory.createDto(100.0))).when(bankAccountProvider).getBankAccount(anyString());
+        doReturn(Optional.of(createBankAccount(100.0))).when(bankAccountProvider).getBankAccount(anyString());
         doReturn(true).when(bankAccountProvider).updateBankAccountBalance(any(), any());
 
         given().port(port)
@@ -135,7 +136,7 @@ class OneTimeTransactionTransferTest extends IntegrationTestBase {
 
     @Test
     void givenBankAccountAndUpdateBalanceFails_whenTransfer_thenTransferFails() {
-        doReturn(Optional.of(TestBankAccountFactory.createDto(0.0))).when(bankAccountProvider).getBankAccount(anyString());
+        doReturn(Optional.of(createBankAccount(0.0))).when(bankAccountProvider).getBankAccount(anyString());
         doReturn(false).when(bankAccountProvider).updateBankAccountBalance(any(), any());
 
         given().port(port)
@@ -166,5 +167,11 @@ class OneTimeTransactionTransferTest extends IntegrationTestBase {
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and().body("transferStatus", is("FAILED"));
+    }
+
+    private BankAccountDto createBankAccount(final Double balance) {
+        return BankAccountDto.builder()
+                .balance(MonetaryAmountDto.builder().amount(balance).build())
+                .build();
     }
 }

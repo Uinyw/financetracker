@@ -17,22 +17,23 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
 
     @Override
     public OneTimeTransactionDto mapOneTimeTransactionModelToDto(final OneTimeTransaction oneTimeTransaction) {
-        final var oneTimeTransactionDto = new OneTimeTransactionDto();
-        oneTimeTransactionDto.setId(UUID.fromString(oneTimeTransaction.getId()));
-        oneTimeTransactionDto.setName(oneTimeTransaction.getName());
-        oneTimeTransactionDto.setDescription(oneTimeTransaction.getDescription());
-        oneTimeTransactionDto.setType(mapTypeModelToDto(oneTimeTransaction.getType()));
-        oneTimeTransactionDto.setLabels(mapLabelModelToDto(oneTimeTransaction.getLabels()));
-        oneTimeTransactionDto.setTransfer(mapTransferModelToDto(oneTimeTransaction.getTransfer()));
-        oneTimeTransactionDto.setAmount(mapMonetaryAmountModelToDto(oneTimeTransaction.getAmount()));
-        oneTimeTransactionDto.setDate(oneTimeTransaction.getDate().toString());
-        oneTimeTransactionDto.setTransferStatus(mapTransferStatusModelToDto(oneTimeTransaction.getTransferStatus()));
-        return oneTimeTransactionDto;
+        return OneTimeTransactionDto.builder()
+                .id(UUID.fromString(oneTimeTransaction.getId()))
+                .name(oneTimeTransaction.getName())
+                .description(oneTimeTransaction.getDescription())
+                .type(mapTypeModelToDto(oneTimeTransaction.getType()))
+                .labels(mapLabelModelToDto(oneTimeTransaction.getLabels()))
+                .transfer(mapTransferModelToDto(oneTimeTransaction.getTransfer()))
+                .amount(mapMonetaryAmountModelToDto(oneTimeTransaction.getAmount()))
+                .date(oneTimeTransaction.getDate().toString())
+                .transferStatus(mapTransferStatusModelToDto(oneTimeTransaction.getTransferStatus()))
+                .build();
     }
 
     @Override
     public OneTimeTransaction mapOneTimeTransactionDtoToModel(final OneTimeTransactionDto oneTimeTransactionDto) {
-        return OneTimeTransaction.with()
+        var p = 0;
+        var y = OneTimeTransaction.with()
                 .id(oneTimeTransactionDto.getId().toString())
                 .name(oneTimeTransactionDto.getName())
                 .description(oneTimeTransactionDto.getDescription())
@@ -42,27 +43,26 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
                 .amount(mapMonetaryAmountDtoToModel(oneTimeTransactionDto.getAmount()))
                 .date(mapDateDtoToModel(oneTimeTransactionDto.getDate()))
                 .build();
+
+        var x = 0;
+        return y;
     }
 
     @Override
     public RecurringTransactionDto mapRecurringTransactionModelToDto(final RecurringTransaction recurringTransaction) {
-        final var recurringTransactionDto = new RecurringTransactionDto();
-        recurringTransactionDto.setId(UUID.fromString(recurringTransaction.getId()));
-        recurringTransactionDto.setName(recurringTransaction.getName());
-        recurringTransactionDto.setDescription(recurringTransaction.getDescription());
-        recurringTransactionDto.setType(mapTypeModelToDto(recurringTransaction.getType()));
-        recurringTransactionDto.setLabels(mapLabelModelToDto(recurringTransaction.getLabels()));
-        recurringTransactionDto.setTransfer(mapTransferModelToDto(recurringTransaction.getTransfer()));
-
-        recurringTransactionDto.setPeriodicity(mapRecurringTypeModelToDto(recurringTransaction.getPeriodicity()));
-        recurringTransactionDto.setFixedAmount(mapMonetaryAmountModelToDto(recurringTransaction.getFixedAmount()));
-
-        final var transactionRecordDtoList = recurringTransaction.getTransactionRecords().stream()
+        return RecurringTransactionDto.builder()
+                .id(UUID.fromString(recurringTransaction.getId()))
+                .name(recurringTransaction.getName())
+                .description(recurringTransaction.getDescription())
+                .type(mapTypeModelToDto(recurringTransaction.getType()))
+                .labels(mapLabelModelToDto(recurringTransaction.getLabels()))
+                .transfer(mapTransferModelToDto(recurringTransaction.getTransfer()))
+                .periodicity(mapRecurringTypeModelToDto(recurringTransaction.getPeriodicity()))
+                .fixedAmount(mapMonetaryAmountModelToDto(recurringTransaction.getFixedAmount()))
+                .transactionRecords(recurringTransaction.getTransactionRecords().stream()
                         .map(this::mapTransactionRecordModelToDto)
-                        .toList();
-        recurringTransactionDto.setTransactionRecords(transactionRecordDtoList);
-
-        return recurringTransactionDto;
+                        .toList())
+                .build();
     }
 
     @Override
@@ -86,15 +86,16 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
     }
 
     private TransactionRecordDto mapTransactionRecordModelToDto(final TransactionRecord transactionRecord) {
-        final var result = new TransactionRecordDto();
-        result.setAmount(mapMonetaryAmountModelToDto(transactionRecord.getAmount()));
-        result.setDate(transactionRecord.getDate().toString());
-        result.setTransferStatus(mapTransferStatusModelToDto(transactionRecord.getTransferStatus()));
-        return result;
+        return TransactionRecordDto.builder()
+                .id(UUID.fromString(transactionRecord.getId()))
+                .amount(mapMonetaryAmountModelToDto(transactionRecord.getAmount()))
+                .date(transactionRecord.getDate().toString())
+                .transferStatus(mapTransferStatusModelToDto(transactionRecord.getTransferStatus()))
+                .build();
     }
 
     private TransactionRecord mapTransactionRecordDtoToModel(final String transactionId, final TransactionRecordDto transactionRecordDto) {
-        return new TransactionRecord(UUID.randomUUID().toString(),
+        return new TransactionRecord(transactionRecordDto.getId().toString(),
                 transactionId,
                 mapDateDtoToModel(transactionRecordDto.getDate()),
                 mapMonetaryAmountDtoToModel(transactionRecordDto.getAmount()),
@@ -143,17 +144,18 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
     }
 
     private MonetaryAmountDto mapMonetaryAmountModelToDto(final MonetaryAmount amount) {
-        final var result = new MonetaryAmountDto();
-        result.setAmount(amount.amount().doubleValue());
-        return result;
+        return MonetaryAmountDto.builder()
+                .amount(amount.amount().doubleValue())
+                .build();
     }
 
     private TransferDto mapTransferModelToDto(final Transfer transfer) {
-        final var result = new TransferDto();
-        result.setSourceBankAccountId(UUID.fromString(transfer.getSourceBankAccountId()));
-        result.setExternalSourceId(transfer.getExternalSourceId());
-        result.setTargetBankAccountId(UUID.fromString(transfer.getTargetBankAccountId()));
-        return result;
+        return TransferDto.builder()
+                .sourceBankAccountId(UUID.fromString(transfer.getSourceBankAccountId()))
+                .externalSourceId(transfer.getExternalSourceId())
+                .targetBankAccountId(UUID.fromString(transfer.getTargetBankAccountId()))
+                .externalTargetId(transfer.getExternalTargetId())
+                .build();
     }
 
     private Type mapTypeDtoToModel(@Nullable final TypeDto typeDto) {
@@ -178,11 +180,14 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
     }
 
     private Transfer mapTransferDtoToModel(final TransferDto transferDto) {
-        if (transferDto == null || (transferDto.getSourceBankAccountId() == null && transferDto.getExternalSourceId() == null)) {
+        if (transferDto == null) {
             throw new NotParseableException();
         }
         
-        return new Transfer(transferDto.getSourceBankAccountId() != null ? transferDto.getSourceBankAccountId().toString() : null, transferDto.getExternalSourceId(), transferDto.getTargetBankAccountId().toString());
+        return new Transfer(transferDto.getSourceBankAccountId() != null ? transferDto.getSourceBankAccountId().toString() : null,
+                transferDto.getExternalSourceId(),
+                transferDto.getTargetBankAccountId() != null ? transferDto.getTargetBankAccountId().toString() : null,
+                transferDto.getExternalTargetId());
     }
 
     private MonetaryAmount mapMonetaryAmountDtoToModel(final MonetaryAmountDto amountDto) {

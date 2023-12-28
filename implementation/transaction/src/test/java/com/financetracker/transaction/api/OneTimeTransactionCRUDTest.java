@@ -1,7 +1,7 @@
 package com.financetracker.transaction.api;
 
 import com.financetracker.transaction.IntegrationTestBase;
-import com.financetracker.transaction.data.TestOneTimeTransactionFactory;
+import com.financetracker.transaction.data.TestOneTimeTransactionBuilder;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,12 +20,12 @@ class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@BeforeEach
 	void setUp() {
-		when(bankAccountProvider.getBankAccount(anyString())).thenReturn(Optional.of(new BankAccountDto()));
+		when(bankAccountProvider.getBankAccount(anyString())).thenReturn(Optional.of(BankAccountDto.builder().build()));
 	}
 
 	@Test
 	void givenOneTimeTransactionDto_whenCreateOneTimeTransaction_thenOneTimeTransactionExists() {
-		final var oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+		final var oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
 
 		given().port(port)
 				.get(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/onetime")
@@ -50,7 +50,7 @@ class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@Test
 	void givenInvalidOneTimeTransactionDto_whenCreateOneTimeTransaction_thenBadRequest() {
-		final var oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+		final var oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
 		oneTimeTransactionDto.setDate(null);
 
 		given().port(port)
@@ -63,7 +63,7 @@ class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@Test
 	void givenExistingOneTimeTransaction_whenGetTransactionById_thenTransactionIsReturned() {
-		final var oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+		final var oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
 
 		given().port(port)
 				.contentType(ContentType.JSON)
@@ -82,7 +82,7 @@ class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@Test
 	void givenExistingOneTimeTransaction_whenGetTransactionByInvalidId_thenNotFound() {
-		final var oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+		final var oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
 		final var invalidId = "foo";
 
 		given().port(port)
@@ -101,7 +101,7 @@ class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@Test
 	void givenExistingOneTimeTransaction_whenPatchTransaction_thenTransactionIsUpdated() {
-		final var oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+		final var oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
 		oneTimeTransactionDto.setName("Name");
 
 		given().port(port)
@@ -135,7 +135,7 @@ class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@Test
 	void givenExistingOneTimeTransaction_whenPatchTransactionByInvalidId_thenNotFound() {
-		final var oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+		final var oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
 		final var invalidId = "foo";
 
 		given().port(port)
@@ -155,7 +155,7 @@ class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@Test
 	void givenExistingOneTimeTransaction_whenDeleteTransaction_thenTransactionDoesNotExistAnymore() {
-		final var oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+		final var oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
 
 		given().port(port)
 				.contentType(ContentType.JSON)
@@ -179,7 +179,7 @@ class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@Test
 	void givenExistingOneTimeTransaction_whenDeleteTransactionByInvalidId_thenNotFound() {
-		final var oneTimeTransactionDto = TestOneTimeTransactionFactory.createDto();
+		final var oneTimeTransactionDto = TestOneTimeTransactionBuilder.buildWithDefaults();
 		final var invalidId = "foo";
 
 		given().port(port)

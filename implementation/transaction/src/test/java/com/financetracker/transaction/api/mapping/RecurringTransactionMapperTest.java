@@ -2,12 +2,10 @@ package com.financetracker.transaction.api.mapping;
 
 import com.financetracker.transaction.IntegrationTestBase;
 import com.financetracker.transaction.api.exceptions.NotParseableException;
-import com.financetracker.transaction.data.TestRecurringTransactionFactory;
+import com.financetracker.transaction.data.TestRecurringTransactionBuilder;
 import com.financetracker.transaction.logic.model.*;
 import org.junit.jupiter.api.Test;
-import org.openapitools.model.PeriodicityDto;
-import org.openapitools.model.RecurringTransactionDto;
-import org.openapitools.model.TypeDto;
+import org.openapitools.model.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,17 +23,17 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenValidRecurringTransactionDto_whenMappingToModel_thenNoExceptionIsThrownAndResultingModelIsValid() {
-        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionFactory.createDto(
+        final var monetaryAmount = MonetaryAmountDto.builder().amount(10.0).build();
+        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionBuilder.build(
                 "Transaction",
                 "Transaction Description",
                 TypeDto.INCOME,
                 List.of("Label1", "Label2"),
-                UUID.randomUUID(),
-                null,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
                 PeriodicityDto.MONTHLY,
                 "2023-10-03",
-                10.0,
-                List.of(TestRecurringTransactionFactory.createTransactionRecordDto(10.0, "2023-10-03"))
+                monetaryAmount,
+                List.of(TransactionRecordDto.builder().id(UUID.randomUUID()).amount(monetaryAmount).date("2023-10-03").build())
         );
 
         final RecurringTransaction recurringTransaction = recurringTransactionMapper.mapRecurringTransactionDtoToModel(recurringTransactionDto);
@@ -61,13 +59,12 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void givenValidRecurringTransactionDtoWithOnlyRequiredProperties_whenMappingToModel_thenNoExceptionIsThrownAndResultingModelIsValid() {
-        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionFactory.createDto(
+        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionBuilder.build(
                 null,
                 null,
                 TypeDto.INCOME,
                 null,
-                UUID.randomUUID(),
-                null,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
                 PeriodicityDto.MONTHLY,
                 "2023-10-03",
                 null,
@@ -96,13 +93,12 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void giveRecurringTransactionDtoWithInvalidType_whenMappingToModel_thenNotParseableException() {
-        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionFactory.createDto(
+        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionBuilder.build(
                 null,
                 null,
                 null,
                 null,
-                UUID.randomUUID(),
-                null,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
                 PeriodicityDto.MONTHLY,
                 "2023-10-03",
                 null,
@@ -114,12 +110,11 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void giveRecurringTransactionDtoWithInvalidTransfer_whenMappingToModel_thenNotParseableException() {
-        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionFactory.createDto(
+        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionBuilder.build(
                 null,
                 null,
                 TypeDto.INCOME,
                 null,
-                UUID.randomUUID(),
                 null,
                 PeriodicityDto.MONTHLY,
                 "2023-10-03",
@@ -133,13 +128,12 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void giveRecurringTransactionDtoWithInvalidTransferSource_whenMappingToModel_thenNotParseableException() {
-        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionFactory.createDto(
+        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionBuilder.build(
                 null,
                 null,
                 TypeDto.INCOME,
                 null,
-                null,
-                null,
+                TransferDto.builder().sourceBankAccountId(null).targetBankAccountId(UUID.randomUUID()).build(),
                 PeriodicityDto.MONTHLY,
                 "2023-10-03",
                 null,
@@ -151,13 +145,12 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void giveRecurringTransactionDtoWithInvalidPeriodicity_whenMappingToModel_thenNotParseableException() {
-        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionFactory.createDto(
+        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionBuilder.build(
                 null,
                 null,
                 TypeDto.INCOME,
                 null,
-                UUID.randomUUID(),
-                null,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
                 null,
                 "2023-10-03",
                 null,
@@ -169,13 +162,12 @@ class RecurringTransactionMapperTest extends IntegrationTestBase {
 
     @Test
     void giveRecurringTransactionDtoWithInvalidStartDate_whenMappingToModel_thenNotParseableException() {
-        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionFactory.createDto(
+        final RecurringTransactionDto recurringTransactionDto = TestRecurringTransactionBuilder.build(
                 null,
                 null,
                 TypeDto.INCOME,
                 null,
-                UUID.randomUUID(),
-                null,
+                TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).targetBankAccountId(UUID.randomUUID()).build(),
                 PeriodicityDto.MONTHLY,
                 "2023",
                 null,

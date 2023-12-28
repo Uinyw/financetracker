@@ -160,6 +160,7 @@
 							<generatorName>jaxrs-spec</generatorName>
 							<generateApiTests>false</generateApiTests>
 							<configOptions>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
 								<sourceFolder>src/main/java/main</sourceFolder>
 								<useJakartaEe>true</useJakartaEe>
 								<openApiNullable>false</openApiNullable>
@@ -179,6 +180,7 @@
 							<generateModelTests>false</generateModelTests>
 							<generateApiTests>false</generateApiTests>
 							<configOptions>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
 								<sourceFolder>src/main/java/main</sourceFolder>
 								<useJakartaEe>true</useJakartaEe>
 								<openApiNullable>false</openApiNullable>

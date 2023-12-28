@@ -74,9 +74,6 @@ public class TransactionResource implements TransactionsApi {
 
     @Override
     public void transactionsRecurringIdDelete(String id) {
-        if (recurringTransactionService.getRecurringTransaction(id).isEmpty()) {
-            throw new NotFoundException();
-        }
         recurringTransactionService.deleteRecurringTransaction(id);
     }
 
@@ -88,11 +85,12 @@ public class TransactionResource implements TransactionsApi {
 
     @Override
     public void transactionsRecurringIdPatch(String id, RecurringTransactionDto recurringTransactionDto) {
-        if (recurringTransactionService.getRecurringTransaction(id).isEmpty()) {
-            throw new NotFoundException();
-        }
+        recurringTransactionService.updateRecurringTransaction(id, recurringTransactionMapper.mapRecurringTransactionDtoToModel(recurringTransactionDto));
+    }
 
-        recurringTransactionService.updateRecurringTransaction(recurringTransactionMapper.mapRecurringTransactionDtoToModel(recurringTransactionDto));
+    @Override
+    public void transactionsRecurringTransactionIdRecordsRecordIdTransferPost(String transactionId, String recordId) {
+        recurringTransactionService.transferTransactionRecordAndSetStatus(transactionId, recordId);
     }
 
 }

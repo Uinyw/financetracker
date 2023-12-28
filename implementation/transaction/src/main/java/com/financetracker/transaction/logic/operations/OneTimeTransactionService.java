@@ -3,9 +3,7 @@ package com.financetracker.transaction.logic.operations;
 import com.financetracker.transaction.api.exceptions.NotParseableException;
 import com.financetracker.transaction.api.exceptions.TransferFailedException;
 import com.financetracker.transaction.infrastructure.db.TransactionRepository;
-import com.financetracker.transaction.infrastructure.client.BankAccountProvider;
 import com.financetracker.transaction.logic.model.OneTimeTransaction;
-import com.financetracker.transaction.logic.model.Transfer;
 import com.financetracker.transaction.logic.model.TransferStatus;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,6 @@ import java.util.Optional;
 @Service
 public class OneTimeTransactionService {
 
-    private final BankAccountProvider bankAccountProvider;
     private final TransferService transferService;
     private final TransactionRepository<OneTimeTransaction> oneTimeTransactionRepository;
 
@@ -31,7 +28,7 @@ public class OneTimeTransactionService {
     }
 
     public void createOneTimeTransaction(final OneTimeTransaction oneTimeTransaction) {
-        if (sourceAndTargetBankAccountDoNotExist(oneTimeTransaction.getTransfer())) {
+        if (transferService.sourceAndTargetBankAccountDoNotExist(oneTimeTransaction.getTransfer())) {
             throw new NotParseableException();
         }
 
@@ -39,7 +36,7 @@ public class OneTimeTransactionService {
     }
 
     public void updateOneTimeTransaction(final String transactionId, final OneTimeTransaction oneTimeTransaction) {
-        if (sourceAndTargetBankAccountDoNotExist(oneTimeTransaction.getTransfer())) {
+        if (transferService.sourceAndTargetBankAccountDoNotExist(oneTimeTransaction.getTransfer())) {
             throw new NotParseableException();
         }
 
@@ -50,11 +47,6 @@ public class OneTimeTransactionService {
 
         transferService.rollbackTransfer(originalOneTimeTransaction.get().getTransfer(), originalOneTimeTransaction.get());
         oneTimeTransactionRepository.save(oneTimeTransaction);
-    }
-
-    private boolean sourceAndTargetBankAccountDoNotExist(final Transfer transfer) {
-        return (transfer.isInternalTransfer() && bankAccountProvider.getBankAccount(transfer.getSourceBankAccountId()).isEmpty())
-                || bankAccountProvider.getBankAccount(transfer.getTargetBankAccountId()).isEmpty();
     }
 
     public void deleteOneTimeTransaction(final String transactionId) {

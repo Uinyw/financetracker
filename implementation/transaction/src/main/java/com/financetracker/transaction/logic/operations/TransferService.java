@@ -18,16 +18,23 @@ public class TransferService {
 
     private final BankAccountProvider bankAccountProvider;
 
+    public boolean sourceAndTargetBankAccountDoNotExist(final Transfer transfer) {
+        return (transfer.hasInternalSource() && bankAccountProvider.getBankAccount(transfer.getSourceBankAccountId()).isEmpty())
+                || (transfer.hasInternalTarget() && bankAccountProvider.getBankAccount(transfer.getTargetBankAccountId()).isEmpty());
+    }
+
     public void transfer(final Transfer transfer, final Transferable transferable) {
         if (transferable.getTransferStatus().equals(TransferStatus.SUCCESSFUL)) {
             return;
         }
 
-        if (transfer.isInternalTransfer()) {
+        if (transfer.hasInternalSource()) {
             withdrawFromBankAccount(transfer.getSourceBankAccountId(), transferable.getAmount().amount());
         }
 
-        depositToBankAccount(transfer.getTargetBankAccountId(), transferable.getAmount().amount());
+        if (transfer.hasInternalTarget()) {
+            depositToBankAccount(transfer.getTargetBankAccountId(), transferable.getAmount().amount());
+        }
     }
 
     public void rollbackTransfer(final Transfer transfer, final Transferable transferable) {
@@ -35,8 +42,13 @@ public class TransferService {
             return;
         }
 
-        if (!transfer.isInternalTransfer()) {
-            withdrawFromBankAccount(transfer.getTargetBankAccountId(), transferable.getAmount().amount());
+        if (transfer.hasInternalSource() && !transfer.hasInternalTarget()) {
+            depositToBankAccount(transfer.getTargetBankAccountId(), transferable.getAmount().amount());
+            return;
+        }
+
+        if (transfer.hasInternalTarget() && !transfer.hasInternalSource()) {
+            withdrawFromBankAccount(transfer.getSourceBankAccountId(), transferable.getAmount().amount());
             return;
         }
 

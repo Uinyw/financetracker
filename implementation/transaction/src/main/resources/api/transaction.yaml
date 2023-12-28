@@ -211,6 +211,30 @@ paths:
         '404':
           description: Recurring transaction with given ID not found.
 
+  /transactions/recurring/{transactionId}/records/{recordId}/transfer:
+    post:
+      summary: Transfer transaction record
+      tags:
+        - Recurring Transaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          description: Record ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully transferred transaction record.
+        '404':
+          description: Recurring transaction or transaction record with given ID not found.
+
 components:
   schemas:
     TransactionDto:
@@ -258,6 +282,10 @@ components:
     TransactionRecordDto:
       type: object
       allOf:
+        - properties:
+            id:
+              type: string
+              format: uuid
         - $ref: '#/components/schemas/TransferableDto'
 
     TransferableDto:
@@ -282,6 +310,8 @@ components:
         targetBankAccountId:
           type: string
           format: uuid
+        externalTargetId:
+          type: string
 
     MonetaryAmountDto:
       type: object
