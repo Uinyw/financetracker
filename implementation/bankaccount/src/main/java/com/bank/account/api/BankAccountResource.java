@@ -36,6 +36,7 @@ public class BankAccountResource implements BankAccountsApi {
         return ResponseEntity.ok().build();
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> bankAccountsIdDelete(final String id) {
         if (bankAccountService.getBankAccount(id).isEmpty()) {
@@ -46,6 +47,7 @@ public class BankAccountResource implements BankAccountsApi {
         return ResponseEntity.ok().build();
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<BankAccountDto> bankAccountsIdGet(final String id) {
         final Optional<BankAccount> bankAccount = bankAccountService.getBankAccount(id);
@@ -53,6 +55,7 @@ public class BankAccountResource implements BankAccountsApi {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> bankAccountsIdPatch(final String id, final BankAccountDto bankAccountDto) {
         if (bankAccountService.getBankAccount(id).isEmpty()) {

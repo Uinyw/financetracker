@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { BankAccount, MonetaryAmount } from './bankAccount';
+import { BankAccount } from './bankAccount';
+import Swal from 'sweetalert2';
 import { BankAccountService } from './bankAccount.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BankAccountDialogComponent } from '../bank-account-dialog/bank-account-dialog.component';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-bank-account',
@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class BankAccountComponent {
 
-  displayedColumns: string[] = ['name', 'description', 'balance', 'dispositionLimit'];
+  displayedColumns: string[] = ['name', 'description', 'balance', 'dispositionLimit', 'labels', 'actions'];
   bankAccounts = new MatTableDataSource<BankAccount>();
 
   @ViewChild(MatPaginator, { static: true })
@@ -26,7 +26,7 @@ export class BankAccountComponent {
 
   ngOnInit() {
     this.bankAccounts.paginator = this.paginator;
-    this.bankAccountService.getAllBankAccounts().subscribe(bankAccounts => this.bankAccounts.data = bankAccounts);
+    this.bankAccountService.getAllBankAccounts().subscribe(bankAccounts => this.bankAccounts.data = bankAccounts.sort((a, b) => a.name.localeCompare(b.name)));
   }
 
   applyFilter(event: Event) {
@@ -36,15 +36,52 @@ export class BankAccountComponent {
     this.bankAccounts.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
-  openDialog(): void {
+  openAddDialog(): void {
     const dialogRef = this.dialog.open(BankAccountDialogComponent, { width: '60%' });
 
     dialogRef.afterClosed().subscribe(result => {
-      const bankAccount = new BankAccount(uuidv4(), result.name, result.description, new MonetaryAmount(result.balance), new MonetaryAmount(result.dispositionLimit), []);
-      this.bankAccountService.createBankAccount(bankAccount).subscribe(() => {
-        this.bankAccounts.data.push(bankAccount)
-        this.bankAccounts.data = this.bankAccounts.data;
+      if (result == null) {
+        return;
+      }
+
+      this.bankAccountService.createBankAccount(result).subscribe(() => {
+        this.bankAccounts.data.push(result)
+        this.bankAccounts.data = this.bankAccounts.data.sort((a, b) => a.name.localeCompare(b.name));
       })
+    });
+  }
+
+  openEditDialog(bankAccount: BankAccount): void {
+    const dialogRef = this.dialog.open(BankAccountDialogComponent, { width: '60%', data: bankAccount });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null) {
+        return;
+      }
+
+      this.bankAccountService.editBankAccount(result).subscribe(() => {
+        const resultingAccounts = this.bankAccounts.data.filter(account => account.id != bankAccount.id)
+        resultingAccounts.push(result)
+        this.bankAccounts.data = resultingAccounts.sort((a, b) => a.name.localeCompare(b.name));
+      })
+    });
+  }
+
+  deleteBankAccount(id: string) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.value) {
+        this.bankAccountService.deleteBankAccount(id).subscribe(() => {
+          this.bankAccounts.data = this.bankAccounts.data.filter(account => account.id != id);
+        })
+      }
     });
   }
 

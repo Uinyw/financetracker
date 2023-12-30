@@ -18,9 +18,15 @@ export class BankAccountService {
   }
 
   createBankAccount(bankAccount: BankAccount): Observable<any> {
-    return this.httpClient.post<any[]>(`${this.BASE_URL}/bankAccounts`, bankAccount);
+    return this.httpClient.post<any>(`${this.BASE_URL}/bankAccounts`, bankAccount);
   }
 
+  deleteBankAccount(bankAccountId: string): Observable<any> {
+    return this.httpClient.delete<any>(`${this.BASE_URL}/bankAccounts/${bankAccountId}`);
+  }
 
+  editBankAccount(bankAccount: BankAccount): Observable<any> {
+    return this.httpClient.patch<any>(`${this.BASE_URL}/bankAccounts/${bankAccount.id}`, bankAccount);
+  }
 
 }
