@@ -16,7 +16,7 @@ export class BankAccountService {
   getAllBankAccounts(): Observable<BankAccount[]> {
     return this.httpClient.get<BankAccount[]>(`${this.BASE_URL}/bankAccounts`);
   }
-
+  
   createBankAccount(bankAccount: BankAccount): Observable<any> {
     return this.httpClient.post<any>(`${this.BASE_URL}/bankAccounts`, bankAccount);
   }

@@ -12,6 +12,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -19,6 +22,8 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BankAccountComponent } from './bank-account/bank-account.component';
 import { BankAccountDialogComponent } from './bank-account-dialog/bank-account-dialog.component';
+import { OneTimeTransactionComponent } from './one-time-transaction/one-time-transaction.component';
+import { OneTimeTransactionDialogComponent } from './one-time-transaction-dialog/one-time-transaction-dialog.component';
 
 
 @NgModule({
@@ -27,6 +32,8 @@ import { BankAccountDialogComponent } from './bank-account-dialog/bank-account-d
     SidenavComponent,
     BankAccountComponent,
     BankAccountDialogComponent,
+    OneTimeTransactionComponent,
+    OneTimeTransactionDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +46,9 @@ import { BankAccountDialogComponent } from './bank-account-dialog/bank-account-d
     MatFormFieldModule,
     MatSortModule,
     MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
     MatPaginatorModule,
     MatButtonModule,
     FormsModule,

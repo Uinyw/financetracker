@@ -10,6 +10,7 @@ public class TransactionConfig extends ResourceConfig {
 
     public TransactionConfig() {
         register(TransactionResource.class);
+        register(CorsFilter.class);
         register(ExceptionHandler.class);
     }
 }
