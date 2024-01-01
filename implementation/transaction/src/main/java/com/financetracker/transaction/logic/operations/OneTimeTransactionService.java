@@ -28,7 +28,7 @@ public class OneTimeTransactionService {
     }
 
     public void createOneTimeTransaction(final OneTimeTransaction oneTimeTransaction) {
-        if (transferService.sourceAndTargetBankAccountDoNotExist(oneTimeTransaction.getTransfer())) {
+        if (transferService.requiredBankAccountsDoNotExist(oneTimeTransaction.getTransfer())) {
             throw new NotParseableException();
         }
 
@@ -36,7 +36,7 @@ public class OneTimeTransactionService {
     }
 
     public void updateOneTimeTransaction(final String transactionId, final OneTimeTransaction oneTimeTransaction) {
-        if (transferService.sourceAndTargetBankAccountDoNotExist(oneTimeTransaction.getTransfer())) {
+        if (transferService.requiredBankAccountsDoNotExist(oneTimeTransaction.getTransfer())) {
             throw new NotParseableException();
         }
 

@@ -1,7 +1,6 @@
 package com.financetracker.transaction.logic.model;
 
 import com.financetracker.transaction.api.exceptions.NotParseableException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,38 +17,39 @@ public class Transfer {
                     final String externalSourceId,
                     final String targetBankAccountId,
                     final String externalTargetId) {
-        if (sourceBankAccountId == null && targetBankAccountId == null) {
-            throw new NotParseableException();
-        }
-
-        if ((sourceBankAccountId == null && externalSourceId == null) || (targetBankAccountId == null && externalTargetId == null)) {
-            throw new NotParseableException();
-        }
-
-        if (sourceBankAccountId != null && externalSourceId != null) {
-            throw new NotParseableException();
-        }
-
-        if (targetBankAccountId != null && externalTargetId != null) {
-            throw new NotParseableException();
-        }
 
         this.sourceBankAccountId = sourceBankAccountId;
         this.externalSourceId = externalSourceId;
         this.targetBankAccountId = targetBankAccountId;
         this.externalTargetId = externalTargetId;
+
+        if (!isShift() && !isIncome() && !isExpense()) {
+            throw new NotParseableException();
+        }
+    }
+
+    public boolean isShift() {
+        return sourceBankAccountId != null && externalSourceId == null && targetBankAccountId != null && externalTargetId == null;
+    }
+
+    public boolean isIncome() {
+        return sourceBankAccountId == null && externalSourceId != null && targetBankAccountId != null && externalTargetId == null;
+    }
+
+    public boolean isExpense() {
+        return sourceBankAccountId != null && externalSourceId == null && targetBankAccountId == null && externalTargetId != null;
     }
 
     public boolean hasInternalSource() {
-        return sourceBankAccountId != null;
+        return isShift() || isExpense();
     }
 
     public boolean hasInternalTarget() {
-        return targetBankAccountId != null;
+        return isShift() || isIncome();
     }
 
     public Transfer invert() {
-        if (!hasInternalSource() || !hasInternalTarget()) {
+        if (!isShift()) {
             return null;
         }
         return new Transfer(targetBankAccountId, externalSourceId, sourceBankAccountId, externalTargetId);

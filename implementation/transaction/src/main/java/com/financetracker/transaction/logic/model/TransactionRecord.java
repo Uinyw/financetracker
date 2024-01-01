@@ -1,13 +1,11 @@
 package com.financetracker.transaction.logic.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Builder(builderMethodName = "with")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

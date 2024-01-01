@@ -44,4 +44,8 @@ public class RecurringTransaction extends Transaction {
         this.fixedAmount = fixedAmount;
         this.transactionRecords = transactionRecords;
     }
+
+    public boolean isEnabledForAutomaticScheduling() {
+        return fixedAmount != null;
+    }
 }

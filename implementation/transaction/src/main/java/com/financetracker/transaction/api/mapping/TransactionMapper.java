@@ -32,20 +32,16 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
 
     @Override
     public OneTimeTransaction mapOneTimeTransactionDtoToModel(final OneTimeTransactionDto oneTimeTransactionDto) {
-        var p = 0;
-        var y = OneTimeTransaction.with()
+        return OneTimeTransaction.with()
                 .id(oneTimeTransactionDto.getId().toString())
                 .name(oneTimeTransactionDto.getName())
                 .description(oneTimeTransactionDto.getDescription())
                 .type(mapTypeDtoToModel(oneTimeTransactionDto.getType()))
                 .labels(mapLabelDtoToModel(oneTimeTransactionDto.getLabels()))
-                .transfer(mapTransferDtoToModel(oneTimeTransactionDto.getTransfer()))
+                .transfer(mapTransferDtoToModel(oneTimeTransactionDto.getTransfer(), oneTimeTransactionDto.getType()))
                 .amount(mapMonetaryAmountDtoToModel(oneTimeTransactionDto.getAmount()))
                 .date(mapDateDtoToModel(oneTimeTransactionDto.getDate()))
                 .build();
-
-        var x = 0;
-        return y;
     }
 
     @Override
@@ -77,7 +73,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
                 .description(recurringTransactionDto.getDescription())
                 .type(mapTypeDtoToModel(recurringTransactionDto.getType()))
                 .labels(mapLabelDtoToModel(recurringTransactionDto.getLabels()))
-                .transfer(mapTransferDtoToModel(recurringTransactionDto.getTransfer()))
+                .transfer(mapTransferDtoToModel(recurringTransactionDto.getTransfer(), recurringTransactionDto.getType()))
                 .startDate(mapDateDtoToModel(recurringTransactionDto.getStartDate()))
                 .periodicity(mapRecurringTypeModelToDto(recurringTransactionDto.getPeriodicity()))
                 .fixedAmount(recurringTransactionDto.getFixedAmount() != null ? mapMonetaryAmountDtoToModel(recurringTransactionDto.getFixedAmount()) : null)
@@ -104,6 +100,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
 
     private TypeDto mapTypeModelToDto(final Type type) {
         return switch (type) {
+            case SHIFT -> TypeDto.SHIFT;
             case INCOME -> TypeDto.INCOME;
             case EXPENSE -> TypeDto.EXPENSE;
         };
@@ -164,6 +161,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
         }
 
         return switch (typeDto) {
+            case SHIFT -> Type.SHIFT;
             case INCOME -> Type.INCOME;
             case EXPENSE -> Type.EXPENSE;
         };
@@ -179,15 +177,21 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
                 .collect(Collectors.toSet());
     }
 
-    private Transfer mapTransferDtoToModel(final TransferDto transferDto) {
+    private Transfer mapTransferDtoToModel(final TransferDto transferDto, final TypeDto type) {
         if (transferDto == null) {
             throw new NotParseableException();
         }
         
-        return new Transfer(transferDto.getSourceBankAccountId() != null ? transferDto.getSourceBankAccountId().toString() : null,
+        final var transfer = new Transfer(transferDto.getSourceBankAccountId() != null ? transferDto.getSourceBankAccountId().toString() : null,
                 transferDto.getExternalSourceId(),
                 transferDto.getTargetBankAccountId() != null ? transferDto.getTargetBankAccountId().toString() : null,
                 transferDto.getExternalTargetId());
+
+        if ((type.equals(TypeDto.SHIFT) && !transfer.isShift()) || (type.equals(TypeDto.INCOME) && !transfer.isIncome()) || (type.equals(TypeDto.EXPENSE) && !transfer.isExpense())) {
+            throw new NotParseableException();
+        }
+
+        return transfer;
     }
 
     private MonetaryAmount mapMonetaryAmountDtoToModel(final MonetaryAmountDto amountDto) {

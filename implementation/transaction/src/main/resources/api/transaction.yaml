@@ -326,7 +326,7 @@ components:
 
     TypeDto:
       type: string
-      enum: [ INCOME, EXPENSE ]
+      enum: [ SHIFT, INCOME, EXPENSE ]
 
     TransferStatusDto:
       type: string

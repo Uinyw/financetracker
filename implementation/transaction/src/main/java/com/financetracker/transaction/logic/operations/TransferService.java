@@ -18,7 +18,7 @@ public class TransferService {
 
     private final BankAccountProvider bankAccountProvider;
 
-    public boolean sourceAndTargetBankAccountDoNotExist(final Transfer transfer) {
+    public boolean requiredBankAccountsDoNotExist(final Transfer transfer) {
         return (transfer.hasInternalSource() && bankAccountProvider.getBankAccount(transfer.getSourceBankAccountId()).isEmpty())
                 || (transfer.hasInternalTarget() && bankAccountProvider.getBankAccount(transfer.getTargetBankAccountId()).isEmpty());
     }
