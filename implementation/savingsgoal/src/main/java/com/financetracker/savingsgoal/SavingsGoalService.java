@@ -16,8 +16,8 @@ public class SavingsGoalService {
     private final SavingsGoalRepository savingsGoalRepository;
 
      public List<SavingsGoalEntity> get() {
-        List<SavingsGoalEntity> sgentities = savingsGoalRepository.findAll();
-        return null;
+        List<SavingsGoalEntity> savingsGoalEntities = savingsGoalRepository.findAll();
+        return savingsGoalEntities;
     }
 
     public SavingsGoal getSavingsGoalById(UUID id) {
@@ -33,4 +33,5 @@ public class SavingsGoalService {
     public Boolean deleteSavingsGoalById(String id) {
         return false;
     }
+
 }

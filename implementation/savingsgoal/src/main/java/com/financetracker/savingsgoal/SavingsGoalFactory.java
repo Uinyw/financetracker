@@ -1,5 +1,6 @@
 package com.financetracker.savingsgoal;
 
+import java.time.Duration;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -11,8 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Component
 public class SavingsGoalFactory {
 
-    public SavingsGoal createPercentageBasedSavingsGoal(){
-        return null;
+    public SavingsGoal createPercentageBasedSavingsGoal(){return null;
     }
 
     public SavingsGoal createAmountBasedSavingsGoal(){
@@ -20,19 +20,16 @@ public class SavingsGoalFactory {
     }
 
     public SavingsGoal createPeriodicalSavingsGoal(UUID bankAccountID){
-        SavingsGoal savingsGoal = new PeriodicalSavingsGoal();
-        savingsGoal.setBankAccountID(bankAccountID);
-        MonetaryAmount monetaryAmount = new MonetaryAmount();
-        monetaryAmount.setAmount(0);
-        savingsGoal.setAmount(monetaryAmount);
+        PeriodicalSavingsGoal savingsGoal = new PeriodicalSavingsGoal();
+        savingsGoal.setBankAccountId(bankAccountID);
         savingsGoal.setRecurringRate(0.0);
-        savingsGoal.setRecurringAmount(1.0);
-        savingsGoal.setDuration("month");
-        savingsGoal.setPeriodicity(Periodicity.MONTHLY);
+        MonetaryAmount reoccuringAmount = new MonetaryAmount();
+        reoccuringAmount.setAmount(1.0);
+        savingsGoal.setRecurringAmount(reoccuringAmount);
         return savingsGoal;
     }
 
     public SavingsGoal createRuleBasedSavingsRule(){
-
+        return null;
     }
 }

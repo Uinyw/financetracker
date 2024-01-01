@@ -12,6 +12,11 @@ public class PeriodicalSavingsGoal extends SavingsGoal {
     private MonetaryAmount recurringAmount;
     private MonetaryAmount goal;
 
+    private Periodicity periodicity;
+
+    private Type type;
+
+
 
     public AchievmentStatus retryExecution(UUID recordId) {
         //TODO implement
@@ -26,4 +31,51 @@ public class PeriodicalSavingsGoal extends SavingsGoal {
 
     }
 
+    public UUID getBankAccountId() {
+        return bankAccountId;
+    }
+
+    public void setBankAccountId(UUID bankAccountId) {
+        this.bankAccountId = bankAccountId;
+    }
+
+    public double getRecurringRate() {
+        return recurringRate;
+    }
+
+    public void setRecurringRate(double recurringRate) {
+        this.recurringRate = recurringRate;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public List<SavingsRecord> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<SavingsRecord> records) {
+        this.records = records;
+    }
+
+    public MonetaryAmount getRecurringAmount() {
+        return recurringAmount;
+    }
+
+    public void setRecurringAmount(MonetaryAmount recurringAmount) {
+        this.recurringAmount = recurringAmount;
+    }
+
+    public MonetaryAmount getGoal() {
+        return goal;
+    }
+
+    public void setGoal(MonetaryAmount goal) {
+        this.goal = goal;
+    }
 }

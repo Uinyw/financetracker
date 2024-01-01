@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.financetracker.savingsgoal.model.SavingsGoalEntity;
 import org.openapitools.api.SavingsGoalsApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +29,13 @@ public class SavingsGoalResource implements SavingsGoalsApi{
     public ResponseEntity<List<SavingsGoalsGet200ResponseInner>> savingsGoalsGet() {
         
         System.out.println("savings goal created");
-
+        List<SavingsGoalEntity> savingsGoalEntityList = savingsGoalService.get();
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
     
     @Override
-    public ResponseEntity<Void> savingsGoalsPost(@Valid @RequestBody SavingsGoal savingsGoal) {
+    public ResponseEntity<Void> savingsGoalsPost(@Valid @RequestBody SavingsGoalsGet200ResponseInner savingsGoal) {
         System.out.println("savings goal saved");
-
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

@@ -10,9 +10,9 @@ tags:
   - name: SavingsGoal
 
 paths:
-  /savingsGoals:
+  /savingsGoals/Periodical:
     get:
-      summary: Get all Savings Goals
+      summary: Get all Periodical Savings Goals
       tags: 
         - SavingsGoal
       responses:
@@ -23,10 +23,38 @@ paths:
               schema:
                 type: array
                 items:
-                  oneOf:
-                    - $ref: '#/components/schemas/PeriodicalSavingsGoal'
-                    - $ref: '#/components/schemas/RuleBasedSavingsGoal'
-    
+                  $ref: '#/components/schemas/PeriodicalSavingsGoal'
+                  
+    post:
+      summary: Create a new periodical or periodical Savings Goal
+      tags: 
+        - SavingsGoal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodicalSavingsGoal'
+        
+      responses:
+        '200':
+          description: Periodical Savings Goal created.
+                    
+  /savingsGoals/RuleBased:
+    get:
+      summary: Get all rule-based Savings Goals
+      tags: 
+        - SavingsGoal
+      responses:
+        '200':
+          description: Retrieve a list of all existing rule-based savings goals.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleBasedSavingsGoal'
+                    
     post:
       summary: Create a new periodical or rule-based Savings Goal
       tags: 
@@ -36,15 +64,76 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/PeriodicalSavingsGoal'
-                - $ref: '#/components/schemas/RuleBasedSavingsGoal'
+              $ref: '#/components/schemas/RuleBasedSavingsGoal'
         
       responses:
         '200':
-          description: Savings Goal created.
+          description: Rule Based Savings Goal created.
+
+
+  /savingsGoals/Periodical{id}:
+    get:
+      summary: Get Periodical Savings Goal by ID
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Retrieve detailed information about a Periodical Savings Goal using its unique identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeriodicalSavingsGoal'
+        '404':
+          description: Periodical Savings Goal not found
           
-  /savingsGoals/{id}:
+    patch:
+      summary: Update Periodical Savings Goal by ID
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Retrieve detailed information about a Periodical Savings Goal using its unique identifier.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodicalSavingsGoal'
+      responses:
+        '200':
+          description: Periodical Savings Goal updated successfully
+        '404':
+          description: Periodical Savings Goal not found
+          
+    delete:
+      summary: Delete a Periodical Savings Goal
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the Periodical Savings Goal to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Periodical Savings Goal deleted successfully
+        '404':
+          description: Periodical Savings Goal not found
+  
+  /savingsGoals/RuleBased/{id}:
     get:
       summary: Get Savings Goal by ID
       tags:
@@ -62,14 +151,12 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/PeriodicalSavingsGoal'
-                  - $ref: '#/components/schemas/RuleBasedSavingsGoal'
+                $ref: '#/components/schemas/RuleBasedSavingsGoal'
         '404':
           description: Savings Goal not found
           
     patch:
-      summary: Update Savings Goal by ID
+      summary: Update Rule Based Savings Goal by ID
       tags:
         - SavingsGoal
       parameters:
@@ -84,31 +171,29 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/PeriodicalSavingsGoal'
-                - $ref: '#/components/schemas/RuleBasedSavingsGoal'
+              $ref: '#/components/schemas/RuleBasedSavingsGoal'
       responses:
         '200':
-          description: Savings Goal updated successfully
+          description: Rule Based Savings Goal updated successfully
         '404':
-          description: Savings Goal not found
+          description: Rule Based Savings Goal not found
           
     delete:
-      summary: Delete a Savings Goal
+      summary: Delete a Rule Based Savings Goal
       tags:
         - SavingsGoal
       parameters:
         - name: id
           in: path
           required: true
-          description: ID of the savings goal to delete
+          description: ID of the Rule Based Savings Goal to delete
           schema:
             type: string
       responses:
         '200':
-          description: Savings Goal deleted successfully
+          description: Rule Based Savings Goal deleted successfully
         '404':
-          description: Savings Goal not found
+          description: Rule Based Savings Goal not found
   
 components:
   responses:
