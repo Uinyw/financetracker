@@ -36,13 +36,30 @@ public class RecurringTransactionService {
         recurringTransactionRepository.save(recurringTransaction);
     }
 
+    public void createTransactionRecordForRecurringTransaction(final TransactionRecord transactionRecord) {
+        final RecurringTransaction transaction = getRecurringTransaction(transactionRecord.getTransactionId()).orElseThrow(NotFoundException::new);
+        transaction.getTransactionRecords().add(transactionRecord);
+        recurringTransactionRepository.save(transaction);
+    }
+
+    public void deleteTransactionRecord(final String transactionId, final String transactionRecordId) {
+        final RecurringTransaction transaction = getRecurringTransaction(transactionId).orElseThrow(NotFoundException::new);
+        final boolean transactionFoundAndRemoved = transaction.getTransactionRecords().removeIf(record -> record.getId().equals(transactionRecordId));
+
+        if (!transactionFoundAndRemoved) {
+            throw new NotFoundException();
+
+        }
+        recurringTransactionRepository.save(transaction);
+    }
+
     public void updateRecurringTransaction(final String transactionId, final RecurringTransaction recurringTransaction) {
         if (transferService.requiredBankAccountsDoNotExist(recurringTransaction.getTransfer())) {
             throw new NotParseableException();
         }
 
         final RecurringTransaction originalTransaction = getRecurringTransaction(transactionId).orElseThrow(NotFoundException::new);
-        originalTransaction.getTransactionRecords().forEach(record -> transferService.rollbackTransfer(originalTransaction.getTransfer(), record));
+        recurringTransaction.setTransactionRecords(originalTransaction.getTransactionRecords());
         recurringTransactionRepository.save(recurringTransaction);
     }
 

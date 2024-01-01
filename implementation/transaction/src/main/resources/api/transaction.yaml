@@ -7,6 +7,7 @@ info:
 tags:
   - name: One-Time Transaction
   - name: Recurring Transaction
+  - name: Transaction Record
 
 paths:
   /transactions/onetime:
@@ -211,11 +212,60 @@ paths:
         '404':
           description: Recurring transaction with given ID not found.
 
+  /transactions/recurring/{transactionId}/records:
+    post:
+      summary: Create transaction record
+      tags:
+        - Transaction Record
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRecordDto'
+
+      responses:
+        '200':
+          description: Successfully created transaction record.
+        '404':
+          description: Recurring transaction with given ID not found.
+
+  /transactions/recurring/{transactionId}/records/{recordId}:
+    delete:
+      summary: Delete transaction record
+      tags:
+        - Transaction Record
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          description: Record ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted transaction record.
+        '404':
+          description: Recurring transaction or transaction record with given ID not found.
+
   /transactions/recurring/{transactionId}/records/{recordId}/transfer:
     post:
       summary: Transfer transaction record
       tags:
-        - Recurring Transaction
+        - Transaction Record
       parameters:
         - name: transactionId
           in: path

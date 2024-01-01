@@ -90,7 +90,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
                 .build();
     }
 
-    private TransactionRecord mapTransactionRecordDtoToModel(final String transactionId, final TransactionRecordDto transactionRecordDto) {
+    public TransactionRecord mapTransactionRecordDtoToModel(final String transactionId, final TransactionRecordDto transactionRecordDto) {
         return new TransactionRecord(transactionRecordDto.getId().toString(),
                 transactionId,
                 mapDateDtoToModel(transactionRecordDto.getDate()),

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.openapitools.api.TransactionsApi;
 import org.openapitools.model.OneTimeTransactionDto;
 import org.openapitools.model.RecurringTransactionDto;
+import org.openapitools.model.TransactionRecordDto;
 import org.springframework.stereotype.Component;
 
 import jakarta.ws.rs.NotFoundException;
@@ -86,6 +87,17 @@ public class TransactionResource implements TransactionsApi {
     @Override
     public void transactionsRecurringIdPatch(String id, RecurringTransactionDto recurringTransactionDto) {
         recurringTransactionService.updateRecurringTransaction(id, recurringTransactionMapper.mapRecurringTransactionDtoToModel(recurringTransactionDto));
+    }
+
+    @Override
+    public void transactionsRecurringTransactionIdRecordsPost(String transactionId, TransactionRecordDto transactionRecordDto) {
+        recurringTransactionService.createTransactionRecordForRecurringTransaction(
+                recurringTransactionMapper.mapTransactionRecordDtoToModel(transactionId, transactionRecordDto));
+    }
+
+    @Override
+    public void transactionsRecurringTransactionIdRecordsRecordIdDelete(String transactionId, String recordId) {
+        recurringTransactionService.deleteTransactionRecord(transactionId, recordId);
     }
 
     @Override

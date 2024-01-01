@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class RecurringTransaction extends Transaction {
     @AttributeOverride(name = "amount", column = @Column(name = "amount", precision = 27, scale = 6))
     private MonetaryAmount fixedAmount;
 
+    @Setter
     @JoinColumn(name = "transaction_id", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<TransactionRecord> transactionRecords = new HashSet<>();
