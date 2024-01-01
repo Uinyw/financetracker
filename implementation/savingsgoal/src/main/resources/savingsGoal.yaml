@@ -23,7 +23,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PeriodicalSavingsGoal'
+                  $ref: '#/components/schemas/PeriodicalSavingsGoalDTO'
                   
     post:
       summary: Create a new periodical or periodical Savings Goal
@@ -34,7 +34,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PeriodicalSavingsGoal'
+              $ref: '#/components/schemas/PeriodicalSavingsGoalDTO'
         
       responses:
         '200':
@@ -53,7 +53,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RuleBasedSavingsGoal'
+                  $ref: '#/components/schemas/RuleBasedSavingsGoalDTO'
                     
     post:
       summary: Create a new periodical or rule-based Savings Goal
@@ -64,7 +64,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RuleBasedSavingsGoal'
+              $ref: '#/components/schemas/RuleBasedSavingsGoalDTO'
         
       responses:
         '200':
@@ -89,7 +89,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PeriodicalSavingsGoal'
+                $ref: '#/components/schemas/PeriodicalSavingsGoalDTO'
         '404':
           description: Periodical Savings Goal not found
           
@@ -109,7 +109,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PeriodicalSavingsGoal'
+              $ref: '#/components/schemas/PeriodicalSavingsGoalDTO'
       responses:
         '200':
           description: Periodical Savings Goal updated successfully
@@ -151,7 +151,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RuleBasedSavingsGoal'
+                $ref: '#/components/schemas/RuleBasedSavingsGoalDTO'
         '404':
           description: Savings Goal not found
           
@@ -171,7 +171,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RuleBasedSavingsGoal'
+              $ref: '#/components/schemas/RuleBasedSavingsGoalDTO'
       responses:
         '200':
           description: Rule Based Savings Goal updated successfully
@@ -209,7 +209,7 @@ components:
         application/json:
           example: {"message": "Bad request"}
   schemas:
-    SavingsGoal:
+    SavingsGoalDTO:
       type: object
       properties:
         id:
@@ -222,10 +222,10 @@ components:
         achievementStatus:
           $ref: '#/components/schemas/AchievementStatus'
       
-    PeriodicalSavingsGoal:
+    PeriodicalSavingsGoalDTO:
       type: object
       allOf:
-        - $ref: '#/components/schemas/SavingsGoal'
+        - $ref: '#/components/schemas/SavingsGoalDTO'
         - properties:
             bankAccountID:
               type: string
@@ -265,7 +265,7 @@ components:
           type: string
           enum: [IN_PROGRESS, ACHIEVED, PARTIALLY_ACHIEVED, FAILED]
           
-    RuleBasedSavingsGoal:
+    RuleBasedSavingsGoalDTO:
       type: object
       properties:
         id:

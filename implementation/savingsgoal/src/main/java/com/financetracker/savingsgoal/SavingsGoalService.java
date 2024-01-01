@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.openapitools.model.PeriodicalSavingsGoalDTO;
+import org.openapitools.model.RuleBasedSavingsGoalDTO;
 import org.springframework.stereotype.Service;
 import com.financetracker.savingsgoal.model.SavingsGoalEntity;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,48 @@ public class SavingsGoalService {
 
     public Boolean deleteSavingsGoalById(String id) {
         return false;
+    }
+
+
+
+ public List<PeriodicalSavingsGoalDTO> getPeriodicalSavingsGoals(){
+    //TODO implement
+     return null;
+ }
+ public boolean createPeriodicalSavingsGoal(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO){
+     //TODO implement
+     return false;
+ }
+
+public boolean deletePeriodicalSavingsGoal(String id){
+         //TODO implement
+         return false;
+}
+
+public PeriodicalSavingsGoalDTO getPeriodicalSavingsGoal(String id){
+    //TODO implement
+         return null;
+}
+
+//-----------
+
+    public List<RuleBasedSavingsGoalDTO> getRuleBasedSavingsGoals(){
+        //TODO implement
+        return null;
+    }
+    public boolean createRuleBasedSavingsGoal(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO){
+        //TODO implement
+        return false;
+    }
+
+    public boolean deleteRuleBasedSavingsGoal(String id){
+        //TODO implement
+        return false;
+    }
+
+    public RuleBasedSavingsGoalDTO getRuleBasedSavingsGoal(String id){
+        //TODO implement
+        return null;
     }
 
 }
