@@ -15,6 +15,21 @@ paths:
       summary: Get all one-time transactions
       tags:
         - One-Time Transaction
+      parameters:
+        - in: query
+          name: sourceBankAccount
+          schema:
+            type: string
+            format: uuid
+          description: Filter for Transactions with given source bank account ID.
+          required: false
+        - in: query
+          name: targetBankAccount
+          schema:
+            type: string
+            format: uuid
+          description: Filter for Transactions with given target bank account ID.
+          required: false
       responses:
         '200':
           description: Successfully retrieved a list of all existing one-time transactions.
@@ -125,6 +140,21 @@ paths:
       summary: Get all recurring transactions
       tags:
         - Recurring Transaction
+      parameters:
+        - in: query
+          name: sourceBankAccount
+          schema:
+            type: string
+            format: uuid
+          description: Filter for Transactions with given source bank account ID.
+          required: false
+        - in: query
+          name: targetBankAccount
+          schema:
+            type: string
+            format: uuid
+          description: Filter for Transactions with given target bank account ID.
+          required: false
       responses:
         '200':
           description: Successfully retrieved a list of all existing recurring transactions.

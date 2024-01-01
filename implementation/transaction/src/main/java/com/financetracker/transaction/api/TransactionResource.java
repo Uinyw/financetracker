@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import jakarta.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -29,8 +30,10 @@ public class TransactionResource implements TransactionsApi {
     private final RecurringTransactionMapper recurringTransactionMapper;
 
     @Override
-    public List<OneTimeTransactionDto> transactionsOnetimeGet() {
+    public List<OneTimeTransactionDto> transactionsOnetimeGet(UUID sourceBankAccount, UUID targetBankAccount) {
         return oneTimeTransactionService.getOneTimeTransactions().stream()
+                .filter(transaction -> sourceBankAccount == null || (transaction.getTransfer().hasInternalSource() && transaction.getTransfer().getSourceBankAccountId().equals(sourceBankAccount.toString())))
+                .filter(transaction -> targetBankAccount == null || (transaction.getTransfer().hasInternalTarget() && transaction.getTransfer().getTargetBankAccountId().equals(targetBankAccount.toString())))
                 .map(oneTimeTransactionMapper::mapOneTimeTransactionModelToDto)
                 .toList();
     }
@@ -62,8 +65,10 @@ public class TransactionResource implements TransactionsApi {
     }
 
     @Override
-    public List<RecurringTransactionDto> transactionsRecurringGet() {
+    public List<RecurringTransactionDto> transactionsRecurringGet(UUID sourceBankAccount, UUID targetBankAccount) {
         return recurringTransactionService.getRecurringTransactions().stream()
+                .filter(transaction -> sourceBankAccount == null || (transaction.getTransfer().hasInternalSource() && transaction.getTransfer().getSourceBankAccountId().equals(sourceBankAccount.toString())))
+                .filter(transaction -> targetBankAccount == null || (transaction.getTransfer().hasInternalTarget() && transaction.getTransfer().getTargetBankAccountId().equals(targetBankAccount.toString())))
                 .map(recurringTransactionMapper::mapRecurringTransactionModelToDto)
                 .toList();
     }
