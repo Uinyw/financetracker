@@ -46,5 +46,6 @@ export enum TransferStatus {
 
 export enum Type {
     INCOME = "INCOME",
-    EXPENSE = "EXPENSE"
+    EXPENSE = "EXPENSE",
+    SHIFT = "SHIFT"
 }
