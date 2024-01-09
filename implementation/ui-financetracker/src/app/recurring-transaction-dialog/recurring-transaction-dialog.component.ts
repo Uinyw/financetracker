@@ -1,28 +1,29 @@
 import { Component, Inject } from '@angular/core';
-import { OneTimeTransaction } from '../one-time-transaction/oneTimeTransaction';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { v4 as uuidv4 } from 'uuid';
-import { BankAccountService } from '../bank-account/bankAccount.service';
+import { RecurringTransaction } from '../recurring-transaction/recurringTransaction';
 import { BankAccount } from '../bank-account/bankAccount';
-import { TransferStatus, Type } from '../transaction/transaction';
+import { Periodicity, Type } from '../transaction/transaction';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { BankAccountService } from '../bank-account/bankAccount.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
-  selector: 'app-one-time-transaction-dialog',
-  templateUrl: './one-time-transaction-dialog.component.html',
-  styleUrls: ['./one-time-transaction-dialog.component.scss']
+  selector: 'app-recurring-transaction-dialog',
+  templateUrl: './recurring-transaction-dialog.component.html',
+  styleUrls: ['./recurring-transaction-dialog.component.scss']
 })
-export class OneTimeTransactionDialogComponent {
+export class RecurringTransactionDialogComponent {
 
   editMode: boolean
-  transaction: OneTimeTransaction
-  date: Date = new Date();
+  transaction: RecurringTransaction
+  startDate: Date = new Date();
   bankAccounts: BankAccount[] = [];
 
   types = Object.values(Type);
+  periodicities = Object.values(Periodicity);
   labels: string = ""
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: OneTimeTransaction,
-              private dialogRef: MatDialogRef<OneTimeTransactionDialogComponent>,
+  constructor(@Inject(MAT_DIALOG_DATA) private data: RecurringTransaction,
+              private dialogRef: MatDialogRef<RecurringTransactionDialogComponent>,
               private bankAccountService: BankAccountService) {
 
     this.editMode = data != null
@@ -44,11 +45,12 @@ export class OneTimeTransactionDialogComponent {
           targetBankAccountId: null,
           externalTargetId: null
         },
-        amount: {
-          amount: 0
+        periodicity: Periodicity.MONTHLY,
+        startDate: "",
+        fixedAmount: {
+          amount: null
         },
-        date: "",
-        transferStatus: TransferStatus.INITIAL
+        transactionRecords: []
       }
     }
   }
@@ -58,7 +60,8 @@ export class OneTimeTransactionDialogComponent {
   }
 
   getResultingTransaction() {
-    this.transaction.date = this.date.toISOString().slice(0, 10)
+    this.transaction.startDate = this.startDate.toISOString().slice(0, 10)
+    
     this.transaction.labels = this.labels != null ? this.labels.split(",") : []
     return this.transaction;
   }

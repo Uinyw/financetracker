@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>{{ 'Create Transaction Record' }}</h1>
+<div mat-dialog-content>
+
+ <mat-form-field class="full-width">
+    <mat-label> Start Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="date">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Amount</mat-label>
+    <input matInput type="number" [(ngModel)]="record.amount.amount">
+  </mat-form-field>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Back</button>
+  <button mat-button [mat-dialog-close]="getResultingRecord()" cdkFocusInitial>Create</button>
+</div>
+

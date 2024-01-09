@@ -54,6 +54,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
                 .labels(mapLabelModelToDto(recurringTransaction.getLabels()))
                 .transfer(mapTransferModelToDto(recurringTransaction.getTransfer()))
                 .periodicity(mapRecurringTypeModelToDto(recurringTransaction.getPeriodicity()))
+                .startDate(recurringTransaction.getStartDate().toString())
                 .fixedAmount(mapMonetaryAmountModelToDto(recurringTransaction.getFixedAmount()))
                 .transactionRecords(recurringTransaction.getTransactionRecords().stream()
                         .map(this::mapTransactionRecordModelToDto)
@@ -76,7 +77,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
                 .transfer(mapTransferDtoToModel(recurringTransactionDto.getTransfer(), recurringTransactionDto.getType()))
                 .startDate(mapDateDtoToModel(recurringTransactionDto.getStartDate()))
                 .periodicity(mapRecurringTypeModelToDto(recurringTransactionDto.getPeriodicity()))
-                .fixedAmount(recurringTransactionDto.getFixedAmount() != null ? mapMonetaryAmountDtoToModel(recurringTransactionDto.getFixedAmount()) : null)
+                .fixedAmount(recurringTransactionDto.getFixedAmount() != null && recurringTransactionDto.getFixedAmount().getAmount() != null ? mapMonetaryAmountDtoToModel(recurringTransactionDto.getFixedAmount()) : null)
                 .transactionRecords(transactionRecords)
                 .build();
     }
@@ -142,7 +143,7 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
 
     private MonetaryAmountDto mapMonetaryAmountModelToDto(final MonetaryAmount amount) {
         return MonetaryAmountDto.builder()
-                .amount(amount.amount().doubleValue())
+                .amount(amount != null && amount.amount() != null ? amount.amount().doubleValue() : null)
                 .build();
     }
 

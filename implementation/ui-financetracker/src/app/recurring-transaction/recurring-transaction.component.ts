@@ -1,31 +1,31 @@
 import { Component, ViewChild } from '@angular/core';
-import { OneTimeTransaction } from './oneTimeTransaction';
-import { Transfer } from '../transaction/transaction';
+import { RecurringTransaction } from './recurringTransaction';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { OneTimeTransactionService } from './oneTimeTransaction.service';
+import { RecurringTransactionService } from './recurringTransaction.service';
 import { MatDialog } from '@angular/material/dialog';
-import Swal from 'sweetalert2';
-import { OneTimeTransactionDialogComponent } from '../one-time-transaction-dialog/one-time-transaction-dialog.component';
+import { Transfer } from '../transaction/transaction';
 import { BankAccountService } from '../bank-account/bankAccount.service';
 import { BankAccount } from '../bank-account/bankAccount';
+import Swal from 'sweetalert2';
+import { RecurringTransactionDialogComponent } from '../recurring-transaction-dialog/recurring-transaction-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-one-time-transaction',
-  templateUrl: './one-time-transaction.component.html',
-  styleUrls: ['./one-time-transaction.component.scss']
+  selector: 'app-recurring-transaction',
+  templateUrl: './recurring-transaction.component.html',
+  styleUrls: ['./recurring-transaction.component.scss']
 })
-export class OneTimeTransactionComponent {
+export class RecurringTransactionComponent {
 
-
-  displayedColumns: string[] = ['name', 'description', 'type', 'amount', 'date', 'transfer', 'transferStatus', 'labels', 'actions'];
-  transactions = new MatTableDataSource<OneTimeTransaction>();
+  displayedColumns: string[] = ['name', 'description', 'type', 'periodicity', 'fixedAmount', 'startDate', 'transfer', 'labels', 'actions'];
   bankAccounts: BankAccount[] = []
+  transactions = new MatTableDataSource<RecurringTransaction>();
 
   @ViewChild(MatPaginator, { static: true })
   paginator!: MatPaginator;
 
-  constructor(private transactionService: OneTimeTransactionService,
+  constructor(private transactionService: RecurringTransactionService,
               private bankAccountService: BankAccountService,
               private dialog: MatDialog) {
     this.bankAccountService.getAllBankAccounts().subscribe(result => this.bankAccounts = result)
@@ -33,7 +33,9 @@ export class OneTimeTransactionComponent {
 
   ngOnInit() {
     this.transactions.paginator = this.paginator;
-    this.transactionService.getAllOneTimeTransactions().subscribe(transactions => this.transactions.data = transactions.sort((a, b) => a.name.localeCompare(b.name)));
+    this.transactionService.getAllRecurringTransactions().subscribe(transactions => {
+      this.transactions.data = transactions.sort((a, b) => a.name.localeCompare(b.name))
+    });
   }
 
   transferToString(transfer: Transfer) {
@@ -49,36 +51,30 @@ export class OneTimeTransactionComponent {
     this.transactions.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
-  transfer(transaction: OneTimeTransaction) {
-    this.transactionService.transferOneTimeTransaction(transaction.id).subscribe(() => {
-      this.transactionService.getAllOneTimeTransactions().subscribe(transactions => this.transactions.data = transactions.sort((a, b) => a.name.localeCompare(b.name)));
-    })
-  }
-
   openAddDialog(): void {
-    const dialogRef = this.dialog.open(OneTimeTransactionDialogComponent, { width: '60%' });
+    const dialogRef = this.dialog.open(RecurringTransactionDialogComponent, { width: '60%' });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result == null) {
         return;
       }
 
-      this.transactionService.createOneTimeTransaction(result).subscribe(() => {
+      this.transactionService.createRecurringTransaction(result).subscribe(() => {
         this.transactions.data.push(result)
         this.transactions.data = this.transactions.data.sort((a, b) => a.name.localeCompare(b.name));
       })
     });
   }
 
-  openEditDialog(transaction: OneTimeTransaction): void {
-    const dialogRef = this.dialog.open(OneTimeTransactionDialogComponent, { width: '60%', data: transaction });
+  openEditDialog(transaction: RecurringTransaction): void {
+    const dialogRef = this.dialog.open(RecurringTransactionDialogComponent, { width: '60%', data: transaction });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result == null) {
         return;
       }
 
-      this.transactionService.editOneTimeTransaction(result).subscribe(() => {
+      this.transactionService.editRecurringTransaction(result).subscribe(() => {
         const resultingTransactions = this.transactions.data.filter(a => a.id != result.id)
         resultingTransactions.push(result)
         this.transactions.data = resultingTransactions.sort((a, b) => a.name.localeCompare(b.name));
@@ -97,12 +93,11 @@ export class OneTimeTransactionComponent {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.value) {
-        this.transactionService.deleteOneTimeTransaction(id).subscribe(() => {
+        this.transactionService.deleteRecurringTransaction(id).subscribe(() => {
           this.transactions.data = this.transactions.data.filter(t => t.id != id);
         })
       }
     });
   }
-
 
 }

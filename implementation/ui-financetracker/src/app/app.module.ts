@@ -24,6 +24,11 @@ import { BankAccountComponent } from './bank-account/bank-account.component';
 import { BankAccountDialogComponent } from './bank-account-dialog/bank-account-dialog.component';
 import { OneTimeTransactionComponent } from './one-time-transaction/one-time-transaction.component';
 import { OneTimeTransactionDialogComponent } from './one-time-transaction-dialog/one-time-transaction-dialog.component';
+import { RecurringTransactionComponent } from './recurring-transaction/recurring-transaction.component';
+import { RecurringTransactionDialogComponent } from './recurring-transaction-dialog/recurring-transaction-dialog.component';
+import { TransactionRecordComponent } from './transaction-record/transaction-record.component';
+import { TransactionRecordDialogComponent } from './transaction-record-dialog/transaction-record-dialog.component';
+import { BankAccountDetailComponent } from './bank-account-detail/bank-account-detail.component';
 
 
 @NgModule({
@@ -34,6 +39,11 @@ import { OneTimeTransactionDialogComponent } from './one-time-transaction-dialog
     BankAccountDialogComponent,
     OneTimeTransactionComponent,
     OneTimeTransactionDialogComponent,
+    RecurringTransactionComponent,
+    RecurringTransactionDialogComponent,
+    TransactionRecordComponent,
+    TransactionRecordDialogComponent,
+    BankAccountDetailComponent,
   ],
   imports: [
     BrowserModule,

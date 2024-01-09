@@ -44,12 +44,11 @@ public class RecurringTransactionService {
 
     public void deleteTransactionRecord(final String transactionId, final String transactionRecordId) {
         final RecurringTransaction transaction = getRecurringTransaction(transactionId).orElseThrow(NotFoundException::new);
-        final boolean transactionFoundAndRemoved = transaction.getTransactionRecords().removeIf(record -> record.getId().equals(transactionRecordId));
 
-        if (!transactionFoundAndRemoved) {
-            throw new NotFoundException();
+        final TransactionRecord recordToDelete = transaction.getTransactionRecords().stream().filter(record -> record.getId().equals(transactionRecordId)).findFirst().orElseThrow(NotFoundException::new);
+        transferService.rollbackTransfer(transaction.getTransfer(), recordToDelete);
 
-        }
+        transaction.getTransactionRecords().removeIf(record -> record.getId().equals(transactionRecordId));
         recurringTransactionRepository.save(transaction);
     }
 

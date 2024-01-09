@@ -18,7 +18,7 @@ export class BankAccount {
 }
 
 export class MonetaryAmount {
-    amount: number;
+    amount: number | null;
 
     constructor(amount: number) {
         this.amount = amount;

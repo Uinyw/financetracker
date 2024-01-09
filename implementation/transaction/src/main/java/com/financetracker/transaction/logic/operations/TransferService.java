@@ -43,12 +43,12 @@ public class TransferService {
         }
 
         if (transfer.hasInternalSource() && !transfer.hasInternalTarget()) {
-            depositToBankAccount(transfer.getTargetBankAccountId(), transferable.getAmount().amount());
+            depositToBankAccount(transfer.getSourceBankAccountId(), transferable.getAmount().amount());
             return;
         }
 
         if (transfer.hasInternalTarget() && !transfer.hasInternalSource()) {
-            withdrawFromBankAccount(transfer.getSourceBankAccountId(), transferable.getAmount().amount());
+            withdrawFromBankAccount(transfer.getTargetBankAccountId(), transferable.getAmount().amount());
             return;
         }
 
