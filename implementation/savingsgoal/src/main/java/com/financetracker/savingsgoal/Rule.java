@@ -1,8 +1,13 @@
 package com.financetracker.savingsgoal;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.UUID;
 
+@Setter
+@Getter
 public class Rule {
     private UUID id;
     private List<UUID> bankAccountID; //changed this to iterate over it later on

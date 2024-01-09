@@ -1,5 +1,8 @@
 package com.financetracker.savingsgoal.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.financetracker.savingsgoal.*;
 import jakarta.persistence.*;
 import org.openapitools.model.AchievementStatus;
@@ -8,6 +11,7 @@ import org.openapitools.model.Periodicity;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -37,7 +41,6 @@ public class SavingsGoalMapper {
     }
     public PeriodicalSavingsGoal periodicalSavingsGoalDTOtoEntity(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO){
         //TODO more work required (savings records missmatch)
-
         org.openapitools.model.MonetaryAmount reoccuringRate = new org.openapitools.model.MonetaryAmount();
         reoccuringRate.setAmount(periodicalSavingsGoalDTO.getRecurringRate());
 
@@ -50,11 +53,46 @@ public class SavingsGoalMapper {
     }
 
     public RuleBasedSavingsGoalDTO ruleBasedSavingsGoalEntityToDTO(RuleBasedSavingsGoal ruleBasedSavingsGoal){
+        //TODO Rule list by UUID!!!!
+        RuleBasedSavingsGoalDTO.TypeEnum matchingType = RuleBasedSavingsGoalDTO.TypeEnum.ALL;
+        switch (ruleBasedSavingsGoal.getMatchingType()){
+            case MATCH_ALL -> matchingType = RuleBasedSavingsGoalDTO.TypeEnum.ANY;
+            case MATCH_ANY -> matchingType = RuleBasedSavingsGoalDTO.TypeEnum.ALL;
+        }
 
+        RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO = createRuleBasedSavingsGoalDTO(
+                ruleBasedSavingsGoal.getId(),
+                ruleBasedSavingsGoal.getName(),
+                ruleBasedSavingsGoal.getDescription(),
+                uuidListToStringList(ruleBasedSavingsGoal.getBankAccountIds().stream().toList()),
+                matchingType,
+                null);
+                //TODO list and non-list unmatch by bank accounts
         return null;
     }
     public RuleBasedSavingsGoal ruleBasedSavingsGoalDTOtoEntity(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO){
-        return null;
+        Set<UUID> rules = new HashSet<>();
+        for(org.openapitools.model.Rule rule : ruleBasedSavingsGoalDTO.getRules()){
+            rules.add(rule.getId());
+        }
+        MatchingType typeEnum = MatchingType.MATCH_ALL;
+        switch (ruleBasedSavingsGoalDTO.getType()){
+            case ALL -> typeEnum = MatchingType.MATCH_ALL;
+            case ANY -> typeEnum = MatchingType.MATCH_ANY;
+        }
+
+
+        RuleBasedSavingsGoal ruleBasedSavingsGoal = createRuleBasedSavingsGoal(
+                ruleBasedSavingsGoalDTO.getId(),
+                ruleBasedSavingsGoalDTO.getDescription(),
+                ruleBasedSavingsGoalDTO.getName(),
+                null,//TODO whats wrong with the achievement status
+                null,//TODO string to uuid
+                rules,
+                typeEnum
+        );
+
+        return ruleBasedSavingsGoal;
     }
 
 
@@ -120,4 +158,51 @@ public class SavingsGoalMapper {
         duration.setEnd(endDate);
         return duration;
     }
+
+    private static RuleBasedSavingsGoalDTO createRuleBasedSavingsGoalDTO(UUID uuid, String name, String description, List<String> bankAccountIds, RuleBasedSavingsGoalDTO.TypeEnum typeEnum, List<Rule> rules) {
+        RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO = new RuleBasedSavingsGoalDTO();
+        ruleBasedSavingsGoalDTO.setId(uuid);
+        ruleBasedSavingsGoalDTO.setName(name);
+        ruleBasedSavingsGoalDTO.setDescription(description);
+        ruleBasedSavingsGoalDTO.setBankAccountIds(bankAccountIds);
+        ruleBasedSavingsGoalDTO.setType(typeEnum);
+        ruleBasedSavingsGoalDTO.setRules(mapModelToDTO(rules));
+        return ruleBasedSavingsGoalDTO;
+    }
+
+    private static List<org.openapitools.model.Rule> mapModelToDTO(List<Rule> rules){
+        //TODO rules do not match SWAGGER issue
+        //TODO several bank account IDs or one - which is right?
+        List<org.openapitools.model.Rule> ruleList = new ArrayList<>();
+        for(Rule rule : rules){
+            org.openapitools.model.Rule tmpRule = new org.openapitools.model.Rule();
+            tmpRule.setId(rule.getId());
+            tmpRule.setDescription(rule.getDescription());
+            tmpRule.setTarget(monetaryAmountModeltoDTO(rule.getTarget()));
+            tmpRule.setBankAccountID(null);
+            ruleList.add(tmpRule);
+        }
+        return ruleList;
+    }
+
+    private static List<String> uuidListToStringList(List<UUID> uuidlist){
+        List<String> stringList = new ArrayList<>();
+        uuidlist.forEach(x->stringList.add(x.toString()));
+
+        return stringList;
+    }
+
+    private static RuleBasedSavingsGoal createRuleBasedSavingsGoal(UUID id, String description, String name, AchievementStatus achievementStatus, Set<UUID> bankAccountIds, Set<UUID> rules, MatchingType matchingType){
+        RuleBasedSavingsGoal ruleBasedSavingsGoal = new RuleBasedSavingsGoal();
+        ruleBasedSavingsGoal.setId(id);
+        ruleBasedSavingsGoal.setDescription(description);
+        ruleBasedSavingsGoal.setName(name);
+        ruleBasedSavingsGoal.setAchievementStatus(achievementStatus);
+        ruleBasedSavingsGoal.setBankAccountIds(bankAccountIds);
+        ruleBasedSavingsGoal.setRules(rules);
+        ruleBasedSavingsGoal.setMatchingType(matchingType);
+
+        return ruleBasedSavingsGoal;
+    }
+
 }

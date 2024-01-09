@@ -16,7 +16,6 @@ public class SavingsGoalService {
     private final SavingsGoalFactory savingsGoalFactory;
     private final PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository;
     private final RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository;
-
     private final SavingsGoalMapper savingsGoalMapper;
 
  public List<PeriodicalSavingsGoalDTO> getPeriodicalSavingsGoals(){
@@ -57,22 +56,38 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
 //-----------
 
     public List<RuleBasedSavingsGoalDTO> getRuleBasedSavingsGoals(){
-        //TODO implement
-        return null;
+        System.out.println("getting all the rule based savings goals");
+        List<RuleBasedSavingsGoalDTO> ruleBasedSavingsGoalDTOS = new ArrayList<>();
+        ruleBasedSavingsGoalRepository.findAll().forEach(rbsg
+                -> ruleBasedSavingsGoalDTOS.add(savingsGoalMapper.ruleBasedSavingsGoalEntityToDTO(rbsg)));
+        return ruleBasedSavingsGoalDTOS;
     }
     public boolean createRuleBasedSavingsGoal(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO){
-        //TODO implement
-        return false;
+        ruleBasedSavingsGoalRepository.save(savingsGoalMapper.ruleBasedSavingsGoalDTOtoEntity(ruleBasedSavingsGoalDTO));
+        System.out.println("rule based savings goal has been created");
+        return true;
     }
 
     public boolean deleteRuleBasedSavingsGoal(String id){
-        //TODO implement
-        return false;
+        RuleBasedSavingsGoal ruleBasedSavingsGoal = findRuleBasedSavingsGoalById(id);
+        if(ruleBasedSavingsGoal == null)
+            return false;
+
+        ruleBasedSavingsGoalRepository.delete(ruleBasedSavingsGoal);
+        return true;
     }
 
     public RuleBasedSavingsGoalDTO getRuleBasedSavingsGoal(String id){
-        //TODO implement
-        return null;
+        RuleBasedSavingsGoal ruleBasedSavingsGoal = findRuleBasedSavingsGoalById(id);
+        return savingsGoalMapper.ruleBasedSavingsGoalEntityToDTO(ruleBasedSavingsGoal);
     }
 
+    private RuleBasedSavingsGoal findRuleBasedSavingsGoalById(String id){
+        for(RuleBasedSavingsGoal sg : ruleBasedSavingsGoalRepository.findAll()){
+            if(sg.getId().toString().equals(id)){
+                return sg;
+            }
+        }
+        return null;
+    }
 }

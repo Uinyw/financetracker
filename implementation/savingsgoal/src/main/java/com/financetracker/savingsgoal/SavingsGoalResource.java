@@ -1,24 +1,15 @@
 package com.financetracker.savingsgoal;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
-import javax.validation.Valid;
-
-import com.financetracker.savingsgoal.model.SavingsGoalEntity;
 import org.openapitools.api.SavingsGoalsApi;
 import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.context.request.NativeWebRequest;
 
 
 @RequiredArgsConstructor
