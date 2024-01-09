@@ -2,7 +2,7 @@ package com.financetracker.transaction.logic.operations;
 
 import com.financetracker.transaction.api.exceptions.NotParseableException;
 import com.financetracker.transaction.api.exceptions.TransferFailedException;
-import com.financetracker.transaction.infrastructure.db.TransactionRepository;
+import com.financetracker.transaction.infrastructure.db.RecurringTransactionRepository;
 import com.financetracker.transaction.logic.model.RecurringTransaction;
 import com.financetracker.transaction.logic.model.TransactionRecord;
 import com.financetracker.transaction.logic.model.TransferStatus;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class RecurringTransactionService {
 
     private final TransferService transferService;
-    private final TransactionRepository<RecurringTransaction> recurringTransactionRepository;
+    private final RecurringTransactionRepository recurringTransactionRepository;
 
     public List<RecurringTransaction> getRecurringTransactions() {
         return recurringTransactionRepository.findAll();

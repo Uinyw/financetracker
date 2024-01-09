@@ -2,7 +2,7 @@ package com.financetracker.transaction.logic.operations;
 
 import com.financetracker.transaction.api.exceptions.NotParseableException;
 import com.financetracker.transaction.api.exceptions.TransferFailedException;
-import com.financetracker.transaction.infrastructure.db.TransactionRepository;
+import com.financetracker.transaction.infrastructure.db.OneTimeTransactionRepository;
 import com.financetracker.transaction.logic.model.OneTimeTransaction;
 import com.financetracker.transaction.logic.model.TransferStatus;
 import jakarta.ws.rs.NotFoundException;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class OneTimeTransactionService {
 
     private final TransferService transferService;
-    private final TransactionRepository<OneTimeTransaction> oneTimeTransactionRepository;
+    private final OneTimeTransactionRepository oneTimeTransactionRepository;
 
     public List<OneTimeTransaction> getOneTimeTransactions() {
         return oneTimeTransactionRepository.findAll();

@@ -1,10 +1,9 @@
 package com.financetracker.transaction.infrastructure.db;
 
-import com.financetracker.transaction.logic.model.Transaction;
+import com.financetracker.transaction.logic.model.OneTimeTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TransactionRepository<T extends Transaction> extends JpaRepository<T, String> {
-
+public interface OneTimeTransactionRepository extends JpaRepository<OneTimeTransaction, String> {
 }

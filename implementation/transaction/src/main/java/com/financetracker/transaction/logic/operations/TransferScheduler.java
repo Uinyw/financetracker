@@ -1,8 +1,8 @@
 package com.financetracker.transaction.logic.operations;
 
 import com.financetracker.transaction.infrastructure.config.Configuration;
-import com.financetracker.transaction.infrastructure.db.TransactionRepository;
-import com.financetracker.transaction.logic.model.OneTimeTransaction;
+import com.financetracker.transaction.infrastructure.db.OneTimeTransactionRepository;
+import com.financetracker.transaction.infrastructure.db.RecurringTransactionRepository;
 import com.financetracker.transaction.logic.model.RecurringTransaction;
 import com.financetracker.transaction.logic.model.TransactionRecord;
 import com.financetracker.transaction.logic.model.TransferStatus;
@@ -21,8 +21,8 @@ public class TransferScheduler {
     private final Clock clock;
     private final OneTimeTransactionService oneTimeTransactionService;
     private final RecurringTransactionService recurringTransactionService;
-    private final TransactionRepository<OneTimeTransaction> oneTimeTransactionRepository;
-    private final TransactionRepository<RecurringTransaction> recurringTransactionRepository;
+    private final OneTimeTransactionRepository oneTimeTransactionRepository;
+    private final RecurringTransactionRepository recurringTransactionRepository;
 
     /**
      * Runs every day at 6am.

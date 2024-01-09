@@ -148,9 +148,9 @@ public class TransactionMapper implements OneTimeTransactionMapper, RecurringTra
 
     private TransferDto mapTransferModelToDto(final Transfer transfer) {
         return TransferDto.builder()
-                .sourceBankAccountId(UUID.fromString(transfer.getSourceBankAccountId()))
+                .sourceBankAccountId(transfer.getSourceBankAccountId() != null ? UUID.fromString(transfer.getSourceBankAccountId()) : null)
                 .externalSourceId(transfer.getExternalSourceId())
-                .targetBankAccountId(UUID.fromString(transfer.getTargetBankAccountId()))
+                .targetBankAccountId(transfer.getTargetBankAccountId() != null ? UUID.fromString(transfer.getTargetBankAccountId()) : null)
                 .externalTargetId(transfer.getExternalTargetId())
                 .build();
     }

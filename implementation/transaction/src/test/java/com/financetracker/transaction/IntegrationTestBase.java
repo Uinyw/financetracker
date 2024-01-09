@@ -3,9 +3,7 @@ package com.financetracker.transaction;
 import com.financetracker.transaction.api.mapping.OneTimeTransactionMapper;
 import com.financetracker.transaction.api.mapping.RecurringTransactionMapper;
 import com.financetracker.transaction.infrastructure.client.BankAccountProvider;
-import com.financetracker.transaction.infrastructure.db.TransactionRepository;
-import com.financetracker.transaction.logic.model.OneTimeTransaction;
-import com.financetracker.transaction.logic.operations.TransferService;
+import com.financetracker.transaction.infrastructure.db.OneTimeTransactionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,7 @@ public class IntegrationTestBase {
     protected static final String LOCAL_BASE_URL_WITHOUT_PORT = "http://localhost";
 
     @Autowired
-    private TransactionRepository<OneTimeTransaction> oneTimeTransactionTransactionRepository;
+    private OneTimeTransactionRepository oneTimeTransactionRepository;
 
     @Autowired
     public OneTimeTransactionMapper oneTimeTransactionMapper;
@@ -35,6 +33,6 @@ public class IntegrationTestBase {
     @AfterEach
     void tearDown() {
         Mockito.reset(bankAccountProvider);
-        oneTimeTransactionTransactionRepository.deleteAll();
+        oneTimeTransactionRepository.deleteAll();
     }
 }
