@@ -6,11 +6,13 @@ import org.openapitools.model.AchievementStatus;
 import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.Periodicity;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@Component
 public class SavingsGoalMapper {
 
     public PeriodicalSavingsGoalDTO periodicalSavingsGoalEntityToDTO(PeriodicalSavingsGoal periodicalSavingsGoal){
@@ -36,7 +38,7 @@ public class SavingsGoalMapper {
     public PeriodicalSavingsGoal periodicalSavingsGoalDTOtoEntity(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO){
         //TODO more work required (savings records missmatch)
 
-        org.openapitools.model.MonetaryAmount reoccuringRate = new org.openapitools.model.MonetaryAmount()MonetaryAmount();
+        org.openapitools.model.MonetaryAmount reoccuringRate = new org.openapitools.model.MonetaryAmount();
         reoccuringRate.setAmount(periodicalSavingsGoalDTO.getRecurringRate());
 
         Duration duration = stringToDuration(periodicalSavingsGoalDTO.getDuration());

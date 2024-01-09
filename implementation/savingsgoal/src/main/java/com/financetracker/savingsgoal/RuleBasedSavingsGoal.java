@@ -1,14 +1,19 @@
 package com.financetracker.savingsgoal;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 import org.openapitools.model.AchievementStatus;
 
 import java.util.Set;
 import java.util.UUID;
 
+@Builder(builderMethodName = "with")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "rule_based_savings_goal")
+@Entity
 public class RuleBasedSavingsGoal{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -30,21 +30,21 @@ public class PeriodicalSavingsGoal{
     @Column(name = "bankAccountId")
     private UUID bankAccountId;
     @Embedded
-    @AttributeOverride(name = "goal", column = @Column(name = "amount", precision = 27, scale = 6))
+    @AttributeOverride(name = "amount", column = @Column(name = "goal"))
     private org.openapitools.model.MonetaryAmount goal;
 
     @Embedded
-    @AttributeOverride(name = "recurringRate", column = @Column(name = "amount", precision = 27, scale = 6))
+    @AttributeOverride(name = "amount", column = @Column(name = "recurringRate"))
     private org.openapitools.model.MonetaryAmount recurringRate;
 
     @Embedded
-    @AttributeOverride(name = "recurringAmount", column = @Column(name = "amount", precision = 27, scale = 6))
+    @AttributeOverride(name = "amount", column = @Column(name = "recurringAmount"))
     private org.openapitools.model.MonetaryAmount recurringAmount;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "start", column = @Column(name = "start", precision = 27, scale = 6)),
-            @AttributeOverride(name = "end", column = @Column(name = "end", precision = 27, scale = 6))
+            @AttributeOverride(name = "start", column = @Column(name = "start")),
+            @AttributeOverride(name = "end", column = @Column(name = "end"))
     })
     private Duration duration;// inclusive infinity
 
