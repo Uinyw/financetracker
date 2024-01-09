@@ -1,13 +1,12 @@
 package com.financetracker.savingsgoal;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
+import com.financetracker.savingsgoal.model.SavingsGoalMapper;
 import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
 import org.springframework.stereotype.Service;
-import com.financetracker.savingsgoal.model.SavingsGoalEntity;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -15,46 +14,44 @@ import lombok.RequiredArgsConstructor;
 public class SavingsGoalService {
 
     private final SavingsGoalFactory savingsGoalFactory;
-    private final SavingsGoalRepository savingsGoalRepository;
+    private final PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository;
+    private final RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository;
 
-     public List<SavingsGoalEntity> get() {
-        List<SavingsGoalEntity> savingsGoalEntities = savingsGoalRepository.findAll();
-        return savingsGoalEntities;
-    }
-
-    public SavingsGoal getSavingsGoalById(UUID id) {
-        Optional<SavingsGoalEntity> savingsGoal = get().stream().filter(ba -> ba.getId().equals(id)).findFirst();
-        return null;
-    }
-
-    public List<SavingsGoalEntity> getSavingsGoals() {
-         List<SavingsGoal> bankAccountEntities;
-        return null;
-    }
-
-    public Boolean deleteSavingsGoalById(String id) {
-        return false;
-    }
-
-
+    private final SavingsGoalMapper savingsGoalMapper;
 
  public List<PeriodicalSavingsGoalDTO> getPeriodicalSavingsGoals(){
-    //TODO implement
-     return null;
+     List<PeriodicalSavingsGoalDTO> periodicalSavingsGoalDTOList = new ArrayList<>();
+     for(PeriodicalSavingsGoal sg : periodicalSavingsGoalRepository.findAll()){
+         periodicalSavingsGoalDTOList.add(savingsGoalMapper.periodicalSavingsGoalEntityToDTO(sg));
+     }
+     return periodicalSavingsGoalDTOList;
  }
  public boolean createPeriodicalSavingsGoal(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO){
-     //TODO implement
-     return false;
+     PeriodicalSavingsGoal periodicalSavingsGoal = savingsGoalMapper.periodicalSavingsGoalDTOtoEntity(periodicalSavingsGoalDTO);
+     periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
+     return true;
  }
 
 public boolean deletePeriodicalSavingsGoal(String id){
-         //TODO implement
-         return false;
+    PeriodicalSavingsGoal psg = findPeriodicalSavingsGoalById(id);
+    if(psg == null)
+        return false;
+    periodicalSavingsGoalRepository.delete(psg);
+    return true;
 }
 
 public PeriodicalSavingsGoalDTO getPeriodicalSavingsGoal(String id){
-    //TODO implement
-         return null;
+    PeriodicalSavingsGoal psg = findPeriodicalSavingsGoalById(id);
+    return savingsGoalMapper.periodicalSavingsGoalEntityToDTO(psg);
+}
+
+private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
+    for(PeriodicalSavingsGoal sg : periodicalSavingsGoalRepository.findAll()){
+        if(sg.getId().toString().equals(id)){
+            return sg;
+        }
+    }
+    return null;
 }
 
 //-----------

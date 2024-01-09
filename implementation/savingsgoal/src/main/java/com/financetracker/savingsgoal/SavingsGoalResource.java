@@ -29,18 +29,20 @@ public class SavingsGoalResource implements SavingsGoalsApi {
 
     @Override
     public ResponseEntity<List<PeriodicalSavingsGoalDTO>> savingsGoalsPeriodicalGet() {
-
+        System.out.println("get the periodical savings goals");
         return new ResponseEntity<>(savingsGoalService.getPeriodicalSavingsGoals(), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> savingsGoalsPeriodicalPost(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO) {
+        System.out.println("post a periodical savings goal");
         savingsGoalService.createPeriodicalSavingsGoal(periodicalSavingsGoalDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<Void> savingsGoalsPeriodicalidDelete(String id) {
+        System.out.println("delete a periodical savings goal");
         boolean worked = savingsGoalService.deletePeriodicalSavingsGoal(id);
         return worked ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<>(HttpStatus.OK);
     }
@@ -82,35 +84,5 @@ public class SavingsGoalResource implements SavingsGoalsApi {
     public ResponseEntity<Void> savingsGoalsRuleBasedPost(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO) {
         return SavingsGoalsApi.super.savingsGoalsRuleBasedPost(ruleBasedSavingsGoalDTO);
     }
-
-    /*
-    @Override
-    public ResponseEntity<List<SavingsGoalsGet200ResponseInner>> savingsGoalsGet() {
-        
-        System.out.println("savings goal created");
-        List<SavingsGoalEntity> savingsGoalEntityList = savingsGoalService.get();
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-    
-    @Override
-    public ResponseEntity<Void> savingsGoalsPost(@Valid @RequestBody SavingsGoalsGet200ResponseInner savingsGoal) {
-        System.out.println("savings goal saved");
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @Override
-    public ResponseEntity<Void> savingsGoalsIdDelete(@PathVariable("id") String id) {
-        
-        System.out.println("deleted savigns goal");
-
-        return true ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<SavingsGoalsGet200ResponseInner> savingsGoalsIdGet(@PathVariable("id") String id) {
-        System.out.println("searching for a savings goal");
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
-*/
 
 }

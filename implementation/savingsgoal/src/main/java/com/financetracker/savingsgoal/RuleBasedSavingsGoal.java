@@ -1,9 +1,25 @@
 package com.financetracker.savingsgoal;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import org.openapitools.model.AchievementStatus;
+
 import java.util.Set;
 import java.util.UUID;
 
-public class RuleBasedSavingsGoal extends SavingsGoal {
+public class RuleBasedSavingsGoal{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+    @Column(name = "description")
+    private String description;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "achievementStatus")
+    private AchievementStatus achievementStatus;
+
     private Set<UUID> bankAccountIds;
     private Set<UUID> rules;
     private MatchingType matchingType;
