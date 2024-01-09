@@ -17,6 +17,14 @@ export class RecurringTransactionService {
     return this.httpClient.get<RecurringTransaction[]>(`${this.BASE_URL}/transactions/recurring`);
   }
 
+  getAllRecurringTransactionsBySource(sourceBankAccountId: string): Observable<RecurringTransaction[]> {
+    return this.httpClient.get<RecurringTransaction[]>(`${this.BASE_URL}/transactions/recurring?sourceBankAccount=${sourceBankAccountId}`);
+  }
+
+  getAllRecurringTransactionsByTarget(sourceBankAccountId: string): Observable<RecurringTransaction[]> {
+    return this.httpClient.get<RecurringTransaction[]>(`${this.BASE_URL}/transactions/recurring?targetBankAccount=${sourceBankAccountId}`);
+  }
+
   getRecurringTransaction(transactionId: string): Observable<RecurringTransaction> {
     return this.httpClient.get<RecurringTransaction>(`${this.BASE_URL}/transactions/recurring/${transactionId}`);
   }

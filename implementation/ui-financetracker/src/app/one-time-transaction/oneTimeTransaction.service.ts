@@ -17,6 +17,14 @@ export class OneTimeTransactionService {
     return this.httpClient.get<OneTimeTransaction[]>(`${this.BASE_URL}/transactions/onetime`);
   }
 
+  getAllOneTimeTransactionsBySource(sourceBankAccountId: string): Observable<OneTimeTransaction[]> {
+    return this.httpClient.get<OneTimeTransaction[]>(`${this.BASE_URL}/transactions/onetime?sourceBankAccount=${sourceBankAccountId}`);
+  }
+
+  getAllOneTimeTransactionsByTarget(sourceBankAccountId: string): Observable<OneTimeTransaction[]> {
+    return this.httpClient.get<OneTimeTransaction[]>(`${this.BASE_URL}/transactions/onetime?targetBankAccount=${sourceBankAccountId}`);
+  }
+
   createOneTimeTransaction(transaction: OneTimeTransaction): Observable<any> {
     return this.httpClient.post<any>(`${this.BASE_URL}/transactions/onetime`, transaction);
   }

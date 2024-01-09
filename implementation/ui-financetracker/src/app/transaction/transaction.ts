@@ -1,3 +1,21 @@
+import { MonetaryAmount } from "../bank-account/bankAccount";
+
+export class Transaction {
+    name: string;
+    date: string;
+    transfer: Transfer;
+    amount: MonetaryAmount;
+    plus: boolean;
+
+    constructor(name: string, date: string, transfer: Transfer, amount: MonetaryAmount, plus: boolean) {
+        this.name = name;
+        this.date = date;
+        this.transfer = transfer;
+        this.amount = amount;
+        this.plus = plus;
+    }
+}
+
 
 export class Transfer {
     sourceBankAccountId: string | null;

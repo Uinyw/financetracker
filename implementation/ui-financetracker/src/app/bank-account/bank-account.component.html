@@ -46,6 +46,9 @@
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef> Actions </th>
             <td mat-cell *matCellDef="let bankAccount">
+                <button mat-button [routerLink]="['/bank-accounts/', bankAccount.id]" >
+                    <mat-icon>expand_all</mat-icon>
+                </button>
                 <button mat-button (click)="openEditDialog(bankAccount)">
                     <mat-icon>edit</mat-icon>
                 </button>

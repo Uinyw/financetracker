@@ -4,9 +4,11 @@ import { BankAccountComponent } from './bank-account/bank-account.component';
 import { OneTimeTransactionComponent } from './one-time-transaction/one-time-transaction.component';
 import { RecurringTransactionComponent } from './recurring-transaction/recurring-transaction.component';
 import { TransactionRecordComponent } from './transaction-record/transaction-record.component';
+import { BankAccountDetailComponent } from './bank-account-detail/bank-account-detail.component';
 
 const routes: Routes = [
   { path: 'bank-accounts', component: BankAccountComponent },
+  { path: 'bank-accounts/:id', component: BankAccountDetailComponent },
   { path: 'transactions/one-time', component: OneTimeTransactionComponent },
   { path: 'transactions/recurring', component: RecurringTransactionComponent },
   { path: 'transactions/recurring/:id', component: TransactionRecordComponent }
