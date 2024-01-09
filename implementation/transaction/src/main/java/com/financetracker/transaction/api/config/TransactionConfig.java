@@ -1,6 +1,6 @@
-package com.financetracker.transaction.config;
+package com.financetracker.transaction.api.config;
 
-import com.financetracker.transaction.TransactionResource;
+import com.financetracker.transaction.api.TransactionResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.context.annotation.Configuration;
 
