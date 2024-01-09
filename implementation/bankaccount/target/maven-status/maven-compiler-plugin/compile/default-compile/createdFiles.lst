@@ -1,8 +1,10 @@
+org/openapitools/model/MonetaryAmountDto$MonetaryAmountDtoBuilder.class
 com/bank/account/infrastructure/converter/LabelSetConverter.class
 com/bank/account/BankAccountApplication.class
 org/openapitools/api/ApiUtil.class
 org/openapitools/model/BankAccountDto.class
 com/bank/account/logic/model/BankAccount.class
+org/openapitools/model/BankAccountDto$BankAccountDtoBuilder.class
 com/bank/account/infrastructure/BankAccountRepository.class
 com/bank/account/logic/model/Label.class
 com/bank/account/api/mapping/BankAccountMapper.class

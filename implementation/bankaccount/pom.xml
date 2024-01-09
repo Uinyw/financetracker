@@ -108,6 +108,7 @@
 							<inputSpec>implementation/bankaccount/src/main/resources/api/bankAccount.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<configOptions>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
 								<openApiNullable>false</openApiNullable>
 								<interfaceOnly>true</interfaceOnly>
 							</configOptions>

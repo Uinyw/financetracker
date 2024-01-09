@@ -1,7 +1,7 @@
 package com.bank.account.api;
 
 import com.bank.account.IntegrationTestBase;
-import com.bank.account.data.TestBankAccountFactory;
+import com.bank.account.data.TestBankAccountBuilder;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ class BankResourceTest extends IntegrationTestBase {
 
     @Test
     void givenBankAccountDto_whenCreateBankAccount_thenBankAccountExists() {
-        final var bankAccountDto = TestBankAccountFactory.createDto();
+        final var bankAccountDto = TestBankAccountBuilder.buildWithDefaults();
 
         given().port(port)
                 .get(LOCAL_BASE_URL_WITHOUT_PORT + "/bankAccounts")
@@ -38,7 +38,7 @@ class BankResourceTest extends IntegrationTestBase {
 
     @Test
     void givenBankAccount_whenGetBankAccountById_thenBankAccountReturned() {
-        final var bankAccountDto = TestBankAccountFactory.createDto();
+        final var bankAccountDto = TestBankAccountBuilder.buildWithDefaults();
 
         given().port(port)
                 .contentType(ContentType.JSON)

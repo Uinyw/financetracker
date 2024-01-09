@@ -29,20 +29,20 @@ public class BankAccountMapper {
     }
 
     public BankAccountDto mapBankAccountModelToDtp(final BankAccount bankAccount) {
-        final BankAccountDto bankAccountDto = new BankAccountDto();
-        bankAccountDto.setId(UUID.fromString(bankAccount.getId()));
-        bankAccountDto.setName(bankAccount.getName());
-        bankAccountDto.setDescription(bankAccount.getDescription());
-        bankAccountDto.setBalance(mapMonetaryAmountModelToDto(bankAccount.getBalance()));
-        bankAccountDto.setDispositionLimit(mapMonetaryAmountModelToDto(bankAccount.getDispositionLimit()));
-        bankAccountDto.setLabels(mapLabelModelToDto(bankAccount.getLabels()));
-        return bankAccountDto;
+        return BankAccountDto.builder()
+                .id(UUID.fromString(bankAccount.getId()))
+                .name(bankAccount.getName())
+                .description(bankAccount.getDescription())
+                .balance(mapMonetaryAmountModelToDto(bankAccount.getBalance()))
+                .dispositionLimit(mapMonetaryAmountModelToDto(bankAccount.getDispositionLimit()))
+                .labels(mapLabelModelToDto(bankAccount.getLabels()))
+                .build();
     }
 
     private MonetaryAmountDto mapMonetaryAmountModelToDto(final MonetaryAmount amount) {
-        final var result = new MonetaryAmountDto();
-        result.setAmount(amount.amount().doubleValue());
-        return result;
+        return MonetaryAmountDto.builder()
+                .amount(amount.amount().doubleValue())
+                .build();
     }
 
     private MonetaryAmount mapMonetaryAmountDtoToModel(final MonetaryAmountDto amountDto) {
