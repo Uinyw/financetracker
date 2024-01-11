@@ -1,17 +1,12 @@
 package com.financetracker.savingsgoal.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.financetracker.savingsgoal.*;
-import jakarta.persistence.*;
 import org.openapitools.model.AchievementStatus;
 import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.Periodicity;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -20,24 +15,18 @@ import java.util.*;
 public class SavingsGoalMapper {
 
     public PeriodicalSavingsGoalDTO periodicalSavingsGoalEntityToDTO(PeriodicalSavingsGoal periodicalSavingsGoal){
-        MonetaryAmount monetaryAmount = new MonetaryAmount();
-        monetaryAmount.setAmount(periodicalSavingsGoal.getGoal().getAmount());
-
-        MonetaryAmount reoccuringAmount = new MonetaryAmount();
-        reoccuringAmount.setAmount(periodicalSavingsGoal.getRecurringAmount().getAmount());
-
         String duration = durationToString(periodicalSavingsGoal.getDuration());
 
-        PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO = createPeriodicalSavingsGoalDTO(periodicalSavingsGoal.getId(),
+        return createPeriodicalSavingsGoalDTO(periodicalSavingsGoal.getId(),
                 periodicalSavingsGoal.getName(),
                 periodicalSavingsGoal.getDescription(),
                 periodicalSavingsGoal.getAchievementStatus(),
                 periodicalSavingsGoal.getBankAccountId(),
-                monetaryAmount,periodicalSavingsGoal.getRecurringRate().getAmount(),
-                reoccuringAmount,
+                periodicalSavingsGoal.getGoal(),
+                periodicalSavingsGoal.getRecurringRate().getAmount(),
+                periodicalSavingsGoal.getRecurringAmount(),
                 duration,
                 periodicalSavingsGoal.getPeriodicity());
-        return periodicalSavingsGoalDTO;
     }
     public PeriodicalSavingsGoal periodicalSavingsGoalDTOtoEntity(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO){
         //TODO more work required (savings records missmatch)
@@ -46,49 +35,47 @@ public class SavingsGoalMapper {
 
         Duration duration = stringToDuration(periodicalSavingsGoalDTO.getDuration());
 
-        PeriodicalSavingsGoal periodicalSavingsGoal = createPeriodicalSavingsGoal(periodicalSavingsGoalDTO.getBankAccountID(),
+        return createPeriodicalSavingsGoal(periodicalSavingsGoalDTO.getBankAccountID(),
                 reoccuringRate,
-                duration,null ,monetaryAmountDTOtoModel(periodicalSavingsGoalDTO.getRecurringAmount()),monetaryAmountDTOtoModel(periodicalSavingsGoalDTO.getGoal()));
-        return periodicalSavingsGoal;
+                duration,
+                convertDTOsavingsRectordToModel(periodicalSavingsGoalDTO.getSavingsRecord()),
+                monetaryAmountDTOtoModel(periodicalSavingsGoalDTO.getRecurringAmount()),
+                monetaryAmountDTOtoModel(periodicalSavingsGoalDTO.getGoal()));
     }
 
     public RuleBasedSavingsGoalDTO ruleBasedSavingsGoalEntityToDTO(RuleBasedSavingsGoal ruleBasedSavingsGoal){
-        //TODO Rule list by UUID!!!!
+        if(ruleBasedSavingsGoal==null)
+            return new RuleBasedSavingsGoalDTO();
+
         RuleBasedSavingsGoalDTO.TypeEnum matchingType = RuleBasedSavingsGoalDTO.TypeEnum.ALL;
         switch (ruleBasedSavingsGoal.getMatchingType()){
             case MATCH_ALL -> matchingType = RuleBasedSavingsGoalDTO.TypeEnum.ANY;
             case MATCH_ANY -> matchingType = RuleBasedSavingsGoalDTO.TypeEnum.ALL;
         }
 
-        RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO = createRuleBasedSavingsGoalDTO(
+        return createRuleBasedSavingsGoalDTO(
                 ruleBasedSavingsGoal.getId(),
                 ruleBasedSavingsGoal.getName(),
                 ruleBasedSavingsGoal.getDescription(),
-                uuidListToStringList(ruleBasedSavingsGoal.getBankAccountIds().stream().toList()),
+                ruleBasedSavingsGoal.getBankAccountIds(),
                 matchingType,
-                null);
-                //TODO list and non-list unmatch by bank accounts
-        return null;
+                ruleBasedSavingsGoal.getRules());
     }
     public RuleBasedSavingsGoal ruleBasedSavingsGoalDTOtoEntity(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO){
-        Set<UUID> rules = new HashSet<>();
-        for(org.openapitools.model.Rule rule : ruleBasedSavingsGoalDTO.getRules()){
-            rules.add(rule.getId());
-        }
+
         MatchingType typeEnum = MatchingType.MATCH_ALL;
         switch (ruleBasedSavingsGoalDTO.getType()){
             case ALL -> typeEnum = MatchingType.MATCH_ALL;
             case ANY -> typeEnum = MatchingType.MATCH_ANY;
         }
 
-
         RuleBasedSavingsGoal ruleBasedSavingsGoal = createRuleBasedSavingsGoal(
                 ruleBasedSavingsGoalDTO.getId(),
                 ruleBasedSavingsGoalDTO.getDescription(),
                 ruleBasedSavingsGoalDTO.getName(),
-                null,//TODO whats wrong with the achievement status
-                null,//TODO string to uuid
-                rules,
+                ruleBasedSavingsGoalDTO.getAchievementStatus(),
+                ruleBasedSavingsGoalDTO.getBankAccountIds(),
+                convertRuleDTOToModel(ruleBasedSavingsGoalDTO.getRules()),
                 typeEnum
         );
 
@@ -115,11 +102,11 @@ public class SavingsGoalMapper {
     public static PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID bankAccountId, org.openapitools.model.MonetaryAmount reoccuringRate, Duration duration, List<SavingsRecord> records, MonetaryAmount reoccuringAmount, MonetaryAmount goal){
         PeriodicalSavingsGoal periodicalSavingsGoal = new PeriodicalSavingsGoal();
         periodicalSavingsGoal.setBankAccountId(bankAccountId);
-        periodicalSavingsGoal.setRecurringRate(reoccuringRate);
+        periodicalSavingsGoal.setRecurringRate(monetaryAmountDTOtoModel(reoccuringRate));
         periodicalSavingsGoal.setDuration(duration);
         periodicalSavingsGoal.setRecords(records);
-        periodicalSavingsGoal.setRecurringAmount(monetaryAmountModeltoDTO(reoccuringAmount));
-        periodicalSavingsGoal.setGoal(monetaryAmountModeltoDTO(goal));
+        periodicalSavingsGoal.setRecurringAmount(reoccuringAmount);
+        periodicalSavingsGoal.setGoal(goal);
         return periodicalSavingsGoal;
     }
 
@@ -129,13 +116,13 @@ public class SavingsGoalMapper {
         return monetaryAmountModel;
     }
 
-    private static org.openapitools.model.MonetaryAmount monetaryAmountModeltoDTO(MonetaryAmount monetaryAmount){
+    public static org.openapitools.model.MonetaryAmount monetaryAmountModeltoDTO(MonetaryAmount monetaryAmount){
         org.openapitools.model.MonetaryAmount monetaryAmountModel = new org.openapitools.model.MonetaryAmount();
         monetaryAmountModel.setAmount(monetaryAmount.getAmount());
         return monetaryAmountModel;
     }
 
-    private static String durationToString(Duration duration){
+    public static String durationToString(Duration duration){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
         formatter = formatter.withLocale( Locale.GERMAN );
         String startDate = duration.getStart().format(formatter);
@@ -159,7 +146,7 @@ public class SavingsGoalMapper {
         return duration;
     }
 
-    private static RuleBasedSavingsGoalDTO createRuleBasedSavingsGoalDTO(UUID uuid, String name, String description, List<String> bankAccountIds, RuleBasedSavingsGoalDTO.TypeEnum typeEnum, List<Rule> rules) {
+    private static RuleBasedSavingsGoalDTO createRuleBasedSavingsGoalDTO(UUID uuid, String name, String description, List<UUID> bankAccountIds, RuleBasedSavingsGoalDTO.TypeEnum typeEnum, List<Rule> rules) {
         RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO = new RuleBasedSavingsGoalDTO();
         ruleBasedSavingsGoalDTO.setId(uuid);
         ruleBasedSavingsGoalDTO.setName(name);
@@ -171,15 +158,13 @@ public class SavingsGoalMapper {
     }
 
     private static List<org.openapitools.model.Rule> mapModelToDTO(List<Rule> rules){
-        //TODO rules do not match SWAGGER issue
-        //TODO several bank account IDs or one - which is right?
         List<org.openapitools.model.Rule> ruleList = new ArrayList<>();
         for(Rule rule : rules){
             org.openapitools.model.Rule tmpRule = new org.openapitools.model.Rule();
             tmpRule.setId(rule.getId());
             tmpRule.setDescription(rule.getDescription());
             tmpRule.setTarget(monetaryAmountModeltoDTO(rule.getTarget()));
-            tmpRule.setBankAccountID(null);
+            tmpRule.setBankAccountID(rule.getBankAccountID());
             ruleList.add(tmpRule);
         }
         return ruleList;
@@ -192,7 +177,7 @@ public class SavingsGoalMapper {
         return stringList;
     }
 
-    private static RuleBasedSavingsGoal createRuleBasedSavingsGoal(UUID id, String description, String name, AchievementStatus achievementStatus, Set<UUID> bankAccountIds, Set<UUID> rules, MatchingType matchingType){
+    private static RuleBasedSavingsGoal createRuleBasedSavingsGoal(UUID id, String description, String name, AchievementStatus achievementStatus, List<UUID> bankAccountIds, List<Rule> rules, MatchingType matchingType){
         RuleBasedSavingsGoal ruleBasedSavingsGoal = new RuleBasedSavingsGoal();
         ruleBasedSavingsGoal.setId(id);
         ruleBasedSavingsGoal.setDescription(description);
@@ -205,4 +190,39 @@ public class SavingsGoalMapper {
         return ruleBasedSavingsGoal;
     }
 
+    private static List<Rule> convertRuleDTOToModel(List<org.openapitools.model.Rule> ruleList){
+        List<Rule> newRuleList = new ArrayList<>();
+
+        for (org.openapitools.model.Rule rule : ruleList){
+            Rule newRule = new Rule();
+            newRule.setBankAccountID(rule.getBankAccountID());
+            newRule.setTarget(monetaryAmountDTOtoModel(rule.getTarget()));
+            newRule.setDescription(rule.getDescription());
+            newRule.setId(rule.getId());
+        }
+
+        return newRuleList;
+    }
+
+    private static List<SavingsRecord> convertDTOsavingsRectordToModel(List<org.openapitools.model.SavingsRecord> savingsRecord){
+        if(savingsRecord==null)
+            return new ArrayList<>();
+        List<SavingsRecord> savingsRecordList = new ArrayList<>();
+        for(org.openapitools.model.SavingsRecord sr : savingsRecord){
+            SavingsRecord tmpRecord = new SavingsRecord();
+            tmpRecord.setDate(getTimeFromString(sr.getDate()));
+            tmpRecord.setId(sr.getId());
+            tmpRecord.setAchievementStatus(sr.getAchievementStatus());
+            tmpRecord.setAmount(monetaryAmountDTOtoModel(sr.getAmount()));
+        }
+
+        return savingsRecordList;
+    }
+
+    public static LocalDate getTimeFromString(String date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+        formatter = formatter.withLocale( Locale.GERMAN );
+
+        return  LocalDate.parse(date, formatter);
+    }
 }

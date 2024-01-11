@@ -20,7 +20,11 @@ public class SavingsGoalResource implements SavingsGoalsApi {
 
     @Override
     public ResponseEntity<List<PeriodicalSavingsGoalDTO>> savingsGoalsPeriodicalGet() {
-        System.out.println("get the periodical savings goals");
+        System.out.println("get the periodical savings goals and create a test one");
+        //------------
+        PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO = savingsGoalService.createRandomPeriodicalSavingsGoal();
+        savingsGoalService.createPeriodicalSavingsGoal(periodicalSavingsGoalDTO);
+        //TODO remove
         return new ResponseEntity<>(savingsGoalService.getPeriodicalSavingsGoals(), HttpStatus.OK);
     }
 
@@ -51,6 +55,8 @@ public class SavingsGoalResource implements SavingsGoalsApi {
 
     @Override
     public ResponseEntity<List<RuleBasedSavingsGoalDTO>> savingsGoalsRuleBasedGet() {
+        //TODO remove
+        savingsGoalService.createRuleBasedSavingsGoal(savingsGoalService.createRandomRBasedSavingsGoal());
         return new ResponseEntity<>(savingsGoalService.getRuleBasedSavingsGoals(), HttpStatus.OK);
     }
 
@@ -73,7 +79,9 @@ public class SavingsGoalResource implements SavingsGoalsApi {
 
     @Override
     public ResponseEntity<Void> savingsGoalsRuleBasedPost(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO) {
-        return SavingsGoalsApi.super.savingsGoalsRuleBasedPost(ruleBasedSavingsGoalDTO);
+        System.out.println("post a rule based savings goal");
+        savingsGoalService.createRuleBasedSavingsGoal(ruleBasedSavingsGoalDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

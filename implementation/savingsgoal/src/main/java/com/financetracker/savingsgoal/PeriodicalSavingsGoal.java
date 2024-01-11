@@ -10,68 +10,66 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Builder(builderMethodName = "with")
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "periodical_savings_goal")
-@Entity
-public class PeriodicalSavingsGoal{
+public class PeriodicalSavingsGoal {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "name")
     private String name;
-    @Column(name = "achievementStatus")
+
+    @Column(name = "achievement_status")
     private AchievementStatus achievementStatus;
-    @Column(name = "bankAccountId")
+
+    @Column(name = "bank_account_id")
     private UUID bankAccountId;
-    @Embedded
-    @AttributeOverride(name = "amount", column = @Column(name = "goal"))
-    private org.openapitools.model.MonetaryAmount goal;
 
     @Embedded
-    @AttributeOverride(name = "amount", column = @Column(name = "recurringRate"))
-    private org.openapitools.model.MonetaryAmount recurringRate;
+    @AttributeOverride(name = "amount", column = @Column(name = "goal_amount"))
+    private MonetaryAmount goal;
 
     @Embedded
-    @AttributeOverride(name = "amount", column = @Column(name = "recurringAmount"))
-    private org.openapitools.model.MonetaryAmount recurringAmount;
+    @AttributeOverride(name = "amount", column = @Column(name = "recurring_rate_amount"))
+    private MonetaryAmount recurringRate;
+
+    @Embedded
+    @AttributeOverride(name = "amount", column = @Column(name = "recurring_amount_amount"))
+    private MonetaryAmount recurringAmount;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "start", column = @Column(name = "start")),
-            @AttributeOverride(name = "end", column = @Column(name = "end"))
+            @AttributeOverride(name = "start", column = @Column(name = "start_date")),
+            @AttributeOverride(name = "end", column = @Column(name = "end_date"))
     })
-    private Duration duration;// inclusive infinity
+    private Duration duration; // inclusive infinity
 
-    @Setter
-    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
+    @JoinColumn(name = "periodical_savings_goal_id", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SavingsRecord> records = new ArrayList<>();
 
     @Column(name = "periodicity")
     private Periodicity periodicity;
 
-    @Column(name = "Type")
+    @Column(name = "goal_type")
     private Type type;
 
-
-
-    public AchievmentStatus retryExecution(UUID recordId) {
-        //TODO implement
-        return AchievmentStatus.FAILED;
+    public AchievementStatus retryExecution(UUID recordId) {
+        // TODO implement
+        return AchievementStatus.FAILED;
     }
 
     public void recalculateRecurringRate() {
-
+        // TODO implement
     }
 
     public void recalculateRecurringAmount() {
-
+        // TODO implement
     }
-
 }

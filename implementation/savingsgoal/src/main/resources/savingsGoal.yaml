@@ -260,6 +260,8 @@ components:
           format: Date
         achievementStatus:
           $ref: '#/components/schemas/AchievementStatus'
+        amount:
+          $ref: '#/components/schemas/MonetaryAmount'
     
     AchievementStatus:
           type: string
@@ -267,25 +269,28 @@ components:
           
     RuleBasedSavingsGoalDTO:
       type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        bankAccountIds:
-          type: array
-          items:
-            type: string
-        type:
-          type: string
-          enum: [MATCH_ALL, MATCH_ANY]
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rule'
+      allOf:
+        - $ref: '#/components/schemas/SavingsGoalDTO'
+        - properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            description:
+              type: string
+            bankAccountIds:
+              type: array
+              items:
+                type: string
+                format: uuid
+            type:
+              type: string
+              enum: [MATCH_ALL, MATCH_ANY]
+            rules:
+              type: array
+              items:
+                $ref: '#/components/schemas/Rule'
     Rule:
       type: object
       properties:

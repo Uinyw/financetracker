@@ -1,9 +1,13 @@
 package com.financetracker.savingsgoal;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.financetracker.savingsgoal.model.SavingsGoalMapper;
+import org.openapitools.model.AchievementStatus;
+import org.openapitools.model.MonetaryAmount;
 import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
 import org.springframework.stereotype.Service;
@@ -89,5 +93,38 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
             }
         }
         return null;
+    }
+
+    public PeriodicalSavingsGoalDTO createRandomPeriodicalSavingsGoal(){
+        com.financetracker.savingsgoal.MonetaryAmount newMonetaryAmount = new com.financetracker.savingsgoal.MonetaryAmount();
+        newMonetaryAmount.setAmount(Math.random()*10000);
+        Duration duration = new Duration();
+        duration.setStart(LocalDate.now());
+        duration.setEnd(LocalDate.of(2025,10,5));
+
+     PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO = new PeriodicalSavingsGoalDTO();
+
+        periodicalSavingsGoalDTO.setId(UUID.randomUUID());
+        periodicalSavingsGoalDTO.setName("random Name");
+        periodicalSavingsGoalDTO.setDescription("random description");
+        periodicalSavingsGoalDTO.setAchievementStatus(AchievementStatus.ACHIEVED);
+        periodicalSavingsGoalDTO.setBankAccountID(UUID.randomUUID());
+        periodicalSavingsGoalDTO.setGoal(SavingsGoalMapper.monetaryAmountModeltoDTO(newMonetaryAmount));
+        periodicalSavingsGoalDTO.setRecurringRate(newMonetaryAmount.getAmount());
+        periodicalSavingsGoalDTO.setRecurringAmount(SavingsGoalMapper.monetaryAmountModeltoDTO(newMonetaryAmount));
+        periodicalSavingsGoalDTO.setDuration(SavingsGoalMapper.durationToString(duration));
+        periodicalSavingsGoalDTO.setPeriodicity(org.openapitools.model.Periodicity.MONTHLY);
+        periodicalSavingsGoalDTO.setSavingsRecord(new ArrayList<>());
+        return periodicalSavingsGoalDTO;
+    }
+    public RuleBasedSavingsGoalDTO createRandomRBasedSavingsGoal(){
+        RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO = new RuleBasedSavingsGoalDTO();
+        ruleBasedSavingsGoalDTO.setId(UUID.randomUUID());
+        ruleBasedSavingsGoalDTO.setName("name");
+        ruleBasedSavingsGoalDTO.setDescription("description");
+        ruleBasedSavingsGoalDTO.setBankAccountIds(new ArrayList<>());
+        ruleBasedSavingsGoalDTO.setType(RuleBasedSavingsGoalDTO.TypeEnum.ANY);
+        ruleBasedSavingsGoalDTO.setRules(new ArrayList<>());
+        return ruleBasedSavingsGoalDTO;
     }
 }
