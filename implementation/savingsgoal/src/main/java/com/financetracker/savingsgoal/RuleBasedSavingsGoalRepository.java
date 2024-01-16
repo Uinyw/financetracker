@@ -3,9 +3,9 @@ package com.financetracker.savingsgoal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.financetracker.savingsgoal.model.SavingsGoalEntity;
+import java.util.UUID;
 
 @Repository
-public interface SavingsGoalRepository extends JpaRepository<SavingsGoalEntity, Long>{
+public interface RuleBasedSavingsGoalRepository extends JpaRepository<RuleBasedSavingsGoal, UUID> {
 
 }
