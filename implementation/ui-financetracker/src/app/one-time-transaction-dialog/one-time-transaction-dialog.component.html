@@ -1,0 +1,69 @@
+<h1 mat-dialog-title>{{ editMode ? 'Edit Transaction' : 'Create Transaction' }}</h1>
+<div mat-dialog-content>
+  <mat-form-field class="full-width">
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="transaction.name">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Description</mat-label>
+    <input matInput [(ngModel)]="transaction.description">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Type</mat-label>
+    <mat-select [(ngModel)]="transaction.type">
+        <mat-option *ngFor="let type of types;" [value]="type">{{type}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Amount</mat-label>
+    <input matInput type="number" [(ngModel)]="transaction.amount.amount">
+  </mat-form-field>
+
+  <div class="example-form-fields">
+    <mat-form-field class="half-width">
+        <mat-label>Source Bank Account</mat-label>
+        <mat-select [disabled]="transaction.type =='INCOME'" [(ngModel)]="transaction.transfer.sourceBankAccountId">
+            <mat-option *ngFor="let account of bankAccounts;" [value]="account.id">{{account.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    <mat-form-field class="half-width">
+        <mat-label>External Source</mat-label>
+        <input matInput [disabled]="transaction.type !='INCOME'" [(ngModel)]="transaction.transfer.externalSourceId">
+    </mat-form-field>
+  </div>
+
+  <div class="example-form-fields">
+    <mat-form-field class="half-width">
+        <mat-label>Target Bank Account</mat-label>
+        <mat-select [disabled]="transaction.type =='EXPENSE'" [(ngModel)]="transaction.transfer.targetBankAccountId">
+            <mat-option *ngFor="let account of bankAccounts;" [value]="account.id">{{account.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field class="half-width">
+        <mat-label>External Target</mat-label>
+        <input matInput [disabled]="transaction.type !='EXPENSE'" [(ngModel)]="transaction.transfer.externalTargetId">
+    </mat-form-field>
+  </div>
+
+  <mat-form-field class="full-width">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="date">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="full-width" style="margin-top: 10px;">
+    <mat-label>Labels (Comma Separated)</mat-label>
+    <input matInput [(ngModel)]="labels">
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Back</button>
+  <button mat-button [mat-dialog-close]="getResultingTransaction()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
+</div>

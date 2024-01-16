@@ -1,5 +1,11 @@
 # FinanceTracker
 
+## Code Coverage
+
+![coverage](../badges/jacoco.svg)
+![branches coverage](../badges/branches.svg)
+
+
 ## Analysis
 
 ### General

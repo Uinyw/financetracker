@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 
 @Getter
@@ -21,6 +21,9 @@ public class OneTimeTransaction extends Transaction implements Transferable {
     @AttributeOverride(name = "amount", column = @Column(name = "amount", precision = 27, scale = 6))
     private MonetaryAmount amount;
 
+    @Setter
+    private TransferStatus transferStatus;
+
     @Builder(builderMethodName = "with")
     public OneTimeTransaction(final String id,
                               final String name,
@@ -33,5 +36,7 @@ public class OneTimeTransaction extends Transaction implements Transferable {
         super(id, name, description, type, labels, transfer);
         this.date = date;
         this.amount = amount;
+        this.transferStatus = TransferStatus.INITIAL;
     }
+
 }

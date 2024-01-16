@@ -6,5 +6,7 @@ public interface Transferable {
 
     LocalDate getDate();
     MonetaryAmount getAmount();
+    TransferStatus getTransferStatus();
+    void setTransferStatus(TransferStatus transferStatus);
 
 }

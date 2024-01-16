@@ -1,0 +1,21 @@
+
+<mat-sidenav #sidenav class="sidenav" mode="side" opened="true">
+    <mat-nav-list>
+        <mat-list-item class="parent" routerLink="/bank-accounts">
+            <span style="display: flex; justify-content: space-between;">
+                <mat-icon mat-list-icon style="padding-right: 10px;">account_balance</mat-icon>
+                <span class="full-width">Bank Accounts</span>
+            </span>
+        </mat-list-item>
+        <mat-list-item class="parent">
+            <span style="display: flex; justify-content: space-between;">
+                <mat-icon mat-list-icon style="padding-right: 10px;">payments</mat-icon>
+                <span class="full-width">Transactions</span>
+            </span>
+        </mat-list-item>
+        <div class="submenu" [ngClass]="{'expanded' : true}">
+            <a mat-list-item routerLink="/transactions/one-time">One-Time Transactions</a>
+            <a mat-list-item routerLink="/transactions/recurring">Recurring Transactions</a>
+        </div>
+    </mat-nav-list>
+</mat-sidenav>

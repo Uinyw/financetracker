@@ -1,0 +1,7 @@
+.openapi-generator-ignore
+README.md
+pom.xml
+src/main/java/org/openapitools/api/ApiUtil.java
+src/main/java/org/openapitools/api/BankAccountsApi.java
+src/main/java/org/openapitools/model/BankAccountDto.java
+src/main/java/org/openapitools/model/MonetaryAmountDto.java
