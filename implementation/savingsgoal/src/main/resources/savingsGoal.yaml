@@ -1,0 +1,324 @@
+openapi: 3.0.0
+info:
+  title: RestAPI
+  version: 1.0.0
+  description: |
+    Welcome to the RestAPI, a comprehensive interface catering to various banking and financial management needs. This API acts as a central hub, facilitating communication between different components for seamless execution of RESTful operations.
+
+
+tags: 
+  - name: SavingsGoal
+
+paths:
+  /savingsGoals/Periodical:
+    get:
+      summary: Get all Periodical Savings Goals
+      tags: 
+        - SavingsGoal
+      responses:
+        '200':
+          description: Retrieve a list of all existing savings goals.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PeriodicalSavingsGoalDTO'
+                  
+    post:
+      summary: Create a new periodical or periodical Savings Goal
+      tags: 
+        - SavingsGoal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodicalSavingsGoalDTO'
+        
+      responses:
+        '200':
+          description: Periodical Savings Goal created.
+                    
+  /savingsGoals/RuleBased:
+    get:
+      summary: Get all rule-based Savings Goals
+      tags: 
+        - SavingsGoal
+      responses:
+        '200':
+          description: Retrieve a list of all existing rule-based savings goals.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleBasedSavingsGoalDTO'
+                    
+    post:
+      summary: Create a new periodical or rule-based Savings Goal
+      tags: 
+        - SavingsGoal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleBasedSavingsGoalDTO'
+        
+      responses:
+        '200':
+          description: Rule Based Savings Goal created.
+
+
+  /savingsGoals/Periodical{id}:
+    get:
+      summary: Get Periodical Savings Goal by ID
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Retrieve detailed information about a Periodical Savings Goal using its unique identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PeriodicalSavingsGoalDTO'
+        '404':
+          description: Periodical Savings Goal not found
+          
+    patch:
+      summary: Update Periodical Savings Goal by ID
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Retrieve detailed information about a Periodical Savings Goal using its unique identifier.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodicalSavingsGoalDTO'
+      responses:
+        '200':
+          description: Periodical Savings Goal updated successfully
+        '404':
+          description: Periodical Savings Goal not found
+          
+    delete:
+      summary: Delete a Periodical Savings Goal
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the Periodical Savings Goal to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Periodical Savings Goal deleted successfully
+        '404':
+          description: Periodical Savings Goal not found
+  
+  /savingsGoals/RuleBased/{id}:
+    get:
+      summary: Get Savings Goal by ID
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Retrieve detailed information about a savings goal using its unique identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleBasedSavingsGoalDTO'
+        '404':
+          description: Savings Goal not found
+          
+    patch:
+      summary: Update Rule Based Savings Goal by ID
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Retrieve detailed information about a savings goal using its unique identifier.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleBasedSavingsGoalDTO'
+      responses:
+        '200':
+          description: Rule Based Savings Goal updated successfully
+        '404':
+          description: Rule Based Savings Goal not found
+          
+    delete:
+      summary: Delete a Rule Based Savings Goal
+      tags:
+        - SavingsGoal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the Rule Based Savings Goal to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rule Based Savings Goal deleted successfully
+        '404':
+          description: Rule Based Savings Goal not found
+  
+components:
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          example: {"message": "Resource not found"}
+
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          example: {"message": "Bad request"}
+  schemas:
+    SavingsGoalDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        achievementStatus:
+          $ref: '#/components/schemas/AchievementStatus'
+      
+    PeriodicalSavingsGoalDTO:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SavingsGoalDTO'
+        - properties:
+            bankAccountID:
+              type: string
+              format: uuid
+            goal:
+              $ref: '#/components/schemas/MonetaryAmount'
+            recurringRate:
+              type: number
+              format: double
+            recurringAmount:
+              $ref: '#/components/schemas/MonetaryAmount'
+            duration:
+              type: string
+            periodicity:
+              $ref: '#/components/schemas/Periodicity'
+            type:
+              type: string
+              enum: [AMOUNT_BASED, PERCENTAGE_BASED]
+            savingsRecord:
+              type: array
+              items:
+                $ref: '#/components/schemas/SavingsRecord'
+              
+    SavingsRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: Date
+        achievementStatus:
+          $ref: '#/components/schemas/AchievementStatus'
+        amount:
+          $ref: '#/components/schemas/MonetaryAmount'
+    
+    AchievementStatus:
+          type: string
+          enum: [IN_PROGRESS, ACHIEVED, PARTIALLY_ACHIEVED, FAILED]
+          
+    RuleBasedSavingsGoalDTO:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SavingsGoalDTO'
+        - properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            description:
+              type: string
+            bankAccountIds:
+              type: array
+              items:
+                type: string
+                format: uuid
+            type:
+              type: string
+              enum: [MATCH_ALL, MATCH_ANY]
+            rules:
+              type: array
+              items:
+                $ref: '#/components/schemas/Rule'
+    Rule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bankAccountID:
+          type: string
+          format: uuid
+        description:
+          type: string
+        type:
+          type: string
+          enum: [EQUALS, GREATER_THAN, LESS_THAN]
+        target:
+          $ref: '#/components/schemas/MonetaryAmount'
+    
+    MonetaryAmount:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          
+    Periodicity:
+        type: string
+        enum: [MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY]
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/TOBIASKAESSMANN/RestAPI/1.0.0
