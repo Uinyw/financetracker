@@ -1,0 +1,170 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+  description: Manage products, supplies and shopping carts.
+
+tags:
+  - name: Product
+
+paths:
+  /products:
+    get:
+      summary: Get all products
+      tags:
+        - Product
+      responses:
+        '200':
+          description: Successfully retrieved a list of all existing products.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+
+    post:
+      summary: Create new product
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+
+      responses:
+        '200':
+          description: Successfully created a new product.
+
+  /products/{id}:
+    get:
+      summary: Get product by ID
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+        '404':
+          description: Product with given ID not found.
+
+    patch:
+      summary: Update product by ID
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+      responses:
+        '200':
+          description: Successfully updated product.
+        '404':
+          description: Product with given ID not found.
+
+    delete:
+      summary: Delete Product by ID
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted product.
+        '404':
+          description: Product with given ID not found.
+
+components:
+  schemas:
+
+    ProductEntryCollection:
+      type: object
+      properties:
+        productEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductEntry'
+
+    ProductEntry:
+      type: object
+      properties:
+        quantity:
+          type: number
+        desiredQuantity:
+          type: number
+        product:
+          $ref: '#/components/schemas/ProductDto'
+
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          $ref: '#/components/schemas/CategoryDto'
+        nutrition:
+          $ref: '#/components/schemas/NutritionDto'
+        price:
+          $ref: '#/components/schemas/MonetaryAmountDto'
+        labels:
+          type: array
+          items:
+            type: string
+
+    NutritionDto:
+      type: object
+      properties:
+        servingSize:
+          type: number
+        calories:
+          type: number
+        carbohydrates:
+          type: number
+        protein:
+          type: number
+        fat:
+          type: number
+        sugar:
+          type: number
+
+    CategoryDto:
+      type: string
+      enum: [ FOOD, DRINKS, HOUSEHOLD, ESSENTIALS, PET_SUPPLIES ]
+
+    MonetaryAmountDto:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
