@@ -89,16 +89,55 @@
 				<version>6.2.1</version>
 				<executions>
 					<execution>
+						<id>savings-goal-api</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<skipValidateSpec>true</skipValidateSpec>
-							<inputSpec>./src/main/resources/savingsGoal.yaml</inputSpec>
+							<inputSpec>implementation/savingsgoal/src/main/resources/savingsGoal.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<configOptions>
 								<openApiNullable>false</openApiNullable>
 								<interfaceOnly>true</interfaceOnly>
+							</configOptions>
+						</configuration>
+					</execution>
+					<execution>
+						<id>bank-account-client</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<skipValidateSpec>true</skipValidateSpec>
+							<inputSpec>implementation/bankaccount/src/main/resources/api/bankAccount.yaml</inputSpec>
+							<generatorName>java</generatorName>
+							<generateModelTests>false</generateModelTests>
+							<generateApiTests>false</generateApiTests>
+							<configOptions>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+								<sourceFolder>src/main/java/main</sourceFolder>
+								<useJakartaEe>true</useJakartaEe>
+								<openApiNullable>false</openApiNullable>
+							</configOptions>
+						</configuration>
+					</execution>
+					<execution>
+						<id>transaction-client</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<skipValidateSpec>true</skipValidateSpec>
+							<inputSpec>implementation/transaction/src/main/resources/api/transaction.yaml</inputSpec>
+							<generatorName>java</generatorName>
+							<generateModelTests>false</generateModelTests>
+							<generateApiTests>false</generateApiTests>
+							<configOptions>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+								<sourceFolder>src/main/java/main</sourceFolder>
+								<useJakartaEe>true</useJakartaEe>
+								<openApiNullable>false</openApiNullable>
 							</configOptions>
 						</configuration>
 					</execution>
