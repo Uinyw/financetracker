@@ -116,7 +116,7 @@
 							<generateApiTests>false</generateApiTests>
 							<configOptions>
 								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
-								<sourceFolder>src/main/java/main</sourceFolder>
+								<sourceFolder>src/main/java</sourceFolder>
 								<useJakartaEe>true</useJakartaEe>
 								<openApiNullable>false</openApiNullable>
 							</configOptions>
@@ -135,7 +135,7 @@
 							<generateApiTests>false</generateApiTests>
 							<configOptions>
 								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
-								<sourceFolder>src/main/java/main</sourceFolder>
+								<sourceFolder>src/main/java</sourceFolder>
 								<useJakartaEe>true</useJakartaEe>
 								<openApiNullable>false</openApiNullable>
 							</configOptions>
