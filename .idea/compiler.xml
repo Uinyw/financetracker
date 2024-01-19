@@ -8,9 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="bankaccount" />
+        <module name="savingsgoal" />
+        <module name="openapi-java-client (1)" />
         <module name="transaction" />
         <module name="openapi-spring" />
-        <module name="openapi-java-client" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -22,7 +23,9 @@
       <module name="bankaccount" options="-parameters" />
       <module name="demo" options="-parameters" />
       <module name="openapi-java-client" options="-Xlint:all -J-Xss4m" />
+      <module name="openapi-java-client (1)" options="-Xlint:all -J-Xss4m" />
       <module name="openapi-spring" options="-parameters" />
+      <module name="savingsgoal" options="-parameters" />
       <module name="transaction" options="-parameters" />
     </option>
   </component>

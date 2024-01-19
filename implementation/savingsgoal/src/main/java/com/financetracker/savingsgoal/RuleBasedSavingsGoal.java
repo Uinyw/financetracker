@@ -2,6 +2,7 @@ package com.financetracker.savingsgoal;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.openapitools.client.model.BankAccountDto;
 import org.openapitools.model.AchievementStatus;
 
 import java.util.List;
@@ -26,12 +27,6 @@ public class RuleBasedSavingsGoal{
     private AchievementStatus achievementStatus;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "bank_account_ids", joinColumns = @JoinColumn(name = "bank_account_ids"))
-    @Column(name = "bank_account_id")
-    private List<UUID> bankAccountIds;
-
-
-    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "rule_list", joinColumns = @JoinColumn(name = "entity_id"))
     @AttributeOverrides({
             @AttributeOverride(name = "id", column = @Column(name = "rule_id")),
@@ -43,5 +38,4 @@ public class RuleBasedSavingsGoal{
 
     @Column(name = "matchingType")
     private MatchingType matchingType;
-
 }

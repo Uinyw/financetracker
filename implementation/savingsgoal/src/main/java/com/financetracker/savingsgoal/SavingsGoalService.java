@@ -3,11 +3,14 @@ package com.financetracker.savingsgoal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import com.financetracker.savingsgoal.client.BankAccountClient;
+import com.financetracker.savingsgoal.client.TransactionClient;
 import com.financetracker.savingsgoal.model.SavingsGoalMapper;
+import org.openapitools.client.model.*;
 import org.openapitools.model.AchievementStatus;
-import org.openapitools.model.MonetaryAmount;
 import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class SavingsGoalService {
 
     private final SavingsGoalFactory savingsGoalFactory;
+    private final BankAccountClient bankAccountClient;
+    private final TransactionClient transactionClient;
     private final PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository;
     private final RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository;
     private final SavingsGoalMapper savingsGoalMapper;
@@ -114,7 +119,7 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         periodicalSavingsGoalDTO.setRecurringAmount(SavingsGoalMapper.monetaryAmountModeltoDTO(newMonetaryAmount));
         periodicalSavingsGoalDTO.setDuration(SavingsGoalMapper.durationToString(duration));
         periodicalSavingsGoalDTO.setPeriodicity(org.openapitools.model.Periodicity.MONTHLY);
-        periodicalSavingsGoalDTO.setSavingsRecord(new ArrayList<>());
+        periodicalSavingsGoalDTO.setOneTimeTransactionRecord(new ArrayList<>());
         return periodicalSavingsGoalDTO;
     }
     public RuleBasedSavingsGoalDTO createRandomRBasedSavingsGoal(){
@@ -122,9 +127,200 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         ruleBasedSavingsGoalDTO.setId(UUID.randomUUID());
         ruleBasedSavingsGoalDTO.setName("name");
         ruleBasedSavingsGoalDTO.setDescription("description");
-        ruleBasedSavingsGoalDTO.setBankAccountIds(new ArrayList<>());
         ruleBasedSavingsGoalDTO.setType(RuleBasedSavingsGoalDTO.TypeEnum.ANY);
         ruleBasedSavingsGoalDTO.setRules(new ArrayList<>());
         return ruleBasedSavingsGoalDTO;
     }
+
+    //-------[logic - rule based]-----
+
+    //TODO where does this get called?
+    public void matchRuleBasedSavingsGoal(RuleBasedSavingsGoal ruleBasedSavingsGoal){
+        boolean rulesMatch = false;
+        switch(ruleBasedSavingsGoal.getMatchingType()){
+            case MATCH_ALL ->rulesMatch = matchAllRules(ruleBasedSavingsGoal);
+            case MATCH_ANY -> rulesMatch = matchAnyRule(ruleBasedSavingsGoal);
+
+        }
+        if(rulesMatch) ruleBasedSavingsGoal.setAchievementStatus(AchievementStatus.ACHIEVED);
+        if(!rulesMatch) ruleBasedSavingsGoal.setAchievementStatus(AchievementStatus.FAILED);
+    }
+
+    private boolean matchAnyRule(RuleBasedSavingsGoal ruleBasedSavingsGoal){
+        boolean match = false;
+        for(Rule rule : ruleBasedSavingsGoal.getRules()){
+            if(matchRule(rule)) return true;
+        }
+        return match;
+    }
+    private boolean matchAllRules(RuleBasedSavingsGoal ruleBasedSavingsGoal){
+        boolean match = true;
+        for(Rule rule : ruleBasedSavingsGoal.getRules()){
+            if(!matchRule(rule)) match = false;
+        }
+        return match;
+    }
+
+    private boolean matchRule(Rule rule){
+        //get BankAccount
+        double money = getBankAccountBalance(rule.getBankAccountID().toString());
+        return matchRuleType(rule, money);
+    }
+    private boolean matchRuleType(Rule rule, double money){
+        boolean match = false;
+        MonetaryAmount targetAmount = rule.getTarget();
+        switch (rule.getRuleType()){
+            case GREATER_THAN -> match = money > targetAmount.getAmount();
+            case EQUALS -> match = money == targetAmount.getAmount();
+            case LESS_THAN -> match = money < targetAmount.getAmount();
+        }
+        return match;
+    }
+
+    // ------ [periodical rule logic]
+
+    //TODO call this method periodically after savings goal rules
+    public OneTimeTransactionDto addNewPercentageOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
+     if(periodicalSavingsGoal.getTransactionIds().isEmpty()){ //if no entry present
+         periodicalSavingsGoal.setTransactionIds(new ArrayList<>());
+         return createPercentageOneTimeTransactionDto(periodicalSavingsGoal);
+     }
+
+     return addNewTransactionDto(periodicalSavingsGoal);
+    }
+
+    //TODO call this method periodically after savings goal rules
+    public OneTimeTransactionDto addNewAmountBasedOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
+        if(periodicalSavingsGoal.getTransactionIds().isEmpty()){ //if no entry present
+            periodicalSavingsGoal.setTransactionIds(new ArrayList<>());
+            return createAmountBasedOneTimeTransactionDto(periodicalSavingsGoal);
+        }
+
+        return addNewTransactionDto(periodicalSavingsGoal);
+    }
+
+    private OneTimeTransactionDto addNewTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
+        OneTimeTransactionDto newOneTimeTransactionDto = new OneTimeTransactionDto();
+        UUID id = UUID.randomUUID();
+
+        List<UUID> transactionIds = periodicalSavingsGoal.getTransactionIds();
+        int numberOfTransactions = periodicalSavingsGoal.getTransactionIds().size();
+        //get oldest transaction
+        OneTimeTransactionDto oldestTransaction = getTransaction(transactionIds.get(numberOfTransactions-1).toString());
+
+        //check if finished
+        if((numberOfTransactions+1)*oldestTransaction.getAmount().getAmount() >= periodicalSavingsGoal.getGoal().getAmount()){
+            periodicalSavingsGoal.setAchievementStatus(AchievementStatus.ACHIEVED);
+            return null;
+        }else{
+            periodicalSavingsGoal.setAchievementStatus(AchievementStatus.IN_PROGRESS);
+        }
+
+        newOneTimeTransactionDto.setDescription(oldestTransaction.getDescription());
+        newOneTimeTransactionDto.setId(id);
+        newOneTimeTransactionDto.setDate(LocalDate.now().toString());
+        newOneTimeTransactionDto.setName(oldestTransaction.getName() + numberOfTransactions + "");
+        newOneTimeTransactionDto.setType(oldestTransaction.getType());
+        newOneTimeTransactionDto.setAmount(oldestTransaction.getAmount());
+
+        transactionIds.add(id);
+        periodicalSavingsGoal.setTransactionIds(transactionIds);
+
+        return newOneTimeTransactionDto;
+    }
+
+//TODO initial call when creating
+    private OneTimeTransactionDto createPercentageOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
+        double bankAccountBalance = getBankAccountBalance(periodicalSavingsGoal.getBankAccountId().toString());
+        double percentage = periodicalSavingsGoal.getRecurringRate().getAmount();
+        double amount = 0.0, months = 0.0;
+        MonetaryAmountDto transferAmount = new MonetaryAmountDto();
+
+        Duration duration = new Duration();
+        duration.setStart(LocalDate.now());
+
+        if(periodicalSavingsGoal.getRecurringRate().getAmount()!=0.0 && bankAccountBalance != 0.0 ) {
+            amount = bankAccountBalance * percentage;
+            months = Math.ceil(bankAccountBalance/amount); // rounded up for long conversion
+            duration.setEnd(LocalDate.now().plusMonths((long) months));
+        }else{
+            duration.setEnd(LocalDate.now());
+        }
+
+        transferAmount.setAmount(amount);
+        UUID id = UUID.randomUUID();
+        ArrayList<UUID> transaction = new ArrayList();
+        transaction.add(id);
+        periodicalSavingsGoal.setTransactionIds(transaction);
+
+        OneTimeTransactionDto oneTimeTransactionDto = new OneTimeTransactionDto();
+        oneTimeTransactionDto.setAmount(transferAmount);
+        oneTimeTransactionDto.setDescription(periodicalSavingsGoal.getDescription());
+        oneTimeTransactionDto.setId(id);
+        oneTimeTransactionDto.setName(periodicalSavingsGoal.getName());
+        oneTimeTransactionDto.setType(TypeDto.SHIFT);
+        oneTimeTransactionDto.setDate(LocalDate.now().toString());
+
+
+        return oneTimeTransactionDto;
+    }
+
+    //TODO initial call when creating
+    private OneTimeTransactionDto createAmountBasedOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
+        MonetaryAmount emptyAmount = new MonetaryAmount();
+        MonetaryAmountDto moneyToBeTransfered = new MonetaryAmountDto();
+
+        periodicalSavingsGoal.setRecurringRate(emptyAmount);
+        moneyToBeTransfered.setAmount(periodicalSavingsGoal.getRecurringRate().getAmount());
+
+        UUID id = UUID.randomUUID();
+        ArrayList<UUID> transactionIds = new ArrayList<>();
+        transactionIds.add(id);
+        periodicalSavingsGoal.setTransactionIds(transactionIds);
+
+        OneTimeTransactionDto oneTimeTransactionDto = new OneTimeTransactionDto();
+        oneTimeTransactionDto.setAmount(moneyToBeTransfered);
+        oneTimeTransactionDto.setName(periodicalSavingsGoal.getName());
+        oneTimeTransactionDto.setDate(LocalDate.now().toString());
+        oneTimeTransactionDto.setId(id);
+        oneTimeTransactionDto.setDescription(periodicalSavingsGoal.getDescription());
+
+        return oneTimeTransactionDto;
+    }
+
+    private double getBankAccountBalance(String id){
+        Optional<BankAccountDto> bankAccountDto = bankAccountClient.getBankAccount(id);
+        double money = 0.0;
+
+        if(bankAccountDto.isEmpty()) { //TODO what to do if the bank account doesn'T exist
+            System.out.println("bank account does not exist");
+            return money;
+        }
+        BankAccountDto bankAccount = bankAccountDto.get();
+        MonetaryAmountDto balance = bankAccount.getBalance();
+        try{
+            money = balance.getAmount();
+            return money;
+        }catch (Exception e){
+            System.out.println("No Monetary amount provided");
+        }
+        return money;
+    }
+
+    private OneTimeTransactionDto getTransaction(String id){
+        Optional<OneTimeTransactionDto> oneTimeTransactionDto = transactionClient.transactionsOnetimeIdGet(id);
+
+
+        if(oneTimeTransactionDto.isEmpty()) { //TODO what to do if the oneTimeTransactionDto doesn't exist
+            System.out.println("transactionDto does not exist");
+            return null;
+        }
+        OneTimeTransactionDto transactionDto = oneTimeTransactionDto.get();
+        return transactionDto;
+    }
+
+
+
+
+
 }

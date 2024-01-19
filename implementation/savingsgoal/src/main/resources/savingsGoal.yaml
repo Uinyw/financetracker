@@ -244,28 +244,15 @@ components:
             type:
               type: string
               enum: [AMOUNT_BASED, PERCENTAGE_BASED]
-            savingsRecord:
+            oneTimeTransactionRecord:
               type: array
               items:
-                $ref: '#/components/schemas/SavingsRecord'
-              
-    SavingsRecord:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        date:
-          type: string
-          format: Date
-        achievementStatus:
-          $ref: '#/components/schemas/AchievementStatus'
-        amount:
-          $ref: '#/components/schemas/MonetaryAmount'
+                type: string
+                format: uuid
     
     AchievementStatus:
           type: string
-          enum: [IN_PROGRESS, ACHIEVED, PARTIALLY_ACHIEVED, FAILED]
+          enum: [IN_PROGRESS, ACHIEVED, FAILED]
           
     RuleBasedSavingsGoalDTO:
       type: object
@@ -279,11 +266,6 @@ components:
               type: string
             description:
               type: string
-            bankAccountIds:
-              type: array
-              items:
-                type: string
-                format: uuid
             type:
               type: string
               enum: [MATCH_ALL, MATCH_ANY]
