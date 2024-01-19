@@ -6,6 +6,7 @@ info:
 
 tags:
   - name: Product
+  - name: Shopping Cart
 
 paths:
   /products:
@@ -100,24 +101,127 @@ paths:
         '404':
           description: Product with given ID not found.
 
+  /shopping-cart:
+    get:
+      summary: Get shopping cart
+      tags:
+        - Shopping Cart
+      responses:
+        '200':
+          description: Successfully retrieved shopping cart.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductEntryCollectionDto'
+
+  /shopping-cart/purchase:
+    post:
+      summary: Purchase Checked Products Entries of Shopping Cart
+      tags:
+        - Shopping Cart
+      responses:
+        '200':
+          description: Successfully purchased shopping cart.
+
+  /shopping-cart/entries:
+    post:
+      summary: Create new Shopping Cart Entry
+      tags:
+        - Shopping Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+
+      responses:
+        '200':
+          description: Successfully created shopping cart entry.
+
+
+  /shopping-cart/entries/{id}:
+    patch:
+      summary: Update Shopping Cart Entry by ID
+      tags:
+        - Shopping Cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+
+      responses:
+        '200':
+          description: Successfully updated shopping cart entry.
+
+    delete:
+      summary: Delete Shopping Cart Entry by ID
+      tags:
+        - Shopping Cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully delete entry.
+
+  /shopping-cart/entries/{id}/check:
+    post:
+      summary: Check Off Shopping Cart Entry
+      tags:
+        - Shopping Cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully checked off entry.
+
 components:
   schemas:
 
-    ProductEntryCollection:
+    ProductEntryCollectionDto:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/ProductEntryCollectionTypeDto'
         productEntries:
           type: array
           items:
-            $ref: '#/components/schemas/ProductEntry'
+            $ref: '#/components/schemas/ProductEntryDto'
 
-    ProductEntry:
+    ProductEntryDto:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         quantity:
           type: number
         desiredQuantity:
           type: number
+        purchased:
+          type: boolean
         product:
           $ref: '#/components/schemas/ProductDto'
 
@@ -161,6 +265,10 @@ components:
     CategoryDto:
       type: string
       enum: [ FOOD, DRINKS, HOUSEHOLD, ESSENTIALS, PET_SUPPLIES ]
+
+    ProductEntryCollectionTypeDto:
+      type: string
+      enum: [ SHOPPING_CART, SUPPLIES ]
 
     MonetaryAmountDto:
       type: object
