@@ -119,6 +119,13 @@ paths:
       summary: Purchase Checked Products Entries of Shopping Cart
       tags:
         - Shopping Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseDto'
+
       responses:
         '200':
           description: Successfully purchased shopping cart.
@@ -276,3 +283,10 @@ components:
         amount:
           type: number
           format: double
+
+    PurchaseDto:
+      type: object
+      properties:
+        sourceBankAccountId:
+          type: string
+          format: uuid

@@ -1,12 +1,11 @@
 package com.financetracker.product.logic.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@Builder(builderMethodName = "with")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +16,7 @@ public class ProductEntry {
     @Id
     private String id;
 
+    @Setter
     @Column(name = "collection_id")
     private String collectionId;
 
@@ -27,6 +27,7 @@ public class ProductEntry {
 
     private BigDecimal desiredQuantity;
 
+    @Setter
     private boolean purchased;
 
 }

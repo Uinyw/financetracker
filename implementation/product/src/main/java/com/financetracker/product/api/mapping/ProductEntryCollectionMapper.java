@@ -17,13 +17,13 @@ import java.util.UUID;
 @Component
 public class ProductEntryCollectionMapper {
 
-    private final ProductMapper productMapper;
+    private final ProductEntryMapper productEntryMapper;
 
     public ProductEntryCollectionDto mapProductEntryCollectionModelToDto(final ProductEntryCollection productEntryCollection) {
         return ProductEntryCollectionDto.builder()
                 .id(UUID.fromString(productEntryCollection.getId()))
                 .type(mapProductEntryCollectionTypeModelToDto(productEntryCollection.getType()))
-                .productEntries(productEntryCollection.getProductEntries().stream().map(this::mapProductEntryModelToDto).toList())
+                .productEntries(productEntryCollection.getProductEntries().stream().map(productEntryMapper::mapProductEntryModelToDto).toList())
                 .build();
     }
 
@@ -34,14 +34,6 @@ public class ProductEntryCollectionMapper {
         };
     }
 
-    public ProductEntryDto mapProductEntryModelToDto(final ProductEntry productEntry) {
-        return ProductEntryDto.builder()
-                .id(UUID.fromString(productEntry.getId()))
-                .product(productMapper.mapProductModelToDto(productEntry.getProduct()))
-                .quantity(productEntry.getQuantity())
-                .desiredQuantity(productEntry.getDesiredQuantity())
-                .purchased(productEntry.isPurchased())
-                .build();
-    }
+
 
 }
