@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.financetracker.savingsgoal.Time.Configuration;
 import com.financetracker.savingsgoal.client.BankAccountClient;
 import com.financetracker.savingsgoal.client.TransactionClient;
 import com.financetracker.savingsgoal.model.SavingsGoalMapper;
 import org.openapitools.client.model.*;
 import org.openapitools.model.AchievementStatus;
 import org.openapitools.model.PeriodicalSavingsGoalDTO;
+import org.openapitools.model.Periodicity;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -183,20 +186,29 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
     public OneTimeTransactionDto addNewPercentageOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
      if(periodicalSavingsGoal.getTransactionIds().isEmpty()){ //if no entry present
          periodicalSavingsGoal.setTransactionIds(new ArrayList<>());
-         return createPercentageOneTimeTransactionDto(periodicalSavingsGoal);
-     }
+         OneTimeTransactionDto ottdto = createPercentageOneTimeTransactionDto(periodicalSavingsGoal);
+         periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
 
-     return addNewTransactionDto(periodicalSavingsGoal);
+         return ottdto;
+     }
+     periodicalSavingsGoalRepository.delete(periodicalSavingsGoal);
+     OneTimeTransactionDto ottd = addNewTransactionDto(periodicalSavingsGoal);
+     periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
+     return ottd;
     }
 
     //TODO call this method periodically after savings goal rules
     public OneTimeTransactionDto addNewAmountBasedOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
         if(periodicalSavingsGoal.getTransactionIds().isEmpty()){ //if no entry present
             periodicalSavingsGoal.setTransactionIds(new ArrayList<>());
-            return createAmountBasedOneTimeTransactionDto(periodicalSavingsGoal);
+            OneTimeTransactionDto ottdto =  createAmountBasedOneTimeTransactionDto(periodicalSavingsGoal);
+            periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
+            return ottdto;
         }
-
-        return addNewTransactionDto(periodicalSavingsGoal);
+        periodicalSavingsGoalRepository.delete(periodicalSavingsGoal);
+        OneTimeTransactionDto ottd = addNewTransactionDto(periodicalSavingsGoal);
+        periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
+        return ottd;
     }
 
     private OneTimeTransactionDto addNewTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
@@ -320,7 +332,58 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
     }
 
 
+    //TODO call the one periodical after clock
+    //TODO new transaction what happens?
+
+    public void receivedNewTransaction(OneTimeTransactionDto oneTimeTransactionDto){
+     //Check if rule based SavingsGoals still hold
+     List<RuleBasedSavingsGoal> lRbsg = ruleBasedSavingsGoalRepository.findAll();
+     lRbsg.forEach(this::matchRuleBasedSavingsGoal);
+
+     //TODO Check also the other ones
 
 
+    }
 
+    /**
+     * Runs every day at 6am.
+     */
+    @Scheduled(cron = "0 0 6 * * *", zone = Configuration.TIME_ZONE)
+    public void transferRecurringTransactionsOnDueDate() {
+        List<PeriodicalSavingsGoal> periodicalSavingsGoals = periodicalSavingsGoalRepository.findAll();
+        List<OneTimeTransactionDto> newTransactions = new ArrayList<>();
+        for (PeriodicalSavingsGoal psg : periodicalSavingsGoals){
+            if(checkDue(psg)){
+                newTransactions.add(addNewTransactionDto(psg));
+            }
+        }
+
+        //TODO send periodicalSavingsGoals in a qeue
+    }
+
+    private boolean checkDue(PeriodicalSavingsGoal periodicalSavingsGoal){
+        Duration duration = periodicalSavingsGoal.getDuration();
+        Periodicity periodicity = periodicalSavingsGoal.getPeriodicity();
+        List<UUID> tids= periodicalSavingsGoal.getTransactionIds();
+        OneTimeTransactionDto newestTransaction = getTransaction(tids.get(tids.size()-1).toString());
+        LocalDate lastDate = savingsGoalMapper.getTimeFromString(newestTransaction.getDate());
+        LocalDate nextDate = lastDate.plusMonths(periodicityToInt(periodicity));
+        if(nextDate.isAfter(LocalDate.now()) && nextDate.isBefore(LocalDate.now().plusDays(1))){
+            //if its after now and before tomorrow
+            return true;
+        }
+
+        return false;
+    }
+
+    private int periodicityToInt(Periodicity periodicity){
+        int value = 1;
+        switch (periodicity){
+            case MONTHLY -> value = 1;
+            case YEARLY -> value = 12;
+            case QUARTERLY -> value = 3;
+            case HALF_YEARLY -> value = 6;
+        }
+        return value;
+    }
 }
