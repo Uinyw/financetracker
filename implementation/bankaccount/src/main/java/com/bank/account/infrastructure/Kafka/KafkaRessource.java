@@ -2,6 +2,7 @@ package com.bank.account.infrastructure.Kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Headers;
+import org.openapitools.client.model.OneTimeTransactionDto;
 import org.openapitools.model.MonetaryAmountDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
