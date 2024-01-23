@@ -41,6 +41,10 @@ public class ProductMapper {
     }
 
     private NutritionDto mapNutritionModelToDto(final Nutrition nutrition) {
+        if (nutrition == null) {
+            return null;
+        }
+
         return NutritionDto.builder()
                 .servingSize(nutrition.servingSize())
                 .calories(nutrition.calories())

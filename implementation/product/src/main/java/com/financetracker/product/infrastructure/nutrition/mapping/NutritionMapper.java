@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 public class NutritionMapper {
 
     public Nutrition mapNutritionInformationToNutritionModel(final NutritionInformation nutritionInformation) {
+        if (nutritionInformation.items().isEmpty()) {
+            return null;
+        }
         return new Nutrition(BigDecimal.valueOf(nutritionInformation.items().get(0).serving_size_g()),
                 BigDecimal.valueOf(nutritionInformation.items().get(0).calories()),
                 BigDecimal.valueOf(nutritionInformation.items().get(0).carbohydrates_total_g()),

@@ -39,7 +39,7 @@ public class TransactionClient implements TransactionProvider {
                 .description("Shopping Expense")
                 .type(TypeDto.EXPENSE)
                 .date(date)
-                .transfer(TransferDto.builder().sourceBankAccountId(bankAccountId).externalSourceId("Supermarket").build())
+                .transfer(TransferDto.builder().sourceBankAccountId(bankAccountId).externalTargetId("Supermarket").build())
                 .amount(MonetaryAmountDto.builder().amount(amount.amount().doubleValue()).build())
                 .labels(List.of("Shopping Expense"))
                 .build();

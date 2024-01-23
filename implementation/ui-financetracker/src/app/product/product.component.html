@@ -1,0 +1,85 @@
+<h1>Products</h1>
+
+
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+</mat-form-field>
+
+
+
+<div  class="mat-elevation-z8">
+    <button mat-button (click)="openAddDialog()">
+        <mat-icon>add</mat-icon>
+    </button>
+    <table mat-table [dataSource]="products" matSort>
+  
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let product"> {{product.id}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let product"> {{product.name}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let product"> {{product.description}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef> Price </th>
+            <td mat-cell *matCellDef="let product"> {{product.price.amount}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef> Category </th>
+            <td mat-cell *matCellDef="let product"> {{product.category}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="carbs">
+            <th mat-header-cell *matHeaderCellDef> Carbs </th>
+            <td mat-cell *matCellDef="let product">{{product.nutrition ? product.nutrition.carbohydrates + "g per " + product.nutrition.servingSize + "g": "-"}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="protein">
+            <th mat-header-cell *matHeaderCellDef> Protein </th>
+            <td mat-cell *matCellDef="let product">{{product.nutrition ? product.nutrition.protein + "g per " + product.nutrition.servingSize + "g": "-"}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fat">
+            <th mat-header-cell *matHeaderCellDef> Fat </th>
+            <td mat-cell *matCellDef="let product">{{product.nutrition ? product.nutrition.fat + "g per " + product.nutrition.servingSize + "g": "-"}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="sugar">
+            <th mat-header-cell *matHeaderCellDef> Sugar </th>
+            <td mat-cell *matCellDef="let product">{{product.nutrition ? product.nutrition.sugar + "g per " + product.nutrition.servingSize + "g": "-"}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="labels">
+            <th mat-header-cell *matHeaderCellDef> Labels </th>
+            <td mat-cell *matCellDef="let product"> {{product.labels != null ? product.labels.join(" | ") : ""}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let product">
+                <button mat-button (click)="openEditDialog(product)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-button (click)="deleteProduct(product.id)" >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+</div>
+
+

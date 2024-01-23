@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>{{ editMode ? 'Edit Product Entry' : 'Add Product Entry' }}</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <mat-label>Product</mat-label>
+        <mat-select [(ngModel)]="productEntry.product">
+            <mat-option *ngFor="let p of products;" [value]="p">{{p.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Quantity</mat-label>
+    <input type="number" matInput [(ngModel)]="productEntry.quantity">
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Back</button>
+  <button mat-button [mat-dialog-close]="getResultingProductEntry()" cdkFocusInitial>{{ editMode ? 'Save' : 'Add' }}</button>
+</div>

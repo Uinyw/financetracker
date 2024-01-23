@@ -17,5 +17,15 @@
             <a mat-list-item routerLink="/transactions/one-time">One-Time Transactions</a>
             <a mat-list-item routerLink="/transactions/recurring">Recurring Transactions</a>
         </div>
+        <mat-list-item class="parent">
+            <span style="display: flex; justify-content: space-between;">
+                <mat-icon mat-list-icon style="padding-right: 10px;">shopping_cart</mat-icon>
+                <span class="full-width">Shopping</span>
+            </span>
+        </mat-list-item>
+        <div class="submenu" [ngClass]="{'expanded' : true}">
+            <a mat-list-item routerLink="/products">Products</a>
+            <a mat-list-item routerLink="/shopping-cart">Shopping Cart</a>
+        </div>
     </mat-nav-list>
 </mat-sidenav>
