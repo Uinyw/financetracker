@@ -1,8 +1,11 @@
 package com.bank.account.infrastructure.Kafka;
 
+import com.bank.account.infrastructure.BankAccountRepository;
+import com.bank.account.logic.operations.BankAccountService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Headers;
 import org.openapitools.client.model.OneTimeTransactionDto;
+import org.openapitools.client.model.TransferDto;
 import org.openapitools.model.MonetaryAmountDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
@@ -27,33 +29,33 @@ public class KafkaRessource {
             LoggerFactory.getLogger(KafkaRessource.class);
 
     private final KafkaTemplate<String, Object> template;
+    private final BankAccountService bankAccountService;
     private final String topic1Name;
     private final int messagesPerRequest;
-    private CountDownLatch latch;
 
     //If new topic is defined, it also as to be set here!!
     public KafkaRessource(
-            final KafkaTemplate<String, Object> template,
+            final KafkaTemplate<String, Object> template, BankAccountService bankAccountService,
             @Value("${tpd.topic1-name}") final String topic1Name,
             @Value("${tpd.messages-per-request}") final int messagesPerRequest) {
         this.template = template;
+        this.bankAccountService = bankAccountService;
         this.topic1Name = topic1Name;
         this.messagesPerRequest = messagesPerRequest;
     }
 
-    @KafkaListener(topics = "transaction-queue", clientIdPrefix = "json",
+
+    @KafkaListener(topics = "transaction-backwards-queue", clientIdPrefix = "json",
             containerFactory = "kafkaListenerContainerFactory")
-    public void listenAsObject(ConsumerRecord<String, OneTimeTransactionDto> cr,
+    public void listenForTransactions(ConsumerRecord<String, OneTimeTransactionDto> cr,
                                @Payload OneTimeTransactionDto payload) {
         logger.info("Logger 1 [JSON] received key {}: Type [{}] | Payload: {} | Record: {}", cr.key(),
                 typeIdHeader(cr.headers()), payload, cr.toString());
-        latch.countDown();
-        //TODO get the transferDTO and add the values for the bank accounts
-        //Transfer transfer = oneTimeTransactionDto.getTransfer();
-        //UUID source = transfer.getSourceBankAccountId();
-        //UUID target = transfer.getTargetBankAccountId();
-        //oneTimeTransactionDto.getAmount();
-        //TODO get the bank accounts and add the values
+        try{
+            bankAccountService.transfer(payload);
+        }catch (Exception e){
+            System.out.println("A problem with the Object occurred\n" + e);
+        }
     }
 
 

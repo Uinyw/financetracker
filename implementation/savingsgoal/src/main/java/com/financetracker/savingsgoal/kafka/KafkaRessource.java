@@ -57,7 +57,7 @@ public class KafkaRessource {
 
     @GetMapping("/transaction2")
     public Boolean sendMessage(OneTimeTransactionDto transaction) throws Exception{
-        this.template.send(topic2Name, transaction);
+        this.template.send(topic2Name, createRandomOneTimeTransactionDto());//TODO replace the random one time transaction
         logger.info("Message put in queue");
     return true;
     }
@@ -72,7 +72,7 @@ public class KafkaRessource {
         oneTimeTransactionDto.setDate(LocalDate.now().toString());
         oneTimeTransactionDto.setId(UUID.randomUUID());
         oneTimeTransactionDto.setDescription("random Description");
-        oneTimeTransactionDto.setTransferStatus(TransferStatusDto.SUCCESSFUL);
+        oneTimeTransactionDto.setTransferStatus(TransferStatusDto.INITIAL);
 
         return oneTimeTransactionDto;
     }

@@ -14,16 +14,13 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootApplication
+@Component
 public class KafkaConfiguration {
-
-    public static void main(String[] args) {
-        SpringApplication.run(KafkaConfiguration.class, args);
-    }
 
     @Autowired
     private KafkaProperties kafkaProperties;
