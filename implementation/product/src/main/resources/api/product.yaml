@@ -7,6 +7,7 @@ info:
 tags:
   - name: Product
   - name: Shopping Cart
+  - name: Supplies
 
 paths:
   /products:
@@ -41,7 +42,7 @@ paths:
 
   /products/{id}:
     get:
-      summary: Get product by ID
+      summary: Get Product by ID
       tags:
         - Product
       parameters:
@@ -103,7 +104,7 @@ paths:
 
   /shopping-cart:
     get:
-      summary: Get shopping cart
+      summary: Get Shopping Cart
       tags:
         - Shopping Cart
       responses:
@@ -200,6 +201,84 @@ paths:
       responses:
         '200':
           description: Successfully checked off entry.
+
+  /supplies:
+    get:
+      summary: Get Supplies
+      tags:
+        - Supplies
+      responses:
+        '200':
+          description: Successfully retrieved supplies.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductEntryCollectionDto'
+
+  /supplies/shop:
+    post:
+      summary: Add Required Product Entries to Shopping Cart
+      tags:
+        - Supplies
+      responses:
+        '200':
+          description: Successfully updated shopping cart.
+
+  /supplies/entries:
+    post:
+      summary: Create new Supply Entry
+      tags:
+        - Supplies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+
+      responses:
+        '200':
+          description: Successfully created supply entry.
+
+  /supplies/entries/{id}:
+    patch:
+      summary: Update Supply Entry by ID
+      tags:
+        - Supplies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+
+      responses:
+        '200':
+          description: Successfully updated supply entry.
+
+    delete:
+      summary: Delete Supply Entry by ID
+      tags:
+        - Supplies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully delete entry.
+
+
 
 components:
   schemas:

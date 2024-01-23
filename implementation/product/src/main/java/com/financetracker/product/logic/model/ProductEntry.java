@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Builder(builderMethodName = "with")
 @Getter
@@ -29,5 +30,27 @@ public class ProductEntry {
 
     @Setter
     private boolean purchased;
+
+    public boolean shouldBeStockedUp() {
+        return quantity.compareTo(desiredQuantity) < 0;
+    }
+
+    public ProductEntry entryToStockUp() {
+        return ProductEntry.with()
+                .id(UUID.randomUUID().toString())
+                .collectionId(collectionId)
+                .product(product)
+                .quantity(desiredQuantity.subtract(quantity))
+                .desiredQuantity(desiredQuantity.subtract(quantity))
+                .build();
+    }
+
+    public void addToQuantity(final BigDecimal quantityToAdd) {
+        quantity = quantity.add(quantityToAdd);
+    }
+
+    public boolean equalsProductEntryBasedOnProduct(final ProductEntry productEntry) {
+        return product.getId().equals(productEntry.getProduct().getId());
+    }
 
 }

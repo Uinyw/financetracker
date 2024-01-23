@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -24,44 +23,28 @@ public class ShoppingCartService {
     private final ProductEntryRepository productEntryRepository;
     private final ProductEntryCollectionRepository shoppingCartRepository;
 
+    private final ProductEntryCollectionService productEntryCollectionService;
+
     public ProductEntryCollection getShoppingCart() {
-        return shoppingCartRepository.findTopByType(ProductEntryCollectionType.SHOPPING_CART).orElseThrow(NotFoundException::new);
+        return productEntryCollectionService.getProductEntryCollection(ProductEntryCollectionType.SHOPPING_CART);
     }
 
     public void addProductEntryToShoppingCart(final ProductEntry productEntry) {
-        final var shoppingCart = getShoppingCart();
-        productEntry.setCollectionId(shoppingCart.getId());
-        shoppingCart.getProductEntries().add(productEntry);
-        shoppingCartRepository.save(shoppingCart);
+        productEntryCollectionService.addProductEntryToCollection(ProductEntryCollectionType.SHOPPING_CART, productEntry);
     }
 
     public void updateProductEntryInShoppingCart(final String productEntryId, final ProductEntry productEntry) {
-        final var shoppingCart = getShoppingCart();
-
-        final var productEntryExistsInShoppingCart = shoppingCart.getProductEntries().stream().anyMatch(productEntryWithIdPredicate(productEntryId));
-        if (!productEntryExistsInShoppingCart) {
-            throw new NotFoundException();
-        }
-
-        productEntry.setCollectionId(shoppingCart.getId());
-        productEntryRepository.save(productEntry);
+        productEntryCollectionService.updateProductEntryInCollection(ProductEntryCollectionType.SHOPPING_CART, productEntryId, productEntry);
     }
 
     public void removeProductEntryFromShoppingCart(final String productEntryId) {
-        final var shoppingCart = getShoppingCart();
-
-        final var productEntryRemoved = shoppingCart.getProductEntries().removeIf(productEntryWithIdPredicate(productEntryId));
-        if (!productEntryRemoved) {
-            throw new NotFoundException();
-        }
-
-        shoppingCartRepository.save(shoppingCart);
+        productEntryCollectionService.removeProductEntryFromCollections(ProductEntryCollectionType.SHOPPING_CART, productEntryId);
     }
 
     public void markProductEntryAsPurchased(final String productEntryId) {
         final var shoppingCart = getShoppingCart();
 
-        final var productEntry = shoppingCart.getProductEntries().stream().filter(productEntryWithIdPredicate(productEntryId)).findFirst().orElseThrow(NotFoundException::new);
+        final var productEntry = shoppingCart.getProductEntries().stream().filter(productEntryCollectionService.productEntryWithIdPredicate(productEntryId)).findFirst().orElseThrow(NotFoundException::new);
         productEntry.setPurchased(true);
 
         productEntryRepository.save(productEntry);
@@ -84,9 +67,4 @@ public class ShoppingCartService {
         shoppingCartRepository.save(shoppingCart);
     }
 
-
-
-    private Predicate<ProductEntry> productEntryWithIdPredicate(final String productEntryId) {
-        return productEntry -> productEntry.getId().equals(productEntryId);
-    }
 }

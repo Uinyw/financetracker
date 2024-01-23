@@ -19,7 +19,7 @@ public class ShoppingCartResource implements ShoppingCartApi {
     private final ProductEntryCollectionMapper shoppingCartMapper;
 
     @Override
-    public void shoppingCartEntriesIdCheckPost(String id) {
+    public void shoppingCartEntriesIdMarkPost(String id) {
         shoppingCartService.markProductEntryAsPurchased(id);
     }
 
