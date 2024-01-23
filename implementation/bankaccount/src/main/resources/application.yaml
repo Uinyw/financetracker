@@ -9,7 +9,16 @@ spring:
   h2:
     console:
       enabled: true
+  kafka:
+    consumer:
+      group-id: tpd-loggers
+      auto-offset-reset: earliest
+    bootstrap-servers: localhost:9092
 
 server:
   port: 8081
+
+tpd:
+  topic1-name: transaction-backwards-queue
+  messages-per-request: 1
 

@@ -1,8 +1,8 @@
-package com.financetracker.savingsgoal.kafka;
+package com.bank.account.infrastructure.Kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Headers;
-import org.openapitools.client.model.*;
+import org.openapitools.model.MonetaryAmountDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,6 @@ public class KafkaRessource {
 
     private final KafkaTemplate<String, Object> template;
     private final String topic1Name;
-    private final String topic2Name;
     private final int messagesPerRequest;
     private CountDownLatch latch;
 
@@ -35,46 +34,10 @@ public class KafkaRessource {
     public KafkaRessource(
             final KafkaTemplate<String, Object> template,
             @Value("${tpd.topic1-name}") final String topic1Name,
-            @Value("${tpd.topic2-name}") final String topic2Name,
             @Value("${tpd.messages-per-request}") final int messagesPerRequest) {
         this.template = template;
         this.topic1Name = topic1Name;
-        this.topic2Name = topic2Name;
         this.messagesPerRequest = messagesPerRequest;
-    }
-
-    //TODO to be deleted
-    @GetMapping("/transaction")
-    public String testReceive() throws Exception {
-        latch = new CountDownLatch(messagesPerRequest); //Messages are duplicated
-        IntStream.range(0, messagesPerRequest)
-                .forEach(i -> this.template.send(topic1Name, String.valueOf(i), createRandomOneTimeTransactionDto())
-                );
-        latch.await(60, TimeUnit.SECONDS);
-        logger.info("All messages received");
-        return "new Transaction!";
-    }
-
-    @GetMapping("/transaction2")
-    public Boolean sendMessage(OneTimeTransactionDto transaction) throws Exception{
-        this.template.send(topic2Name, transaction);
-        logger.info("Message put in queue");
-    return true;
-    }
-
-    private OneTimeTransactionDto createRandomOneTimeTransactionDto(){
-        OneTimeTransactionDto oneTimeTransactionDto = new OneTimeTransactionDto();
-        MonetaryAmountDto monetaryAmountDto = new MonetaryAmountDto();
-        monetaryAmountDto.setAmount((double)Math.round(Math.random()*1000));
-        oneTimeTransactionDto.setAmount(monetaryAmountDto);
-        oneTimeTransactionDto.setType(TypeDto.INCOME);
-        oneTimeTransactionDto.setName("random Name");
-        oneTimeTransactionDto.setDate(LocalDate.now().toString());
-        oneTimeTransactionDto.setId(UUID.randomUUID());
-        oneTimeTransactionDto.setDescription("random Description");
-        oneTimeTransactionDto.setTransferStatus(TransferStatusDto.SUCCESSFUL);
-
-        return oneTimeTransactionDto;
     }
 
     @KafkaListener(topics = "transaction-queue", clientIdPrefix = "json",
@@ -84,6 +47,12 @@ public class KafkaRessource {
         logger.info("Logger 1 [JSON] received key {}: Type [{}] | Payload: {} | Record: {}", cr.key(),
                 typeIdHeader(cr.headers()), payload, cr.toString());
         latch.countDown();
+        //TODO get the transferDTO and add the values for the bank accounts
+        //Transfer transfer = oneTimeTransactionDto.getTransfer();
+        //UUID source = transfer.getSourceBankAccountId();
+        //UUID target = transfer.getTargetBankAccountId();
+        //oneTimeTransactionDto.getAmount();
+        //TODO get the bank accounts and add the values
     }
 
 

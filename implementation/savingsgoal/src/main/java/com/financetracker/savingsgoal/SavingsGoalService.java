@@ -9,6 +9,7 @@ import java.util.UUID;
 import com.financetracker.savingsgoal.Time.Configuration;
 import com.financetracker.savingsgoal.client.BankAccountClient;
 import com.financetracker.savingsgoal.client.TransactionClient;
+import com.financetracker.savingsgoal.kafka.KafkaRessource;
 import com.financetracker.savingsgoal.model.SavingsGoalMapper;
 import org.openapitools.client.model.*;
 import org.openapitools.model.AchievementStatus;
@@ -29,6 +30,7 @@ public class SavingsGoalService {
     private final PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository;
     private final RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository;
     private final SavingsGoalMapper savingsGoalMapper;
+    //private final KafkaRessource kafkaRessource;
 
  public List<PeriodicalSavingsGoalDTO> getPeriodicalSavingsGoals(){
      List<PeriodicalSavingsGoalDTO> periodicalSavingsGoalDTOList = new ArrayList<>();
@@ -351,14 +353,17 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
     @Scheduled(cron = "0 0 6 * * *", zone = Configuration.TIME_ZONE)
     public void transferRecurringTransactionsOnDueDate() {
         List<PeriodicalSavingsGoal> periodicalSavingsGoals = periodicalSavingsGoalRepository.findAll();
-        List<OneTimeTransactionDto> newTransactions = new ArrayList<>();
         for (PeriodicalSavingsGoal psg : periodicalSavingsGoals){
             if(checkDue(psg)){
-                newTransactions.add(addNewTransactionDto(psg));
+                try {
+                    //kafkaRessource.sendMessage(addNewTransactionDto(psg));//TODO send periodicalSavingsGoals in a qeue [done] - check if it works
+                }catch (Exception e){
+                    System.out.println(e);
+                    System.out.println("Couldn't send the transaction");
+                }
+
             }
         }
-
-        //TODO send periodicalSavingsGoals in a qeue
     }
 
     private boolean checkDue(PeriodicalSavingsGoal periodicalSavingsGoal){

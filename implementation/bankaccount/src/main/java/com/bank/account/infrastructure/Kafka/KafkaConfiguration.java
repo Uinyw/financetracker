@@ -1,4 +1,4 @@
-package com.financetracker.savingsgoal.kafka;
+package com.bank.account.infrastructure.Kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -31,8 +31,6 @@ public class KafkaConfiguration {
     @Value("${tpd.topic1-name}")
     private String topic1Name;
 
-    @Value("${tpd.topic2-name}")
-    private String topic2Name;
 
 
     // Producer configuration
@@ -63,11 +61,6 @@ public class KafkaConfiguration {
         return new NewTopic(topic1Name, 1, (short) 1);
     }
 
-    //This bean sets the topic2
-    @Bean
-    public NewTopic topic2Creator() {
-        return new NewTopic(topic2Name, 1, (short) 1);
-    }
 
 
     // JSON Consumer Configuration
