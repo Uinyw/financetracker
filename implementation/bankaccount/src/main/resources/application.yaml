@@ -20,5 +20,6 @@ server:
 
 tpd:
   topic1-name: transaction-backwards-queue
+  topic2-name: account-update
   messages-per-request: 1
 

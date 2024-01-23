@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Headers;
 import org.openapitools.client.model.OneTimeTransactionDto;
 import org.openapitools.client.model.TransferDto;
+import org.openapitools.model.BankAccountDto;
 import org.openapitools.model.MonetaryAmountDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,20 +29,12 @@ public class KafkaRessource {
     private static final Logger logger =
             LoggerFactory.getLogger(KafkaRessource.class);
 
-    private final KafkaTemplate<String, Object> template;
     private final BankAccountService bankAccountService;
-    private final String topic1Name;
-    private final int messagesPerRequest;
 
     //If new topic is defined, it also as to be set here!!
     public KafkaRessource(
-            final KafkaTemplate<String, Object> template, BankAccountService bankAccountService,
-            @Value("${tpd.topic1-name}") final String topic1Name,
-            @Value("${tpd.messages-per-request}") final int messagesPerRequest) {
-        this.template = template;
+            BankAccountService bankAccountService) {
         this.bankAccountService = bankAccountService;
-        this.topic1Name = topic1Name;
-        this.messagesPerRequest = messagesPerRequest;
     }
 
 

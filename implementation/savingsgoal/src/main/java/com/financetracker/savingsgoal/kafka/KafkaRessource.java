@@ -28,6 +28,7 @@ public class KafkaRessource {
     private final KafkaTemplate<String, Object> template;
     private final String topic1Name;
     private final String topic2Name;
+    private final String topic3Name;
     private final int messagesPerRequest;
     private CountDownLatch latch;
 
@@ -36,15 +37,17 @@ public class KafkaRessource {
             final KafkaTemplate<String, Object> template,
             @Value("${tpd.topic1-name}") final String topic1Name,
             @Value("${tpd.topic2-name}") final String topic2Name,
+            @Value("${tpd.topic3-name}") final String topic3Name,
             @Value("${tpd.messages-per-request}") final int messagesPerRequest) {
         this.template = template;
         this.topic1Name = topic1Name;
         this.topic2Name = topic2Name;
+        this.topic3Name = topic3Name;
         this.messagesPerRequest = messagesPerRequest;
     }
 
     //TODO to be deleted
-    @GetMapping("/transaction")
+    @GetMapping("/transactionTest")
     public String testReceive() throws Exception {
         latch = new CountDownLatch(messagesPerRequest); //Messages are duplicated
         IntStream.range(0, messagesPerRequest)
@@ -55,13 +58,21 @@ public class KafkaRessource {
         return "new Transaction!";
     }
 
+    //TODO to be deleted
     @GetMapping("/transaction2")
-    public Boolean sendMessage(OneTimeTransactionDto transaction) throws Exception{
-        this.template.send(topic2Name, createRandomOneTimeTransactionDto());//TODO replace the random one time transaction
+    public Boolean sendTestMessage(OneTimeTransactionDto transaction) throws Exception{
+        this.template.send(topic1Name, createRandomOneTimeTransactionDto());//TODO replace the random one time transaction
         logger.info("Message put in queue");
     return true;
     }
+    @GetMapping("/transaction")
+    public Boolean sendMessage(OneTimeTransactionDto transaction) throws Exception{
+        this.template.send(topic2Name, transaction);
+        logger.info("Message put in queue");
+        return true;
+    }
 
+    //TODO to be deleted
     private OneTimeTransactionDto createRandomOneTimeTransactionDto(){
         OneTimeTransactionDto oneTimeTransactionDto = new OneTimeTransactionDto();
         MonetaryAmountDto monetaryAmountDto = new MonetaryAmountDto();
@@ -76,16 +87,25 @@ public class KafkaRessource {
 
         return oneTimeTransactionDto;
     }
-
+/*
     @KafkaListener(topics = "transaction-queue", clientIdPrefix = "json",
-            containerFactory = "kafkaListenerContainerFactory")
+            containerFactory = "OneTimeTransactionDtoKafkaListenerContainerFactory", groupId = "topic1")
     public void listenAsObject(ConsumerRecord<String, OneTimeTransactionDto> cr,
                                @Payload OneTimeTransactionDto payload) {
         logger.info("Logger 1 [JSON] received key {}: Type [{}] | Payload: {} | Record: {}", cr.key(),
                 typeIdHeader(cr.headers()), payload, cr.toString());
         latch.countDown();
     }
-
+*/
+    @KafkaListener(topics = "account-update", clientIdPrefix = "json",
+            containerFactory = "bankAccountDtoKafkaListenerContainerFactory", groupId = "topic2")
+    public void listenBankAccountChange(ConsumerRecord<String, BankAccountDto> cr,
+                               @Payload BankAccountDto payload) {
+        logger.info("Logger 1 [JSON] received key {}: Type [{}] | Payload: {} | Record: {}", cr.key(),
+                typeIdHeader(cr.headers()), payload, cr.toString());
+        latch.countDown();
+        System.out.println("listener");
+    }
 
     private static String typeIdHeader(Headers headers) {
         return StreamSupport.stream(headers.spliterator(), false)

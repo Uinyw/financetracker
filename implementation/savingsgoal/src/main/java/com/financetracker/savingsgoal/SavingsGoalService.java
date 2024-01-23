@@ -30,7 +30,7 @@ public class SavingsGoalService {
     private final PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository;
     private final RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository;
     private final SavingsGoalMapper savingsGoalMapper;
-    //private final KafkaRessource kafkaRessource;
+    private final KafkaRessource kafkaRessource;
 
  public List<PeriodicalSavingsGoalDTO> getPeriodicalSavingsGoals(){
      List<PeriodicalSavingsGoalDTO> periodicalSavingsGoalDTOList = new ArrayList<>();
@@ -105,6 +105,7 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         return null;
     }
 
+    //TODO delete
     public PeriodicalSavingsGoalDTO createRandomPeriodicalSavingsGoal(){
         com.financetracker.savingsgoal.MonetaryAmount newMonetaryAmount = new com.financetracker.savingsgoal.MonetaryAmount();
         newMonetaryAmount.setAmount(Math.random()*10000);
@@ -127,6 +128,7 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         periodicalSavingsGoalDTO.setOneTimeTransactionRecord(new ArrayList<>());
         return periodicalSavingsGoalDTO;
     }
+    //TODO delete
     public RuleBasedSavingsGoalDTO createRandomRBasedSavingsGoal(){
         RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO = new RuleBasedSavingsGoalDTO();
         ruleBasedSavingsGoalDTO.setId(UUID.randomUUID());
@@ -184,35 +186,6 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
 
     // ------ [periodical rule logic]
 
-    //TODO call this method periodically after savings goal rules
-    public OneTimeTransactionDto addNewPercentageOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
-     if(periodicalSavingsGoal.getTransactionIds().isEmpty()){ //if no entry present
-         periodicalSavingsGoal.setTransactionIds(new ArrayList<>());
-         OneTimeTransactionDto ottdto = createPercentageOneTimeTransactionDto(periodicalSavingsGoal);
-         periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
-
-         return ottdto;
-     }
-     periodicalSavingsGoalRepository.delete(periodicalSavingsGoal);
-     OneTimeTransactionDto ottd = addNewTransactionDto(periodicalSavingsGoal);
-     periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
-     return ottd;
-    }
-
-    //TODO call this method periodically after savings goal rules
-    public OneTimeTransactionDto addNewAmountBasedOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
-        if(periodicalSavingsGoal.getTransactionIds().isEmpty()){ //if no entry present
-            periodicalSavingsGoal.setTransactionIds(new ArrayList<>());
-            OneTimeTransactionDto ottdto =  createAmountBasedOneTimeTransactionDto(periodicalSavingsGoal);
-            periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
-            return ottdto;
-        }
-        periodicalSavingsGoalRepository.delete(periodicalSavingsGoal);
-        OneTimeTransactionDto ottd = addNewTransactionDto(periodicalSavingsGoal);
-        periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
-        return ottd;
-    }
-
     private OneTimeTransactionDto addNewTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
         OneTimeTransactionDto newOneTimeTransactionDto = new OneTimeTransactionDto();
         UUID id = UUID.randomUUID();
@@ -243,7 +216,7 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         return newOneTimeTransactionDto;
     }
 
-//TODO initial call when creating
+/*
     private OneTimeTransactionDto createPercentageOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
         double bankAccountBalance = getBankAccountBalance(periodicalSavingsGoal.getBankAccountId().toString());
         double percentage = periodicalSavingsGoal.getRecurringRate().getAmount();
@@ -279,7 +252,7 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         return oneTimeTransactionDto;
     }
 
-    //TODO initial call when creating
+
     private OneTimeTransactionDto createAmountBasedOneTimeTransactionDto(PeriodicalSavingsGoal periodicalSavingsGoal){
         MonetaryAmount emptyAmount = new MonetaryAmount();
         MonetaryAmountDto moneyToBeTransfered = new MonetaryAmountDto();
@@ -300,13 +273,13 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         oneTimeTransactionDto.setDescription(periodicalSavingsGoal.getDescription());
 
         return oneTimeTransactionDto;
-    }
+    }*/
 
     private double getBankAccountBalance(String id){
         Optional<BankAccountDto> bankAccountDto = bankAccountClient.getBankAccount(id);
         double money = 0.0;
 
-        if(bankAccountDto.isEmpty()) { //TODO what to do if the bank account doesn'T exist
+        if(bankAccountDto.isEmpty()) { //TODO what to do if the bank account doesn't exist
             System.out.println("bank account does not exist");
             return money;
         }
@@ -356,7 +329,7 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         for (PeriodicalSavingsGoal psg : periodicalSavingsGoals){
             if(checkDue(psg)){
                 try {
-                    //kafkaRessource.sendMessage(addNewTransactionDto(psg));//TODO send periodicalSavingsGoals in a qeue [done] - check if it works
+                    kafkaRessource.sendMessage(addNewTransactionDto(psg));
                 }catch (Exception e){
                     System.out.println(e);
                     System.out.println("Couldn't send the transaction");
@@ -373,7 +346,7 @@ private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id){
         OneTimeTransactionDto newestTransaction = getTransaction(tids.get(tids.size()-1).toString());
         LocalDate lastDate = savingsGoalMapper.getTimeFromString(newestTransaction.getDate());
         LocalDate nextDate = lastDate.plusMonths(periodicityToInt(periodicity));
-        if(nextDate.isAfter(LocalDate.now()) && nextDate.isBefore(LocalDate.now().plusDays(1))){
+        if(nextDate.isAfter(LocalDate.now()) && nextDate.isBefore(LocalDate.now().plusDays(1)) && nextDate.isBefore(duration.getEnd()) && nextDate.isAfter(duration.getStart())){
             //if its after now and before tomorrow
             return true;
         }

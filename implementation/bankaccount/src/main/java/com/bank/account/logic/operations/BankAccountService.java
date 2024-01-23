@@ -3,13 +3,13 @@ package com.bank.account.logic.operations;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
+import com.bank.account.api.mapping.BankAccountMapper;
 import com.bank.account.infrastructure.BankAccountRepository;
+import com.bank.account.infrastructure.Kafka.KafkaSendMessages;
 import com.bank.account.logic.model.BankAccount;
 import com.bank.account.logic.model.MonetaryAmount;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.client.ApiException;
 import org.openapitools.client.model.*;
 import org.openapitools.model.BankAccountDto;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
+    private final KafkaSendMessages kafkaSendMessages;
+    private final BankAccountMapper bankAccountMapper;
 
     public List<BankAccount> getBankAccounts() {
         return bankAccountRepository.findAll();
@@ -30,13 +32,23 @@ public class BankAccountService {
 
     public void createBankAccount(final BankAccount bankAccount) {
         bankAccountRepository.save(bankAccount);
+        this.savingsGoalsNotification(bankAccount);//TODO not really needed, because its new anyways
     }
 
     public void updateBankAccount(final BankAccount bankAccount) {
         bankAccountRepository.save(bankAccount);
+        this.savingsGoalsNotification(bankAccount);
     }
 
+    private void savingsGoalsNotification(BankAccount bankAccount){
+        BankAccountDto bankAccountDto = bankAccountMapper.mapBankAccountModelToDtp(bankAccount);
+        try{
+            kafkaSendMessages.balanceChange(bankAccountDto);
+        }catch (Exception e){
+            System.out.println("Problem with sending the Bank account\n"+e);
+        }
 
+    }
     public void deleteBankAccount(final String bankAccountId) {
         bankAccountRepository.deleteById(bankAccountId);
     }

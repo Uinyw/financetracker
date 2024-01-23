@@ -4,6 +4,8 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.openapitools.client.model.BankAccountDto;
+import org.openapitools.client.model.OneTimeTransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -31,28 +33,9 @@ public class KafkaConfiguration {
     @Value("${tpd.topic2-name}")
     private String topic2Name;
 
+    @Value("${tpd.topic3-name}")
+    private String topic3Name;
 
-    // Producer configuration
-    @Bean
-    public Map<String, Object> producerConfigs() {
-        Map<String, Object> props =
-                new HashMap<>(kafkaProperties.buildProducerProperties());
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class);
-        return props;
-    }
-
-    @Bean
-    public ProducerFactory<String, Object> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
-    }
-
-    @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }
 
     //This bean sets the topic1
     @Bean
@@ -66,6 +49,33 @@ public class KafkaConfiguration {
         return new NewTopic(topic2Name, 1, (short) 1);
     }
 
+    //This bean sets the topic3
+    @Bean
+    public NewTopic topic3Creator() {
+        return new NewTopic(topic3Name, 1, (short) 1);
+    }
+
+    /*
+    // Producer configuration
+    @Bean
+    public Map<String, Object> producerConfigs() {
+        Map<String, Object> props =
+                new HashMap<>(kafkaProperties.buildProducerProperties());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return props;
+    }
+
+    @Bean
+    public ProducerFactory<String, Object> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Object> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
+
 
     // JSON Consumer Configuration
     @Bean
@@ -76,13 +86,70 @@ public class KafkaConfiguration {
                 kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer
         );
     }
+    // JSON Consumer Configuration
+    @Bean
+    public ConsumerFactory<String, Object> consumer2Factory() {
+        final JsonDeserializer<Object> jsonDeserializer = new JsonDeserializer<>();
+        jsonDeserializer.addTrustedPackages("*");
+        return new DefaultKafkaConsumerFactory<>(
+                kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer
+        );
+    }
+
+     */
+    @Bean
+    public Map<String, Object> producerConfigs() {
+        Map<String, Object> props = new HashMap<>(kafkaProperties.buildProducerProperties());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return props;
+    }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+    public ProducerFactory<String, Object> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
 
+    @Bean
+    public KafkaTemplate<String, Object> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
+
+    // JSON Consumer Configuration for TransactionDTO
+/*
+    @Bean
+    public ConsumerFactory<String, OneTimeTransactionDto> OneTimeTransactionDtoConsumerFactory() {
+        JsonDeserializer<OneTimeTransactionDto> jsonDeserializer = new JsonDeserializer<>(OneTimeTransactionDto.class);
+        jsonDeserializer.addTrustedPackages("*");
+        return new DefaultKafkaConsumerFactory<>(
+                kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer
+        );
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, OneTimeTransactionDto> OneTimeTransactionDtoKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OneTimeTransactionDto> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(OneTimeTransactionDtoConsumerFactory());
+        return factory;
+    }
+*/
+    // JSON Consumer Configuration for BankAccountDTO
+
+    @Bean
+    public ConsumerFactory<String, BankAccountDto> bankAccountDtoConsumerFactory() {
+        JsonDeserializer<BankAccountDto> jsonDeserializer = new JsonDeserializer<>(BankAccountDto.class);
+        jsonDeserializer.addTrustedPackages("org.openapitools.model");
+        return new DefaultKafkaConsumerFactory<>(
+                kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer
+        );
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, BankAccountDto> bankAccountDtoKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, BankAccountDto> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(bankAccountDtoConsumerFactory());
         return factory;
     }
 
