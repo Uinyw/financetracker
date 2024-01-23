@@ -116,7 +116,7 @@ paths:
 
   /shopping-cart/purchase:
     post:
-      summary: Purchase Checked Products Entries of Shopping Cart
+      summary: Purchase Marked Products Entries of Shopping Cart
       tags:
         - Shopping Cart
       requestBody:
@@ -185,9 +185,9 @@ paths:
         '200':
           description: Successfully delete entry.
 
-  /shopping-cart/entries/{id}/check:
+  /shopping-cart/entries/{id}/mark:
     post:
-      summary: Check Off Shopping Cart Entry
+      summary: Mark Shopping Cart Entry as Purchased
       tags:
         - Shopping Cart
       parameters:
