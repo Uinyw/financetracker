@@ -116,10 +116,10 @@ public class KafkaConfiguration {
     }
 
     // JSON Consumer Configuration for TransactionDTO
-/*
+
     @Bean
     public ConsumerFactory<String, OneTimeTransactionDto> OneTimeTransactionDtoConsumerFactory() {
-        JsonDeserializer<OneTimeTransactionDto> jsonDeserializer = new JsonDeserializer<>(OneTimeTransactionDto.class);
+        JsonDeserializer<OneTimeTransactionDto> jsonDeserializer = new JsonDeserializer<>(OneTimeTransactionDto.class, false);
         jsonDeserializer.addTrustedPackages("*");
         return new DefaultKafkaConsumerFactory<>(
                 kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer
@@ -133,7 +133,7 @@ public class KafkaConfiguration {
         factory.setConsumerFactory(OneTimeTransactionDtoConsumerFactory());
         return factory;
     }
-*/
+
     // JSON Consumer Configuration for BankAccountDTO
 
     @Bean

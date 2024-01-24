@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
@@ -30,7 +29,6 @@ public class KafkaRessource {
     private final String topic2Name;
     private final String topic3Name;
     private final int messagesPerRequest;
-    private CountDownLatch latch;
 
     //If new topic is defined, it also as to be set here!!
     public KafkaRessource(
@@ -49,11 +47,7 @@ public class KafkaRessource {
     //TODO to be deleted
     @GetMapping("/transactionTest")
     public String testReceive() throws Exception {
-        latch = new CountDownLatch(messagesPerRequest); //Messages are duplicated
-        IntStream.range(0, messagesPerRequest)
-                .forEach(i -> this.template.send(topic1Name, String.valueOf(i), createRandomOneTimeTransactionDto())
-                );
-        latch.await(60, TimeUnit.SECONDS);
+        this.template.send(topic1Name, createRandomOneTimeTransactionDto());
         logger.info("All messages received");
         return "new Transaction!";
     }
@@ -87,24 +81,22 @@ public class KafkaRessource {
 
         return oneTimeTransactionDto;
     }
-/*
+
     @KafkaListener(topics = "transaction-queue", clientIdPrefix = "json",
             containerFactory = "OneTimeTransactionDtoKafkaListenerContainerFactory", groupId = "topic1")
     public void listenAsObject(ConsumerRecord<String, OneTimeTransactionDto> cr,
                                @Payload OneTimeTransactionDto payload) {
         logger.info("Logger 1 [JSON] received key {}: Type [{}] | Payload: {} | Record: {}", cr.key(),
                 typeIdHeader(cr.headers()), payload, cr.toString());
-        latch.countDown();
     }
-*/
+
     @KafkaListener(topics = "account-update", clientIdPrefix = "json",
             containerFactory = "bankAccountDtoKafkaListenerContainerFactory", groupId = "topic2")
     public void listenBankAccountChange(ConsumerRecord<String, BankAccountDto> cr,
                                @Payload BankAccountDto payload) {
         logger.info("Logger 1 [JSON] received key {}: Type [{}] | Payload: {} | Record: {}", cr.key(),
                 typeIdHeader(cr.headers()), payload, cr.toString());
-        latch.countDown();
-        System.out.println("listener");
+        System.out.println("account-update listener success");
     }
 
     private static String typeIdHeader(Headers headers) {
