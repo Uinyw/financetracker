@@ -138,8 +138,8 @@ public class KafkaConfiguration {
 
     @Bean
     public ConsumerFactory<String, BankAccountDto> bankAccountDtoConsumerFactory() {
-        JsonDeserializer<BankAccountDto> jsonDeserializer = new JsonDeserializer<>(BankAccountDto.class);
-        jsonDeserializer.addTrustedPackages("org.openapitools.model");
+        JsonDeserializer<BankAccountDto> jsonDeserializer = new JsonDeserializer<>(BankAccountDto.class, false);
+        jsonDeserializer.addTrustedPackages("*");
         return new DefaultKafkaConsumerFactory<>(
                 kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer
         );

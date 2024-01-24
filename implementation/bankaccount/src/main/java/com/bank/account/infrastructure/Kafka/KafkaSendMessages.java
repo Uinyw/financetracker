@@ -9,6 +9,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 public class KafkaSendMessages {
 
@@ -30,7 +32,7 @@ public class KafkaSendMessages {
     //TODO send message after change of bank account
     @GetMapping("/balanceChange")
     public Boolean balanceChange(BankAccountDto bankAccountDto) throws Exception{
-        this.template.send(topic2Name, bankAccountDto);
+        this.template.send(topic2Name, BankAccountDto.builder().id(UUID.randomUUID()).build());
         logger.info("Message put in queue");
         return true;
     }
