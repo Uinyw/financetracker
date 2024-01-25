@@ -1,4 +1,4 @@
-package com.financetracker.savingsgoal;
+package com.financetracker.savingsgoal.model;
 
 import java.time.Duration;
 import java.util.List;

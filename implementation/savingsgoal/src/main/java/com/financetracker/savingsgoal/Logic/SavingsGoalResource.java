@@ -1,7 +1,8 @@
-package com.financetracker.savingsgoal;
+package com.financetracker.savingsgoal.Logic;
 
 import java.util.List;
 
+import com.financetracker.savingsgoal.Logic.SavingsGoalService;
 import org.openapitools.api.SavingsGoalsApi;
 import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;

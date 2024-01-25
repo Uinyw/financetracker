@@ -2,6 +2,7 @@ package com.bank.account.infrastructure.Kafka;
 
 import com.bank.account.logic.operations.BankAccountService;
 import org.openapitools.model.BankAccountDto;
+import org.openapitools.model.MonetaryAmountDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,8 @@ public class KafkaSendMessages {
     //TODO send message after change of bank account
     @GetMapping("/balanceChange")
     public Boolean balanceChange(BankAccountDto bankAccountDto) throws Exception{
-        this.template.send(topic2Name, BankAccountDto.builder().id(UUID.randomUUID()).build());
+            //TODO here a random bank account gets build
+        this.template.send(topic2Name, BankAccountDto.builder().id(UUID.randomUUID()).balance(MonetaryAmountDto.builder().amount(Math.random()*1000).build()).build());
         logger.info("Message put in queue");
         return true;
     }
