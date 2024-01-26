@@ -4,7 +4,6 @@ import com.financetracker.savingsgoal.Duration;
 import com.financetracker.savingsgoal.PeriodicalSavingsGoal;
 import com.financetracker.savingsgoal.Time.Configuration;
 import com.financetracker.savingsgoal.client.TransactionClient;
-import com.financetracker.savingsgoal.kafka.KafkaSendMessages;
 import com.financetracker.savingsgoal.model.PeriodicalSavingsGoalRepository;
 import com.financetracker.savingsgoal.model.SavingsGoalMapper;
 import org.openapitools.client.model.OneTimeTransactionDto;
@@ -22,14 +21,11 @@ import java.util.UUID;
 
 @Component
 public class PeriodicalSavingsGoalLogic {
-
-    private final KafkaSendMessages kafkaSendMessages;
     private final TransactionClient transactionClient;
     private final PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository;
     private final SavingsGoalMapper savingsGoalMapper;
 
-    public PeriodicalSavingsGoalLogic(KafkaSendMessages kafkaSendMessages, TransactionClient transactionClient, PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository, SavingsGoalMapper savingsGoalMapper) {
-        this.kafkaSendMessages = kafkaSendMessages;
+    public PeriodicalSavingsGoalLogic(TransactionClient transactionClient, PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository, SavingsGoalMapper savingsGoalMapper) {
         this.transactionClient = transactionClient;
         this.periodicalSavingsGoalRepository = periodicalSavingsGoalRepository;
         this.savingsGoalMapper = savingsGoalMapper;
@@ -123,7 +119,6 @@ public class PeriodicalSavingsGoalLogic {
         for (PeriodicalSavingsGoal psg : periodicalSavingsGoals) {
             if (checkDue(psg)) {
                 try {
-                    kafkaSendMessages.sendScheduledMessage(addNewScheduledTransaction(psg));
                 } catch (Exception e) {
                     System.out.println(e + "\n Couldn't send the transaction");
                 }
