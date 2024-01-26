@@ -140,26 +140,8 @@
 							<configOptions>
 								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
 								<openApiNullable>false</openApiNullable>
+								<sourceFolder>src/main/java/main</sourceFolder>
 								<interfaceOnly>true</interfaceOnly>
-							</configOptions>
-						</configuration>
-					</execution>
-					<execution>
-						<id>transaction-client</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<skipValidateSpec>true</skipValidateSpec>
-							<inputSpec>implementation/transaction/src/main/resources/api/transaction.yaml</inputSpec>
-							<generatorName>java</generatorName>
-							<generateModelTests>false</generateModelTests>
-							<generateApiTests>false</generateApiTests>
-							<configOptions>
-								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
-								<sourceFolder>src/main/java</sourceFolder>
-								<useJakartaEe>true</useJakartaEe>
-								<openApiNullable>false</openApiNullable>
 							</configOptions>
 						</configuration>
 					</execution>

@@ -19,7 +19,6 @@ server:
   port: 8081
 
 tpd:
-  topic1-name: transaction-backwards-queue
-  topic2-name: account-update
+  topic-bank-account-update: bankaccount-update
   messages-per-request: 1
 
