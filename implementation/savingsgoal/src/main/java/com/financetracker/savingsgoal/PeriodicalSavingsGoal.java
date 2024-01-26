@@ -50,26 +50,14 @@ public class PeriodicalSavingsGoal {
     })
     private Duration duration; // inclusive infinity
 
-    @JoinColumn(name = "periodical_savings_goal_id", referencedColumnName = "id")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<SavingsRecord> records = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "periodical_savings_goal_id", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "transaction_id")
+    private List<UUID> transactionIds;
 
     @Column(name = "periodicity")
     private Periodicity periodicity;
 
     @Column(name = "goal_type")
     private Type type;
-
-    public AchievementStatus retryExecution(UUID recordId) {
-        // TODO implement
-        return AchievementStatus.FAILED;
-    }
-
-    public void recalculateRecurringRate() {
-        // TODO implement
-    }
-
-    public void recalculateRecurringAmount() {
-        // TODO implement
-    }
 }

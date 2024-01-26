@@ -2,10 +2,7 @@ package com.bank.account.logic.model;
 
 import com.bank.account.infrastructure.converter.LabelSetConverter;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +10,7 @@ import java.util.Set;
 @Builder(builderMethodName = "with")
 @AllArgsConstructor
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "bank_account")
 @Entity

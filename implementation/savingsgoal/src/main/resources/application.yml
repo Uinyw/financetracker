@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    consumer:
+      group-id: tpd-loggers
+      auto-offset-reset: earliest
+    bootstrap-servers: localhost:9092
+
+tpd:
+  topic1-name: transaction-queue
+  topic2-name: transaction-backwards-queue
+  topic3-name: account-update
+  messages-per-request: 1
