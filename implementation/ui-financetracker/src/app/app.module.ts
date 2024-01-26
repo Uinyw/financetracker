@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,10 @@ import { RecurringTransactionDialogComponent } from './recurring-transaction-dia
 import { TransactionRecordComponent } from './transaction-record/transaction-record.component';
 import { TransactionRecordDialogComponent } from './transaction-record-dialog/transaction-record-dialog.component';
 import { BankAccountDetailComponent } from './bank-account-detail/bank-account-detail.component';
+import { ProductComponent } from './product/product.component';
+import { ProductDialogComponent } from './product-dialog/product-dialog.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { ShoppingCartDialogComponent } from './shopping-cart-dialog/shopping-cart-dialog.component';
 
 
 @NgModule({
@@ -44,6 +49,10 @@ import { BankAccountDetailComponent } from './bank-account-detail/bank-account-d
     TransactionRecordComponent,
     TransactionRecordDialogComponent,
     BankAccountDetailComponent,
+    ProductComponent,
+    ProductDialogComponent,
+    ShoppingCartComponent,
+    ShoppingCartDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +69,7 @@ import { BankAccountDetailComponent } from './bank-account-detail/bank-account-d
     MatNativeDateModule,
     MatSelectModule,
     MatPaginatorModule,
+    MatCheckboxModule,
     MatButtonModule,
     FormsModule,
     HttpClientModule,

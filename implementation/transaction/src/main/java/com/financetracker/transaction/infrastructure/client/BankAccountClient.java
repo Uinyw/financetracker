@@ -1,6 +1,5 @@
 package com.financetracker.transaction.infrastructure.client;
 
-import com.financetracker.transaction.api.exceptions.TransferFailedException;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.BankAccountApi;
 import org.openapitools.client.model.BankAccountDto;
