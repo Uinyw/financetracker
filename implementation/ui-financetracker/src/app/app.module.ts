@@ -34,6 +34,8 @@ import { ProductComponent } from './product/product.component';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { ShoppingCartDialogComponent } from './shopping-cart-dialog/shopping-cart-dialog.component';
+import { SuppliesComponent } from './supplies/supplies.component';
+import { SuppliesDialogComponent } from './supplies-dialog/supplies-dialog.component';
 
 
 @NgModule({
@@ -53,6 +55,8 @@ import { ShoppingCartDialogComponent } from './shopping-cart-dialog/shopping-car
     ProductDialogComponent,
     ShoppingCartComponent,
     ShoppingCartDialogComponent,
+    SuppliesComponent,
+    SuppliesDialogComponent,
   ],
   imports: [
     BrowserModule,

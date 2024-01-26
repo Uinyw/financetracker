@@ -24,6 +24,7 @@ public class ProductEntry {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Product product;
 
+    @Setter
     private BigDecimal quantity;
 
     private BigDecimal desiredQuantity;
@@ -43,10 +44,6 @@ public class ProductEntry {
                 .quantity(desiredQuantity.subtract(quantity))
                 .desiredQuantity(desiredQuantity.subtract(quantity))
                 .build();
-    }
-
-    public void addToQuantity(final BigDecimal quantityToAdd) {
-        quantity = quantity.add(quantityToAdd);
     }
 
     public boolean equalsProductEntryBasedOnProduct(final ProductEntry productEntry) {

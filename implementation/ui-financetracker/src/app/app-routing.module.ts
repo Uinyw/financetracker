@@ -7,6 +7,7 @@ import { TransactionRecordComponent } from './transaction-record/transaction-rec
 import { BankAccountDetailComponent } from './bank-account-detail/bank-account-detail.component';
 import { ProductComponent } from './product/product.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { SuppliesComponent } from './supplies/supplies.component';
 
 const routes: Routes = [
   { path: 'bank-accounts', component: BankAccountComponent },
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'transactions/recurring', component: RecurringTransactionComponent },
   { path: 'transactions/recurring/:id', component: TransactionRecordComponent },
   { path: 'products', component: ProductComponent },
-  { path: 'shopping-cart', component: ShoppingCartComponent }
+  { path: 'shopping-cart', component: ShoppingCartComponent },
+  { path: 'supplies', component: SuppliesComponent }
 ];
 
 @NgModule({

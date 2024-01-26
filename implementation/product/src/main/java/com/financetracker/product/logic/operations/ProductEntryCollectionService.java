@@ -31,7 +31,7 @@ public class ProductEntryCollectionService {
                 .filter(productEntry::equalsProductEntryBasedOnProduct)
                 .findFirst()
                 .ifPresentOrElse(
-                        p -> p.addToQuantity(productEntry.getQuantity()),
+                        p -> p.setQuantity(productEntry.getQuantity()),
                         () -> collection.getProductEntries().add(productEntry)
                 );
 
