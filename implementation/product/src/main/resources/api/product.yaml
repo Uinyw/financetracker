@@ -1,0 +1,371 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+  description: Manage products, supplies and shopping carts.
+
+tags:
+  - name: Product
+  - name: Shopping Cart
+  - name: Supplies
+
+paths:
+  /products:
+    get:
+      summary: Get all products
+      tags:
+        - Product
+      responses:
+        '200':
+          description: Successfully retrieved a list of all existing products.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+
+    post:
+      summary: Create new product
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+
+      responses:
+        '200':
+          description: Successfully created a new product.
+
+  /products/{id}:
+    get:
+      summary: Get Product by ID
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+        '404':
+          description: Product with given ID not found.
+
+    patch:
+      summary: Update product by ID
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+      responses:
+        '200':
+          description: Successfully updated product.
+        '404':
+          description: Product with given ID not found.
+
+    delete:
+      summary: Delete Product by ID
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted product.
+        '404':
+          description: Product with given ID not found.
+
+  /shopping-cart:
+    get:
+      summary: Get Shopping Cart
+      tags:
+        - Shopping Cart
+      responses:
+        '200':
+          description: Successfully retrieved shopping cart.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductEntryCollectionDto'
+
+  /shopping-cart/purchase:
+    post:
+      summary: Purchase Marked Products Entries of Shopping Cart
+      tags:
+        - Shopping Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseDto'
+
+      responses:
+        '200':
+          description: Successfully purchased shopping cart.
+
+  /shopping-cart/entries:
+    post:
+      summary: Create new Shopping Cart Entry
+      tags:
+        - Shopping Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+
+      responses:
+        '200':
+          description: Successfully created shopping cart entry.
+
+
+  /shopping-cart/entries/{id}:
+    patch:
+      summary: Update Shopping Cart Entry by ID
+      tags:
+        - Shopping Cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+
+      responses:
+        '200':
+          description: Successfully updated shopping cart entry.
+
+    delete:
+      summary: Delete Shopping Cart Entry by ID
+      tags:
+        - Shopping Cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully delete entry.
+
+  /shopping-cart/entries/{id}/mark:
+    post:
+      summary: Mark Shopping Cart Entry as Purchased
+      tags:
+        - Shopping Cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully checked off entry.
+
+  /supplies:
+    get:
+      summary: Get Supplies
+      tags:
+        - Supplies
+      responses:
+        '200':
+          description: Successfully retrieved supplies.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductEntryCollectionDto'
+
+  /supplies/shop:
+    post:
+      summary: Add Required Product Entries to Shopping Cart
+      tags:
+        - Supplies
+      responses:
+        '200':
+          description: Successfully updated shopping cart.
+
+  /supplies/entries:
+    post:
+      summary: Create new Supply Entry
+      tags:
+        - Supplies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+
+      responses:
+        '200':
+          description: Successfully created supply entry.
+
+  /supplies/entries/{id}:
+    patch:
+      summary: Update Supply Entry by ID
+      tags:
+        - Supplies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+
+      responses:
+        '200':
+          description: Successfully updated supply entry.
+
+    delete:
+      summary: Delete Supply Entry by ID
+      tags:
+        - Supplies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Entry ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully delete entry.
+
+
+
+components:
+  schemas:
+
+    ProductEntryCollectionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/ProductEntryCollectionTypeDto'
+        productEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductEntryDto'
+
+    ProductEntryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+        desiredQuantity:
+          type: number
+        purchased:
+          type: boolean
+        product:
+          $ref: '#/components/schemas/ProductDto'
+
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          $ref: '#/components/schemas/CategoryDto'
+        nutrition:
+          $ref: '#/components/schemas/NutritionDto'
+        price:
+          $ref: '#/components/schemas/MonetaryAmountDto'
+        labels:
+          type: array
+          items:
+            type: string
+
+    NutritionDto:
+      type: object
+      properties:
+        servingSize:
+          type: number
+        calories:
+          type: number
+        carbohydrates:
+          type: number
+        protein:
+          type: number
+        fat:
+          type: number
+        sugar:
+          type: number
+
+    CategoryDto:
+      type: string
+      enum: [ FOOD, DRINKS, HOUSEHOLD, ESSENTIALS, PET_SUPPLIES ]
+
+    ProductEntryCollectionTypeDto:
+      type: string
+      enum: [ SHOPPING_CART, SUPPLIES ]
+
+    MonetaryAmountDto:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+
+    PurchaseDto:
+      type: object
+      properties:
+        sourceBankAccountId:
+          type: string
+          format: uuid
