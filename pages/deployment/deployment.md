@@ -6,5 +6,6 @@
 4. Run the following commands
 ```
 mvn clean package --file implementation/bankaccount/pom.xml
+mvn clean package --file implementation/transaction/pom.xml
 docker-compose up -d
 ```
