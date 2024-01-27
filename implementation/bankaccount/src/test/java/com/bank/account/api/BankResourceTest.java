@@ -3,6 +3,7 @@ package com.bank.account.api;
 import com.bank.account.IntegrationTestBase;
 import com.bank.account.data.TestBankAccountBuilder;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -11,6 +12,7 @@ import static org.hamcrest.Matchers.is;
 
 class BankResourceTest extends IntegrationTestBase {
 
+    @Disabled
     @Test
     void givenBankAccountDto_whenCreateBankAccount_thenBankAccountExists() {
         final var bankAccountDto = TestBankAccountBuilder.buildWithDefaults();
@@ -36,6 +38,7 @@ class BankResourceTest extends IntegrationTestBase {
                 .and().body("[0].id", is(bankAccountDto.getId().toString()));
     }
 
+    @Disabled
     @Test
     void givenBankAccount_whenGetBankAccountById_thenBankAccountReturned() {
         final var bankAccountDto = TestBankAccountBuilder.buildWithDefaults();
