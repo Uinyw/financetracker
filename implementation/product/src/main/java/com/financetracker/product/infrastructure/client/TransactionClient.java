@@ -8,6 +8,7 @@ import org.openapitools.client.model.MonetaryAmountDto;
 import org.openapitools.client.model.OneTimeTransactionDto;
 import org.openapitools.client.model.TransferDto;
 import org.openapitools.client.model.TypeDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
@@ -18,19 +19,19 @@ import java.util.UUID;
 @Component
 public class TransactionClient implements TransactionProvider {
 
-    private static final String BASE_URL_TRANSACTION = "http://localhost:8080";
+    @Value("${transaction}")
+    private String host;
 
     private final Clock clock;
     private final OneTimeTransactionApi transactionApi;
 
     public TransactionClient(final Clock clock) {
         transactionApi = new OneTimeTransactionApi();
-        transactionApi.setCustomBaseUrl(BASE_URL_TRANSACTION);
-
         this.clock = clock;
     }
 
     public void bookExpense(final UUID bankAccountId, final MonetaryAmount amount) {
+        setBaseUrl();
         final String date = LocalDate.now(clock).toString();
 
         final var transaction = OneTimeTransactionDto.builder()
@@ -49,5 +50,13 @@ public class TransactionClient implements TransactionProvider {
         } catch (ApiException e) {
             throw new BookingException();
         }
+    }
+
+    private void setBaseUrl() {
+        if (transactionApi.getCustomBaseUrl() != null) {
+            return;
+        }
+
+        transactionApi.setCustomBaseUrl("http://" + host + ":8080");
     }
 }

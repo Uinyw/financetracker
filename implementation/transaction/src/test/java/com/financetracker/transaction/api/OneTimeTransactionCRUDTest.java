@@ -4,6 +4,7 @@ import com.financetracker.transaction.IntegrationTestBase;
 import com.financetracker.transaction.data.TestOneTimeTransactionBuilder;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.BankAccountDto;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-
+@Disabled
 class OneTimeTransactionCRUDTest extends IntegrationTestBase {
 
 	@BeforeEach

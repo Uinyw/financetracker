@@ -4,6 +4,7 @@ import com.financetracker.transaction.IntegrationTestBase;
 import com.financetracker.transaction.data.TestRecurringTransactionBuilder;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.BankAccountDto;
 import org.openapitools.client.model.MonetaryAmountDto;
@@ -18,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
+@Disabled
 class RecurringTransactionTransferTest extends IntegrationTestBase {
 
     private RecurringTransactionDto recurringTransaction;

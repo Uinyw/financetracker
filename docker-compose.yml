@@ -23,6 +23,7 @@ services:
   bankaccount:
     container_name: bank-account
     build: ./implementation/bankaccount
+    hostname: bankaccount
     environment:
       - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
     ports:
@@ -35,6 +36,23 @@ services:
   transaction:
     container_name: transaction
     build: ./implementation/transaction
+    hostname: transaction
     ports:
       - 8080:8080
+    environment:
+      BANK-ACCOUNT: bankaccount
+
+  product:
+    container_name: product
+    build: ./implementation/product
+    ports:
+      - 8083:8083
+    environment:
+      TRANSACTION: transaction
+
+  ui:
+    container_name: ui
+    build: ./implementation/ui-financetracker
+    ports:
+      - 4200:80
 
