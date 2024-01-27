@@ -7,5 +7,6 @@
 ```
 mvn clean package --file implementation/bankaccount/pom.xml
 mvn clean package --file implementation/transaction/pom.xml
+mvn clean package --file implementation/product/pom.xml
 docker-compose up -d
 ```
