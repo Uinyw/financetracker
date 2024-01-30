@@ -23,15 +23,16 @@ import static org.mockito.ArgumentMatchers.any;
 
 public class RuleBasedSavingsGoalMapperTest extends IntegrationTest {
     @BeforeEach
-    void setUp() throws Exception {
-        doNothing().when(messagePublisher).sendScheduledMessage(any());
+    void setUp() {
+        doNothing().when(messageConsumer).listenBankAccountChange(any(), any());
     }
+
     @Test
     void givenValidRuleBasedSavingsGoal_whenMappingToModel_thenNoExceptionIsThrownAndResultingModelIsValid() {
         final RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO = RuleBasedSavingsGoalBuilder.buildWithDefaults();
         final RuleBasedSavingsGoal ruleBasedSavingsGoal = ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalDTOtoEntity(ruleBasedSavingsGoalDTO);
 
-        assertThat(ruleBasedSavingsGoal.getId(), is(ruleBasedSavingsGoalDTO.getId().toString()));
+        assertThat(ruleBasedSavingsGoal.getId().toString(), is(ruleBasedSavingsGoalDTO.getId().toString()));
         assertThat(ruleBasedSavingsGoal.getName(), is(ruleBasedSavingsGoalDTO.getName()));
         assertThat(ruleBasedSavingsGoal.getDescription(), is(ruleBasedSavingsGoalDTO.getDescription()));
         assertThat(ruleBasedSavingsGoal.getRules(), is(ruleBasedSavingsGoalDTO.getRules()));

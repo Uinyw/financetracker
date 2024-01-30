@@ -8,7 +8,10 @@ import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.Periodicity;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Component
@@ -44,7 +47,7 @@ public class PeriodicalSavingsGoalMapper {
 
 
 
-    public static PeriodicalSavingsGoalDTO createPeriodicalSavingsGoalDTO(UUID id, String name, String description, AchievementStatus achievementStatus, UUID bankAccountId, MonetaryAmount goal, double reoccuringRate, MonetaryAmount reoccuringAmount, String duration, Periodicity periodicity){
+    private PeriodicalSavingsGoalDTO createPeriodicalSavingsGoalDTO(UUID id, String name, String description, AchievementStatus achievementStatus, UUID bankAccountId, MonetaryAmount goal, double reoccuringRate, MonetaryAmount reoccuringAmount, String duration, Periodicity periodicity){
         PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO = new PeriodicalSavingsGoalDTO();
 
         periodicalSavingsGoalDTO.setId(id);
@@ -60,7 +63,7 @@ public class PeriodicalSavingsGoalMapper {
         return periodicalSavingsGoalDTO;
     }
 
-    public static PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID bankAccountId, org.openapitools.model.MonetaryAmount reoccuringRate, Duration duration, List<UUID> transactionIds, MonetaryAmount reoccuringAmount, MonetaryAmount goal){
+    private PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID bankAccountId, org.openapitools.model.MonetaryAmount reoccuringRate, Duration duration, List<UUID> transactionIds, MonetaryAmount reoccuringAmount, MonetaryAmount goal){
         PeriodicalSavingsGoal periodicalSavingsGoal = new PeriodicalSavingsGoal();
         periodicalSavingsGoal.setBankAccountId(bankAccountId);
         periodicalSavingsGoal.setRecurringRate(SavingsGoalMapper.monetaryAmountDTOtoModel(reoccuringRate));
@@ -69,5 +72,12 @@ public class PeriodicalSavingsGoalMapper {
         periodicalSavingsGoal.setRecurringAmount(reoccuringAmount);
         periodicalSavingsGoal.setGoal(goal);
         return periodicalSavingsGoal;
+    }
+
+    public LocalDate getTimeFromString(String date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+        formatter = formatter.withLocale( Locale.GERMAN );
+
+        return  LocalDate.parse(date, formatter);
     }
 }

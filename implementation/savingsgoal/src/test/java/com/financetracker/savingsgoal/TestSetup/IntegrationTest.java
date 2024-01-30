@@ -2,7 +2,7 @@ package com.financetracker.savingsgoal.TestSetup;
 
 import com.financetracker.savingsgoal.client.BankAccountProvider;
 import com.financetracker.savingsgoal.client.TransactionProvider;
-import com.financetracker.savingsgoal.kafka.KafkaMessagePublisher;
+import com.financetracker.savingsgoal.kafka.MessageConsumer;
 import com.financetracker.savingsgoal.model.PeriodicalSavingsGoalRepository;
 import com.financetracker.savingsgoal.model.RuleBasedSavingsGoalMapper;
 import com.financetracker.savingsgoal.model.RuleBasedSavingsGoalRepository;
@@ -44,7 +44,7 @@ import org.springframework.test.annotation.DirtiesContext;
     public TransactionProvider transactionProvider;
 
     @MockBean
-    public KafkaMessagePublisher messagePublisher;
+    public MessageConsumer messageConsumer;
 
     @AfterEach
     void tearDown() {
