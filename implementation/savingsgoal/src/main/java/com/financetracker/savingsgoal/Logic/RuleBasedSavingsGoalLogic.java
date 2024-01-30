@@ -3,6 +3,7 @@ package com.financetracker.savingsgoal.Logic;
 import com.financetracker.savingsgoal.MonetaryAmount;
 import com.financetracker.savingsgoal.Rule;
 import com.financetracker.savingsgoal.RuleBasedSavingsGoal;
+import com.financetracker.savingsgoal.model.RuleBasedSavingsGoalMapper;
 import com.financetracker.savingsgoal.model.RuleBasedSavingsGoalRepository;
 import com.financetracker.savingsgoal.client.BankAccountClient;
 import com.financetracker.savingsgoal.model.SavingsGoalMapper;
@@ -21,12 +22,12 @@ public class RuleBasedSavingsGoalLogic {
 
     private final BankAccountClient bankAccountClient;
     private final RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository;
-    private final SavingsGoalMapper savingsGoalMapper;
+    private final RuleBasedSavingsGoalMapper ruleBasedSavingsGoalMapper;
 
-    public RuleBasedSavingsGoalLogic(BankAccountClient bankAccountClient, RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository, SavingsGoalMapper savingsGoalMapper) {
+    public RuleBasedSavingsGoalLogic(BankAccountClient bankAccountClient, RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository, RuleBasedSavingsGoalMapper ruleBasedSavingsGoalMapper) {
         this.bankAccountClient = bankAccountClient;
         this.ruleBasedSavingsGoalRepository = ruleBasedSavingsGoalRepository;
-        this.savingsGoalMapper = savingsGoalMapper;
+        this.ruleBasedSavingsGoalMapper = ruleBasedSavingsGoalMapper;
     }
 
 
@@ -34,12 +35,12 @@ public class RuleBasedSavingsGoalLogic {
         System.out.println("getting all the rule based savings goals");
         List<RuleBasedSavingsGoalDTO> ruleBasedSavingsGoalDTOS = new ArrayList<>();
         ruleBasedSavingsGoalRepository.findAll().forEach(rbsg
-                -> ruleBasedSavingsGoalDTOS.add(savingsGoalMapper.ruleBasedSavingsGoalEntityToDTO(rbsg)));
+                -> ruleBasedSavingsGoalDTOS.add(ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalEntityToDTO(rbsg)));
         return ruleBasedSavingsGoalDTOS;
     }
 
     public boolean createRuleBasedSavingsGoal(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO) {
-        ruleBasedSavingsGoalRepository.save(savingsGoalMapper.ruleBasedSavingsGoalDTOtoEntity(ruleBasedSavingsGoalDTO));
+        ruleBasedSavingsGoalRepository.save(ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalDTOtoEntity(ruleBasedSavingsGoalDTO));
         System.out.println("rule based savings goal has been created");
         return true;
     }
@@ -54,7 +55,7 @@ public class RuleBasedSavingsGoalLogic {
 
     public RuleBasedSavingsGoalDTO getRuleBasedSavingsGoal(String id) {
         RuleBasedSavingsGoal ruleBasedSavingsGoal = findRuleBasedSavingsGoalById(id);
-        return savingsGoalMapper.ruleBasedSavingsGoalEntityToDTO(ruleBasedSavingsGoal);
+        return ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalEntityToDTO(ruleBasedSavingsGoal);
     }
 
     private RuleBasedSavingsGoal findRuleBasedSavingsGoalById(String id) {

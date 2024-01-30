@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-public class KafkaSendMessages {
+public class KafkaSendMessages implements KafkaMessagePublisher{
 
     private static final Logger logger =
             LoggerFactory.getLogger(KafkaReceiveMessages.class);
