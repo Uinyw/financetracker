@@ -130,7 +130,7 @@
 						</goals>
 						<configuration>
 							<skipValidateSpec>true</skipValidateSpec>
-							<inputSpec>implementation/savingsgoal/src/main/resources/savingsGoal.yaml</inputSpec>
+							<inputSpec>implementation/savingsgoal/src/main/resources/api/savingsGoal.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<configOptions>
 								<openApiNullable>false</openApiNullable>
