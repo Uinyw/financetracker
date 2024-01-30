@@ -54,11 +54,6 @@ public class PeriodicalSavingsGoal {
     })
     private Duration duration; // inclusive infinity
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "periodical_savings_goal_id", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "transaction_id")
-    private List<UUID> transactionIds;
-
     @Column(name = "periodicity")
     private Periodicity periodicity;
 

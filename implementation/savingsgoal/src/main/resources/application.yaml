@@ -19,3 +19,9 @@ tpd:
   topic-bank-account-update: bankaccount-update
   messages-per-request: 1
 
+server:
+  port: 8084
+
+bank-account: localhost
+transaction: localhost
+

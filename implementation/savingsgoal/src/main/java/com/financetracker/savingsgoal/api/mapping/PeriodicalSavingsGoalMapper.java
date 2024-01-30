@@ -43,15 +43,7 @@ public class PeriodicalSavingsGoalMapper {
                 .recurringRate(periodicalSavingsGoalDTO.getRecurringRate())
                 .recurringAmount(new com.financetracker.savingsgoal.logic.model.MonetaryAmount(periodicalSavingsGoalDTO.getRecurringAmount().getAmount()))
                 .duration(stringToDuration(periodicalSavingsGoalDTO.getDuration()))
-                .transactionIds(periodicalSavingsGoalDTO.getOneTimeTransactionRecord())
                 .build();
-    }
-
-    public LocalDate getTimeFromString(String date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-        formatter = formatter.withLocale( Locale.GERMAN );
-
-        return  LocalDate.parse(date, formatter);
     }
 
     private String durationToString(Duration duration) {

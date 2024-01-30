@@ -86,7 +86,7 @@ public class PeriodicalSavingsGoalLogic {
                         amount = bankAccount.get().getBalance().getAmount() * psg.getRecurringRate();
                     }
 
-                    transactionProvider.createOneTimeTransaction(OneTimeTransactionDto.builder()
+                    transactionProvider.createAndTransferOneTimeTransaction(OneTimeTransactionDto.builder()
                             .id(UUID.randomUUID())
                             .name("Savings Goal " + psg.getName())
                             .type(TypeDto.SHIFT)

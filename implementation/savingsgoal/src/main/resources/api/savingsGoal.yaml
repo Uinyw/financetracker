@@ -244,14 +244,6 @@ components:
               type: string
             periodicity:
               $ref: '#/components/schemas/Periodicity'
-            type:
-              type: string
-              enum: [AMOUNT_BASED, PERCENTAGE_BASED]
-            oneTimeTransactionRecord:
-              type: array
-              items:
-                type: string
-                format: uuid
     
     AchievementStatus:
           type: string
