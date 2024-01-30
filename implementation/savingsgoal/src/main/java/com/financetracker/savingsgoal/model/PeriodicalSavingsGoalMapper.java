@@ -64,14 +64,14 @@ public class PeriodicalSavingsGoalMapper {
     }
 
     private PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID bankAccountId, org.openapitools.model.MonetaryAmount reoccuringRate, Duration duration, List<UUID> transactionIds, MonetaryAmount reoccuringAmount, MonetaryAmount goal){
-        PeriodicalSavingsGoal periodicalSavingsGoal = new PeriodicalSavingsGoal();
-        periodicalSavingsGoal.setBankAccountId(bankAccountId);
-        periodicalSavingsGoal.setRecurringRate(SavingsGoalMapper.monetaryAmountDTOtoModel(reoccuringRate));
-        periodicalSavingsGoal.setDuration(duration);
-        periodicalSavingsGoal.setTransactionIds(transactionIds);
-        periodicalSavingsGoal.setRecurringAmount(reoccuringAmount);
-        periodicalSavingsGoal.setGoal(goal);
-        return periodicalSavingsGoal;
+        return PeriodicalSavingsGoal.with()
+                .id(bankAccountId)
+                .recurringRate(SavingsGoalMapper.monetaryAmountDTOtoModel(reoccuringRate))
+                .duration(duration)
+                .transactionIds(transactionIds)
+                .recurringAmount(reoccuringAmount)
+                .goal(goal)
+                .build();
     }
 
     public LocalDate getTimeFromString(String date){
