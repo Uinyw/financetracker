@@ -25,7 +25,7 @@ public class BankAccountResource implements BankAccountsApi {
     @Override
     public ResponseEntity<List<BankAccountDto>> bankAccountsGet() {
         return new ResponseEntity<>(bankAccountService.getBankAccounts().stream()
-                .map(bankAccountMapper::mapBankAccountModelToDtp)
+                .map(bankAccountMapper::mapBankAccountModelToDto)
                 .toList(), HttpStatus.OK);
     }
 
@@ -51,7 +51,7 @@ public class BankAccountResource implements BankAccountsApi {
     @Override
     public ResponseEntity<BankAccountDto> bankAccountsIdGet(final String id) {
         final Optional<BankAccount> bankAccount = bankAccountService.getBankAccount(id);
-        return bankAccount.map(account -> new ResponseEntity<>(bankAccountMapper.mapBankAccountModelToDtp(account), HttpStatus.OK))
+        return bankAccount.map(account -> new ResponseEntity<>(bankAccountMapper.mapBankAccountModelToDto(account), HttpStatus.OK))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 

@@ -73,3 +73,9 @@
 [Domain Transaction](./pages/design/domain_transaction.md)
 
 [Domain Savings Goal](./pages/design/domain_savings_goal.md)
+
+[Domain Shopping](./pages/design/domain_shopping.md)
+
+## Local Deployment
+
+[Deployment Steps](./pages/deployment/deployment.md)

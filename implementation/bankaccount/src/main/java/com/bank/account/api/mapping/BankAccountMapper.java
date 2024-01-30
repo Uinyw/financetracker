@@ -28,7 +28,7 @@ public class BankAccountMapper {
                 .build();
     }
 
-    public BankAccountDto mapBankAccountModelToDtp(final BankAccount bankAccount) {
+    public BankAccountDto mapBankAccountModelToDto(final BankAccount bankAccount) {
         return BankAccountDto.builder()
                 .id(UUID.fromString(bankAccount.getId()))
                 .name(bankAccount.getName())

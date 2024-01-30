@@ -4,8 +4,6 @@ import com.financetracker.savingsgoal.Duration;
 import com.financetracker.savingsgoal.PeriodicalSavingsGoal;
 import com.financetracker.savingsgoal.Time.Configuration;
 import com.financetracker.savingsgoal.client.TransactionClient;
-import com.financetracker.savingsgoal.kafka.KafkaSendMessages;
-import com.financetracker.savingsgoal.model.PeriodicalSavingsGoalMapper;
 import com.financetracker.savingsgoal.model.PeriodicalSavingsGoalRepository;
 import com.financetracker.savingsgoal.model.SavingsGoalMapper;
 import org.openapitools.client.model.OneTimeTransactionDto;
@@ -23,31 +21,26 @@ import java.util.UUID;
 
 @Component
 public class PeriodicalSavingsGoalLogic {
-
-    private final KafkaSendMessages kafkaSendMessages;
     private final TransactionClient transactionClient;
     private final PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository;
     private final SavingsGoalMapper savingsGoalMapper;
-    private final PeriodicalSavingsGoalMapper periodicalSavingsGoalMapper;
 
-    public PeriodicalSavingsGoalLogic(KafkaSendMessages kafkaSendMessages, TransactionClient transactionClient, PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository, SavingsGoalMapper savingsGoalMapper, PeriodicalSavingsGoalMapper periodicalSavingsGoalMapper) {
-        this.kafkaSendMessages = kafkaSendMessages;
+    public PeriodicalSavingsGoalLogic(TransactionClient transactionClient, PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository, SavingsGoalMapper savingsGoalMapper) {
         this.transactionClient = transactionClient;
         this.periodicalSavingsGoalRepository = periodicalSavingsGoalRepository;
         this.savingsGoalMapper = savingsGoalMapper;
-        this.periodicalSavingsGoalMapper = periodicalSavingsGoalMapper;
     }
 
     public List<PeriodicalSavingsGoalDTO> getPeriodicalSavingsGoals() {
         List<PeriodicalSavingsGoalDTO> periodicalSavingsGoalDTOList = new ArrayList<>();
         for (PeriodicalSavingsGoal sg : periodicalSavingsGoalRepository.findAll()) {
-            periodicalSavingsGoalDTOList.add(periodicalSavingsGoalMapper.periodicalSavingsGoalEntityToDTO(sg));
+            periodicalSavingsGoalDTOList.add(savingsGoalMapper.periodicalSavingsGoalEntityToDTO(sg));
         }
         return periodicalSavingsGoalDTOList;
     }
 
     public boolean createPeriodicalSavingsGoal(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO) {
-        PeriodicalSavingsGoal periodicalSavingsGoal = periodicalSavingsGoalMapper.periodicalSavingsGoalDTOtoEntity(periodicalSavingsGoalDTO);
+        PeriodicalSavingsGoal periodicalSavingsGoal = savingsGoalMapper.periodicalSavingsGoalDTOtoEntity(periodicalSavingsGoalDTO);
         periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
         return true;
     }
@@ -62,7 +55,7 @@ public class PeriodicalSavingsGoalLogic {
 
     public PeriodicalSavingsGoalDTO getPeriodicalSavingsGoal(String id) {
         PeriodicalSavingsGoal psg = findPeriodicalSavingsGoalById(id);
-        return periodicalSavingsGoalMapper.periodicalSavingsGoalEntityToDTO(psg);
+        return savingsGoalMapper.periodicalSavingsGoalEntityToDTO(psg);
     }
 
     private PeriodicalSavingsGoal findPeriodicalSavingsGoalById(String id) {
@@ -126,7 +119,6 @@ public class PeriodicalSavingsGoalLogic {
         for (PeriodicalSavingsGoal psg : periodicalSavingsGoals) {
             if (checkDue(psg)) {
                 try {
-                    kafkaSendMessages.sendScheduledMessage(addNewScheduledTransaction(psg));
                 } catch (Exception e) {
                     System.out.println(e + "\n Couldn't send the transaction");
                 }
@@ -139,7 +131,7 @@ public class PeriodicalSavingsGoalLogic {
         Periodicity periodicity = periodicalSavingsGoal.getPeriodicity();
         List<UUID> tids = periodicalSavingsGoal.getTransactionIds();
         OneTimeTransactionDto newestTransaction = getTransaction(tids.get(tids.size() - 1).toString());
-        LocalDate lastDate = SavingsGoalMapper.getTimeFromString(newestTransaction.getDate());
+        LocalDate lastDate = savingsGoalMapper.getTimeFromString(newestTransaction.getDate());
         LocalDate nextDate = lastDate.plusMonths(periodicityToInt(periodicity));
         if (nextDate.isAfter(LocalDate.now()) && nextDate.isBefore(LocalDate.now().plusDays(1)) && nextDate.isBefore(duration.getEnd()) && nextDate.isAfter(duration.getStart())) {
             //if its after now and before tomorrow

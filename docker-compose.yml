@@ -1,14 +1,58 @@
 version: '2'
 services:
+
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
     - "2181:2181"
+
   kafka:
     image: wurstmeister/kafka
     ports:
-    - "9092:9092"
+    - "9093:9093"
+    hostname: kafka
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    depends_on:
+      - zookeeper
+
+  bankaccount:
+    container_name: bank-account
+    build: ./implementation/bankaccount
+    hostname: bankaccount
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+    ports:
+      - 8081:8081
+    links:
+      - kafka
+    depends_on:
+      - kafka
+
+  transaction:
+    container_name: transaction
+    build: ./implementation/transaction
+    hostname: transaction
+    ports:
+      - 8080:8080
+    environment:
+      BANK-ACCOUNT: bankaccount
+
+  product:
+    container_name: product
+    build: ./implementation/product
+    ports:
+      - 8083:8083
+    environment:
+      TRANSACTION: transaction
+
+  ui:
+    container_name: ui
+    build: ./implementation/ui-financetracker
+    ports:
+      - 4200:80
+

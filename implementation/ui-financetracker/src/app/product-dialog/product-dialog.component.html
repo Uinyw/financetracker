@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>{{ editMode ? 'Edit Product' : 'Create Product' }}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="product.name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input matInput [(ngModel)]="product.description">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Price</mat-label>
+    <input type="number" matInput [(ngModel)]="product.price.amount">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Category</mat-label>
+    <mat-select [(ngModel)]="product.category">
+        <mat-option *ngFor="let c of categories;" [value]="c">{{c}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <mat-label>Labels (Comma Separated)</mat-label>
+    <input matInput [(ngModel)]="labels">
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Back</button>
+  <button mat-button [mat-dialog-close]="getResultingProduct()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
+</div>

@@ -3,21 +3,12 @@ package com.financetracker.savingsgoal.Logic;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import com.financetracker.savingsgoal.Duration;
-import com.financetracker.savingsgoal.PeriodicalSavingsGoal;
-import com.financetracker.savingsgoal.model.PeriodicalSavingsGoalRepository;
-import com.financetracker.savingsgoal.model.SavingsGoalFactory;
-import com.financetracker.savingsgoal.Time.Configuration;
-import com.financetracker.savingsgoal.client.TransactionClient;
-import com.financetracker.savingsgoal.kafka.KafkaSendMessages;
 import com.financetracker.savingsgoal.model.SavingsGoalMapper;
 import org.openapitools.client.model.*;
 import org.openapitools.model.*;
-import org.openapitools.model.Periodicity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
