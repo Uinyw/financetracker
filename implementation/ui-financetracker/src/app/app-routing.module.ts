@@ -8,6 +8,8 @@ import { BankAccountDetailComponent } from './bank-account-detail/bank-account-d
 import { ProductComponent } from './product/product.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { SuppliesComponent } from './supplies/supplies.component';
+import { SavingsGoalRuleBasedComponent } from './savings-goal-rule-based/savings-goal-rule-based.component';
+import { SavingsGoalRuleBasedDetailComponent } from './savings-goal-rule-based-detail/savings-goal-rule-based-detail.component';
 
 const routes: Routes = [
   { path: 'bank-accounts', component: BankAccountComponent },
@@ -17,7 +19,9 @@ const routes: Routes = [
   { path: 'transactions/recurring/:id', component: TransactionRecordComponent },
   { path: 'products', component: ProductComponent },
   { path: 'shopping-cart', component: ShoppingCartComponent },
-  { path: 'supplies', component: SuppliesComponent }
+  { path: 'supplies', component: SuppliesComponent },
+  { path: 'savings-goals/rule-based', component: SavingsGoalRuleBasedComponent },
+  { path: 'savings-goals/rule-based/:id', component: SavingsGoalRuleBasedDetailComponent },
 ];
 
 @NgModule({

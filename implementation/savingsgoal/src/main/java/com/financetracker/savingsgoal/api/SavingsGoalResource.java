@@ -9,6 +9,7 @@ import org.openapitools.model.PeriodicalSavingsGoalDTO;
 import org.openapitools.model.RuleBasedSavingsGoalDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -20,54 +21,64 @@ public class SavingsGoalResource implements SavingsGoalsApi {
 
     private final SavingsGoalService savingsGoalService;
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<List<PeriodicalSavingsGoalDTO>> savingsGoalsPeriodicalGet() {
         return new ResponseEntity<>(savingsGoalService.getPeriodicalSavingsGoals(), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> savingsGoalsPeriodicalPost(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO) {
         savingsGoalService.createPeriodicalSavingsGoal(periodicalSavingsGoalDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> savingsGoalsPeriodicalidDelete(String id) {
         boolean worked = savingsGoalService.deletePeriodicalSavingsGoal(id);
         return worked ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<PeriodicalSavingsGoalDTO> savingsGoalsPeriodicalidGet(String id) {
         return new ResponseEntity<>(savingsGoalService.getPeriodicalSavingsGoal(id), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> savingsGoalsPeriodicalidPatch(String id, PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO) {
         throw new NotImplementedException();
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<List<RuleBasedSavingsGoalDTO>> savingsGoalsRuleBasedGet() {
         return new ResponseEntity<>(savingsGoalService.getRuleBasedSavingsGoals(), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> savingsGoalsRuleBasedIdDelete(String id) {
         boolean worked = savingsGoalService.deleteRuleBasedSavingsGoal(id);
         return worked ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<RuleBasedSavingsGoalDTO> savingsGoalsRuleBasedIdGet(String id) {
         return new ResponseEntity<>(savingsGoalService.getRuleBasedSavingsGoal(id), HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> savingsGoalsRuleBasedIdPatch(String id, RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO) {
         throw new NotImplementedException();
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> savingsGoalsRuleBasedPost(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO) {
         savingsGoalService.createRuleBasedSavingsGoal(ruleBasedSavingsGoalDTO);
