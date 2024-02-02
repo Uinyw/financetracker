@@ -12,6 +12,7 @@ import java.util.List;
 public class RuleBasedSavingsGoalLogic {
 
     private final RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository;
+    private final RuleBasedSavingsGoalMatchingLogic ruleBasedSavingsGoalMatchingLogic;
 
     public List<RuleBasedSavingsGoal> getRuleBasedSavingsGoals() {
         return ruleBasedSavingsGoalRepository.findAll();
@@ -19,6 +20,7 @@ public class RuleBasedSavingsGoalLogic {
 
     public void createRuleBasedSavingsGoal(RuleBasedSavingsGoal ruleBasedSavingsGoal) {
         ruleBasedSavingsGoalRepository.save(ruleBasedSavingsGoal);
+        ruleBasedSavingsGoalMatchingLogic.checkForChanges(ruleBasedSavingsGoal);
     }
 
     public boolean updateRuleBasedSavingsGoal(final String savingsGoalId, final RuleBasedSavingsGoal ruleBasedSavingsGoal) {
@@ -28,6 +30,7 @@ public class RuleBasedSavingsGoalLogic {
         }
 
         ruleBasedSavingsGoalRepository.save(ruleBasedSavingsGoal);
+        ruleBasedSavingsGoalMatchingLogic.checkForChanges(ruleBasedSavingsGoal);
         return true;
     }
 

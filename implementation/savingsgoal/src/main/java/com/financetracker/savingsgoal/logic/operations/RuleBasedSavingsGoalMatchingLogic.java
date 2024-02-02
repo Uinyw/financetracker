@@ -1,5 +1,6 @@
 package com.financetracker.savingsgoal.logic.operations;
 
+import com.financetracker.savingsgoal.infrastructure.client.bankaccount.BankAccountProvider;
 import com.financetracker.savingsgoal.infrastructure.db.RuleBasedSavingsGoalRepository;
 import com.financetracker.savingsgoal.logic.model.AchievementStatus;
 import com.financetracker.savingsgoal.logic.model.MonetaryAmount;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Component
 public class RuleBasedSavingsGoalMatchingLogic {
 
+    private final BankAccountProvider bankAccountProvider;
     private final RuleBasedSavingsGoalRepository repository;
 
     public void checkForChanges(BankAccountDto bankAccountDto) {
@@ -25,6 +27,12 @@ public class RuleBasedSavingsGoalMatchingLogic {
                     ruleBasedSavingsGoal.setAchievementStatus(isSavingsGoalAchieved ? AchievementStatus.ACHIEVED : AchievementStatus.FAILED);
                     repository.save(ruleBasedSavingsGoal);
                 });
+    }
+
+    public void checkForChanges(final RuleBasedSavingsGoal ruleBasedSavingsGoal) {
+        final var isSavingsGoalAchieved = isSavingsGoalAchieved(ruleBasedSavingsGoal);
+        ruleBasedSavingsGoal.setAchievementStatus(isSavingsGoalAchieved ? AchievementStatus.ACHIEVED : AchievementStatus.FAILED);
+        repository.save(ruleBasedSavingsGoal);
     }
 
     private boolean savingsGoalIsBasedOnBankAccount(final RuleBasedSavingsGoal ruleBasedSavingsGoal, final UUID bankAccountId) {
@@ -39,10 +47,22 @@ public class RuleBasedSavingsGoalMatchingLogic {
         };
     }
 
+    public boolean isSavingsGoalAchieved(RuleBasedSavingsGoal ruleBasedSavingsGoal) {
+        return switch (ruleBasedSavingsGoal.getMatchingType()) {
+            case MATCH_ALL -> matchAllRules(ruleBasedSavingsGoal);
+            case MATCH_ANY -> matchAnyRule(ruleBasedSavingsGoal);
+        };
+    }
+
     private boolean matchAllRules(final RuleBasedSavingsGoal ruleBasedSavingsGoal, final BankAccountDto bankAccountDto) {
         return ruleBasedSavingsGoal.getRules().stream()
                 .filter(x -> x.getBankAccountId().equals(bankAccountDto.getId()))
                 .allMatch(rule -> matchRule(rule, bankAccountDto));
+    }
+
+    private boolean matchAllRules(final RuleBasedSavingsGoal ruleBasedSavingsGoal) {
+        return ruleBasedSavingsGoal.getRules().stream()
+                .allMatch(this::matchRule);
     }
 
     private boolean matchAnyRule(final RuleBasedSavingsGoal ruleBasedSavingsGoal, final BankAccountDto bankAccountDto) {
@@ -51,8 +71,23 @@ public class RuleBasedSavingsGoalMatchingLogic {
                 .anyMatch(rule -> matchRule(rule, bankAccountDto));
     }
 
+    private boolean matchAnyRule(final RuleBasedSavingsGoal ruleBasedSavingsGoal) {
+        return ruleBasedSavingsGoal.getRules().stream()
+                .anyMatch(this::matchRule);
+    }
+
     private boolean matchRule(final Rule rule, final BankAccountDto bankAccountDto) {
         return matchRuleType(rule, bankAccountDto.getBalance().getAmount());
+    }
+
+    private boolean matchRule(final Rule rule) {
+        final var bankAccount = bankAccountProvider.getBankAccount(rule.getBankAccountId().toString());
+
+        if (bankAccount.isEmpty()) {
+            return false;
+        }
+
+        return matchRuleType(rule, bankAccount.get().getBalance().getAmount());
     }
 
     private boolean matchRuleType(Rule rule, double money) {
