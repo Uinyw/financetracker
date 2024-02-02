@@ -19,13 +19,14 @@ public class TransactionClient implements TransactionProvider{
     }
 
     @Override
-    public void createAndTransferOneTimeTransaction(OneTimeTransactionDto oneTimeTransactionDto) {
+    public boolean createAndTransferOneTimeTransaction(OneTimeTransactionDto oneTimeTransactionDto) {
         setBaseUrl();
         try {
             oneTimeTransactionApi.transactionsOnetimePost(oneTimeTransactionDto);
             oneTimeTransactionApi.transactionsOnetimeIdTransferPost(oneTimeTransactionDto.getId().toString());
+            return true;
         } catch (ApiException e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 

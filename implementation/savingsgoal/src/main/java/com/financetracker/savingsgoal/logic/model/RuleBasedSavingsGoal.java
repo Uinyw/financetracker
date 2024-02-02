@@ -2,9 +2,10 @@ package com.financetracker.savingsgoal.logic.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.openapitools.model.AchievementStatus;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder(builderMethodName = "with")
@@ -17,7 +18,6 @@ import java.util.UUID;
 public class RuleBasedSavingsGoal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "description")
@@ -26,19 +26,15 @@ public class RuleBasedSavingsGoal {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "achievementStatus")
+    @Column(name = "achievement_status")
     private AchievementStatus achievementStatus;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "rule_list", joinColumns = @JoinColumn(name = "entity_id"))
-    @AttributeOverrides({
-            @AttributeOverride(name = "id", column = @Column(name = "rule_id")),
-            @AttributeOverride(name = "bankAccountID", column = @Column(name = "rule_bank_account_id")),
-            @AttributeOverride(name = "description", column = @Column(name = "rule_description"))
-    })
-    private List<Rule> rules;
+    @Setter
+    @JoinColumn(name = "savings_goal_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Rule> rules = new HashSet<>();
 
-    @Column(name = "matchingType")
+    @Column(name = "matching_type")
     private MatchingType matchingType;
 
 }

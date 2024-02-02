@@ -3,15 +3,17 @@ package com.financetracker.savingsgoal.logic.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder(builderMethodName = "with")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rule")
+@Table(name = "savings_record")
 @Entity
-public class Rule {
+public class SavingsRecord {
 
     @Id
     private UUID id;
@@ -19,11 +21,11 @@ public class Rule {
     @Column(name = "savings_goal_id")
     private UUID savingsGoalId;
 
-    private UUID bankAccountId;
+    private LocalDate date;
 
-    private String description;
+    @Embedded
+    @AttributeOverride(name = "amount", column = @Column(name = "amount"))
+    private MonetaryAmount amount;
 
-    private MonetaryAmount target;
-
-    private RuleType ruleType;
+    private AchievementStatus achievementStatus;
 }

@@ -2,8 +2,9 @@ package com.financetracker.savingsgoal.logic.operations;
 
 import java.util.List;
 
+import com.financetracker.savingsgoal.logic.model.PeriodicalSavingsGoal;
+import com.financetracker.savingsgoal.logic.model.RuleBasedSavingsGoal;
 import org.openapitools.client.model.*;
-import org.openapitools.model.*;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -12,40 +13,50 @@ import lombok.RequiredArgsConstructor;
 public class SavingsGoalService {
 
     private final RuleBasedSavingsGoalLogic ruleBasedSavingsGoalLogic;
+    private final RuleBasedSavingsGoalMatchingLogic matchingLogic;
     private final PeriodicalSavingsGoalLogic periodicalSavingsGoalLogic;
 
     public void onReceiveBankAccountChange(BankAccountDto bankAccountDto) {
-        ruleBasedSavingsGoalLogic.checkForChanges(bankAccountDto);
+        matchingLogic.checkForChanges(bankAccountDto);
     }
-    public List<PeriodicalSavingsGoalDTO> getPeriodicalSavingsGoals() {
+
+    public List<PeriodicalSavingsGoal> getPeriodicalSavingsGoals() {
         return periodicalSavingsGoalLogic.getPeriodicalSavingsGoals();
     }
 
-    public void createPeriodicalSavingsGoal(PeriodicalSavingsGoalDTO periodicalSavingsGoalDTO) {
-        periodicalSavingsGoalLogic.createPeriodicalSavingsGoal(periodicalSavingsGoalDTO);
+    public void createPeriodicalSavingsGoal(PeriodicalSavingsGoal periodicalSavingsGoal) {
+        periodicalSavingsGoalLogic.createPeriodicalSavingsGoal(periodicalSavingsGoal);
+    }
+
+    public void updatePeriodicalSavingsGoal(String savingsGoalId, PeriodicalSavingsGoal periodicalSavingsGoal) {
+        periodicalSavingsGoalLogic.updatePeriodicalSavingsGoal(savingsGoalId, periodicalSavingsGoal);
     }
 
     public boolean deletePeriodicalSavingsGoal(String id) {
         return periodicalSavingsGoalLogic.deletePeriodicalSavingsGoal(id);
     }
 
-    public PeriodicalSavingsGoalDTO getPeriodicalSavingsGoal(String id) {
-        return periodicalSavingsGoalLogic.getPeriodicalSavingsGoal(id);
+    public PeriodicalSavingsGoal getPeriodicalSavingsGoal(String id) {
+        return periodicalSavingsGoalLogic.findPeriodicalSavingsGoalById(id);
     }
 
-    public List<RuleBasedSavingsGoalDTO> getRuleBasedSavingsGoals() {
+    public List<RuleBasedSavingsGoal> getRuleBasedSavingsGoals() {
         return ruleBasedSavingsGoalLogic.getRuleBasedSavingsGoals();
     }
 
-    public void createRuleBasedSavingsGoal(RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO) {
-        ruleBasedSavingsGoalLogic.createRuleBasedSavingsGoal(ruleBasedSavingsGoalDTO);
+    public void createRuleBasedSavingsGoal(RuleBasedSavingsGoal ruleBasedSavingsGoal) {
+        ruleBasedSavingsGoalLogic.createRuleBasedSavingsGoal(ruleBasedSavingsGoal);
+    }
+
+    public boolean updateRuleBasedSavingsGoal(String savingsGoalId, RuleBasedSavingsGoal ruleBasedSavingsGoal) {
+        return ruleBasedSavingsGoalLogic.updateRuleBasedSavingsGoal(savingsGoalId, ruleBasedSavingsGoal);
     }
 
     public boolean deleteRuleBasedSavingsGoal(String id) {
         return ruleBasedSavingsGoalLogic.deleteRuleBasedSavingsGoal(id);
     }
 
-    public RuleBasedSavingsGoalDTO getRuleBasedSavingsGoal(String id) {
-        return ruleBasedSavingsGoalLogic.getRuleBasedSavingsGoal(id);
+    public RuleBasedSavingsGoal getRuleBasedSavingsGoal(String id) {
+        return ruleBasedSavingsGoalLogic.findRuleBasedSavingsGoalById(id);
     }
 }

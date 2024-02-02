@@ -3,5 +3,5 @@ package com.financetracker.savingsgoal.infrastructure.client.transaction;
 import org.openapitools.client.model.OneTimeTransactionDto;
 
 public interface TransactionProvider {
-    void createAndTransferOneTimeTransaction(OneTimeTransactionDto oneTimeTransactionDto);
+    boolean createAndTransferOneTimeTransaction(OneTimeTransactionDto oneTimeTransactionDto);
 }

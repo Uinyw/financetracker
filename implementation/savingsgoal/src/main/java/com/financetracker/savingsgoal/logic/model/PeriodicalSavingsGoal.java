@@ -2,10 +2,9 @@ package com.financetracker.savingsgoal.logic.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.openapitools.model.AchievementStatus;
-import org.openapitools.model.Periodicity;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder(builderMethodName = "with")
@@ -18,7 +17,6 @@ import java.util.UUID;
 public class PeriodicalSavingsGoal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "description")
@@ -52,9 +50,14 @@ public class PeriodicalSavingsGoal {
             @AttributeOverride(name = "start", column = @Column(name = "start_date")),
             @AttributeOverride(name = "end", column = @Column(name = "end_date"))
     })
-    private Duration duration; // inclusive infinity
+    private Duration duration;
 
     @Column(name = "periodicity")
     private Periodicity periodicity;
+
+    @Setter
+    @JoinColumn(name = "savings_goal_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<SavingsRecord> savingsRecords = new HashSet<>();
 
 }

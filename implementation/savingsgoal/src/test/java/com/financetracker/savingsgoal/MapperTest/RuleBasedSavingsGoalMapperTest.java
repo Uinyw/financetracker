@@ -27,7 +27,7 @@ public class RuleBasedSavingsGoalMapperTest extends IntegrationTest {
     @Test
     void givenValidRuleBasedSavingsGoal_whenMappingToModel_thenNoExceptionIsThrownAndResultingModelIsValid() {
         final RuleBasedSavingsGoalDTO ruleBasedSavingsGoalDTO = TestRuleBasedSavingsGoalBuilder.buildWithDefaults();
-        final RuleBasedSavingsGoal ruleBasedSavingsGoal = ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalDTOtoEntity(ruleBasedSavingsGoalDTO);
+        final RuleBasedSavingsGoal ruleBasedSavingsGoal = ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalDtoToEntity(ruleBasedSavingsGoalDTO);
 
         assertThat(ruleBasedSavingsGoal.getId().toString(), is(ruleBasedSavingsGoalDTO.getId().toString()));
         assertThat(ruleBasedSavingsGoal.getName(), is(ruleBasedSavingsGoalDTO.getName()));
@@ -49,7 +49,7 @@ public class RuleBasedSavingsGoalMapperTest extends IntegrationTest {
                 null
         );
 
-        final RuleBasedSavingsGoal ruleBasedSavingsGoal = ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalDTOtoEntity(ruleBasedSavingsGoalDTO);
+        final RuleBasedSavingsGoal ruleBasedSavingsGoal = ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalDtoToEntity(ruleBasedSavingsGoalDTO);
 
         assertThat(ruleBasedSavingsGoal.getId(), is(ruleBasedSavingsGoalDTO.getId().toString()));
         assertThat(ruleBasedSavingsGoal.getName(), is(ruleBasedSavingsGoalDTO.getName()));

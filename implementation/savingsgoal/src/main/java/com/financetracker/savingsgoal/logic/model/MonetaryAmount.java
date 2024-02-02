@@ -12,5 +12,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MonetaryAmount {
-    private double amount;
+    private Double amount;
 }
