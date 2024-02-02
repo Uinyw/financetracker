@@ -21,13 +21,14 @@ public class PeriodicalSavingsGoalLogic {
         periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
     }
 
-    public void updatePeriodicalSavingsGoal(final String savingsGoalId, final PeriodicalSavingsGoal periodicalSavingsGoal) {
+    public boolean updatePeriodicalSavingsGoal(final String savingsGoalId, final PeriodicalSavingsGoal periodicalSavingsGoal) {
         final var originalSavingsGoal = findPeriodicalSavingsGoalById(savingsGoalId);
         if (originalSavingsGoal == null) {
-            return;
+            return false;
         }
 
         periodicalSavingsGoalRepository.save(periodicalSavingsGoal);
+        return true;
     }
 
     public boolean deletePeriodicalSavingsGoal(String id) {

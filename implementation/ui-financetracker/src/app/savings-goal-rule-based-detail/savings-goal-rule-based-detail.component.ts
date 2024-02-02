@@ -25,7 +25,10 @@ export class SavingsGoalRuleBasedDetailComponent {
   constructor(private savingsGoalService: RuleBasedSavingsGoalService,
               private dialog: MatDialog,
               private route: ActivatedRoute) {
-    this.savingsGoalService.getRuleBasedSavingsGoalById(route.snapshot.paramMap.get("id")!).subscribe(result => this.savingsGoal = result)
+    this.savingsGoalService.getRuleBasedSavingsGoalById(route.snapshot.paramMap.get("id")!).subscribe(result => {
+      this.savingsGoal = result
+      this.rules.data = this.savingsGoal.rules
+    })
   }
 
   ngOnInit() {
@@ -50,8 +53,7 @@ export class SavingsGoalRuleBasedDetailComponent {
       this.savingsGoal?.rules.push(result);
 
       this.savingsGoalService.editRuleBasedSavingsGoal(this.savingsGoal!).subscribe(() => {
-        this.rules.data.push(result)
-        this.rules.data = this.rules.data.sort((a, b) => a.bankAccountID.localeCompare(b.bankAccountID));
+        this.rules.data = this.rules.data.sort((a, b) => a.bankAccountId.localeCompare(b.bankAccountId));
       })
 
     });

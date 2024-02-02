@@ -28,8 +28,8 @@ public class SavingsGoalService {
         periodicalSavingsGoalLogic.createPeriodicalSavingsGoal(periodicalSavingsGoal);
     }
 
-    public void updatePeriodicalSavingsGoal(String savingsGoalId, PeriodicalSavingsGoal periodicalSavingsGoal) {
-        periodicalSavingsGoalLogic.updatePeriodicalSavingsGoal(savingsGoalId, periodicalSavingsGoal);
+    public boolean updatePeriodicalSavingsGoal(String savingsGoalId, PeriodicalSavingsGoal periodicalSavingsGoal) {
+        return periodicalSavingsGoalLogic.updatePeriodicalSavingsGoal(savingsGoalId, periodicalSavingsGoal);
     }
 
     public boolean deletePeriodicalSavingsGoal(String id) {

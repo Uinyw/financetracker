@@ -31,11 +31,11 @@ export class SavingsGoalRuleBasedDetailDialogComponent {
       this.rule = {
         id: uuidv4(),
         description: "",
-        bankAccountID: "",
+        bankAccountId: "",
         target: {
-          amount: 0
+          amount: 0.0
         },
-        ruleType: RuleType.EQUALS
+        type: RuleType.EQUALS
       }
     }
   }

@@ -14,23 +14,23 @@ export class RuleBasedSavingsGoalService {
   }
 
   getAllRuleBasedSavingsGoals(): Observable<RuleBasedSavingsGoal[]> {
-    return this.httpClient.get<RuleBasedSavingsGoal[]>(`${this.BASE_URL}/savingsGoals/RuleBased`);
+    return this.httpClient.get<RuleBasedSavingsGoal[]>(`${this.BASE_URL}/savings-goals/rule-based`);
   }
 
   getRuleBasedSavingsGoalById(savingsGoalId: string): Observable<RuleBasedSavingsGoal> {
-    return this.httpClient.get<RuleBasedSavingsGoal>(`${this.BASE_URL}/savingsGoals/RuleBased/${savingsGoalId}`);
+    return this.httpClient.get<RuleBasedSavingsGoal>(`${this.BASE_URL}/savings-goals/rule-based/${savingsGoalId}`);
   }
 
   editRuleBasedSavingsGoal(savingsGoal: RuleBasedSavingsGoal): Observable<any> {
-    return this.httpClient.patch<any>(`${this.BASE_URL}/savingsGoals/RuleBased/${savingsGoal.id}`, savingsGoal);
+    return this.httpClient.patch<any>(`${this.BASE_URL}/savings-goals/rule-based/${savingsGoal.id}`, savingsGoal);
   }
 
   createRuleBasedSavingsGoal(savingsGoal: RuleBasedSavingsGoal): Observable<any> {
-    return this.httpClient.post<any>(`${this.BASE_URL}/savingsGoals/RuleBased`, savingsGoal);
+    return this.httpClient.post<any>(`${this.BASE_URL}/savings-goals/rule-based`, savingsGoal);
   }
 
   deleteRuleBasedSavingsGoal(savingsGoalId: string): Observable<any> {
-    return this.httpClient.delete<any>(`${this.BASE_URL}/savingsGoals/RuleBased/${savingsGoalId}`);
+    return this.httpClient.delete<any>(`${this.BASE_URL}/savings-goals/rule-based/${savingsGoalId}`);
   }
 
 }

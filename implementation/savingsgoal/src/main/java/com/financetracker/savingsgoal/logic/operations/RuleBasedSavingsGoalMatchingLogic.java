@@ -57,7 +57,7 @@ public class RuleBasedSavingsGoalMatchingLogic {
 
     private boolean matchRuleType(Rule rule, double money) {
         MonetaryAmount targetAmount = rule.getTarget();
-        return switch (rule.getRuleType()) {
+        return switch (rule.getType()) {
             case GREATER_THAN -> money > targetAmount.getAmount();
             case EQUALS -> money == targetAmount.getAmount();
             case LESS_THAN -> money < targetAmount.getAmount();

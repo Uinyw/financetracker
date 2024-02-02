@@ -5,15 +5,15 @@ export class RuleBasedSavingsGoal {
     name: string;
     description: string;
     achievementStatus: AchievementStatus;
-    type: Type;
+    matchingType: MatchingType;
     rules: Rule[];
 
-    constructor(id: string, name: string, description: string, achievementStatus: AchievementStatus, type: Type, rules: Rule[]) {
+    constructor(id: string, name: string, description: string, achievementStatus: AchievementStatus, matchingType: MatchingType, rules: Rule[]) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.achievementStatus = achievementStatus;
-        this.type = type;
+        this.matchingType = matchingType;
         this.rules = rules;
     }
 }
@@ -24,7 +24,7 @@ export enum AchievementStatus {
     FAILED = "FAILED"
 }
 
-export enum Type {
+export enum MatchingType {
     MATCH_ALL = "MATCH_ALL",
     MATCH_ANY = "MATCH_ANY",
 }
@@ -32,15 +32,15 @@ export enum Type {
 export class Rule {
     id: string;
     description: string;
-    ruleType: RuleType;
-    bankAccountID: string;
+    type: RuleType;
+    bankAccountId: string;
     target: MonetaryAmount;
 
-    constructor(id: string, description: string, ruleType: RuleType, bankAccountID: string, target: MonetaryAmount) {
+    constructor(id: string, description: string, type: RuleType, bankAccountId: string, target: MonetaryAmount) {
         this.id = id;
         this.description = description;
-        this.ruleType = ruleType;
-        this.bankAccountID = bankAccountID;
+        this.type = type;
+        this.bankAccountId = bankAccountId;
         this.target = target;
     }
 }

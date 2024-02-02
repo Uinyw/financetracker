@@ -133,7 +133,7 @@
 							<inputSpec>implementation/savingsgoal/src/main/resources/api/savingsGoal.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<configOptions>
-								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
 								<openApiNullable>false</openApiNullable>
 								<useJakartaEe>true</useJakartaEe>
 								<interfaceOnly>true</interfaceOnly>

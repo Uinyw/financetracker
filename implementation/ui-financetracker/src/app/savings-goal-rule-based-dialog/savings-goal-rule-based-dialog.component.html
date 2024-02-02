@@ -10,7 +10,7 @@
   </mat-form-field>
   <mat-form-field class="full-width">
     <mat-label>Matching Type</mat-label>
-    <mat-select [(ngModel)]="savingsGoal.type">
+    <mat-select [(ngModel)]="savingsGoal.matchingType">
         <mat-option *ngFor="let type of types;" [value]="type">{{type}}</mat-option>
     </mat-select>
   </mat-form-field>

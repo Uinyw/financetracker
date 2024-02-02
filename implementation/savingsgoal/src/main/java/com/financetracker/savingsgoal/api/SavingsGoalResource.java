@@ -48,14 +48,14 @@ public class SavingsGoalResource implements SavingsGoalsApi {
     @Override
     public ResponseEntity<Void> savingsGoalsPeriodicalIdDelete(String id) {
         boolean worked = savingsGoalService.deletePeriodicalSavingsGoal(id);
-        return worked ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<>(HttpStatus.OK);
+        return worked ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> savingsGoalsPeriodicalIdPatch(String id, PeriodicalSavingsGoalDto periodicalSavingsGoalDto) {
-        savingsGoalService.updatePeriodicalSavingsGoal(id, periodicalSavingsGoalMapper.periodicalSavingsGoalDtoToEntity(periodicalSavingsGoalDto));
-        return ResponseEntity.ok().build();
+        boolean worked = savingsGoalService.updatePeriodicalSavingsGoal(id, periodicalSavingsGoalMapper.periodicalSavingsGoalDtoToEntity(periodicalSavingsGoalDto));
+        return worked ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @CrossOrigin(origins = "*")
@@ -82,14 +82,14 @@ public class SavingsGoalResource implements SavingsGoalsApi {
     @Override
     public ResponseEntity<Void> savingsGoalsRuleBasedIdDelete(String id) {
         boolean worked = savingsGoalService.deleteRuleBasedSavingsGoal(id);
-        return worked ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<>(HttpStatus.OK);
+        return worked ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> savingsGoalsRuleBasedIdPatch(String id, RuleBasedSavingsGoalDto ruleBasedSavingsGoalDto) {
         boolean worked = savingsGoalService.updateRuleBasedSavingsGoal(id, ruleBasedSavingsGoalMapper.ruleBasedSavingsGoalDtoToEntity(ruleBasedSavingsGoalDto));
-        return worked ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : new ResponseEntity<>(HttpStatus.OK);
+        return worked ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.openapitools.model.MatchingTypeDto;
 import org.openapitools.model.RuleBasedSavingsGoalDto;
 import org.openapitools.model.RuleDto;
+import org.openapitools.model.RuleTypeDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -61,6 +62,7 @@ public class RuleBasedSavingsGoalMapper {
                         .id(rule.getId())
                         .bankAccountId(rule.getBankAccountId())
                         .target(commonMapper.monetaryAmountModelToDto(rule.getTarget()))
+                        .type(ruleTypeModelToDto(rule.getType()))
                         .description(rule.getDescription())
                         .build())
                 .toList();
@@ -73,9 +75,26 @@ public class RuleBasedSavingsGoalMapper {
                         .savingsGoalId(savingsGoalId)
                         .bankAccountId(rule.getBankAccountId())
                         .target(commonMapper.monetaryAmountDtoToModel(rule.getTarget()))
+                        .type(ruleTypeDtoToModel(rule.getType()))
                         .description(rule.getDescription())
                         .build())
                 .collect(Collectors.toSet());
+    }
+
+    public RuleTypeDto ruleTypeModelToDto(final RuleType ruleType) {
+        return switch (ruleType) {
+            case EQUALS -> RuleTypeDto.EQUALS;
+            case GREATER_THAN -> RuleTypeDto.GREATER_THAN;
+            case LESS_THAN -> RuleTypeDto.LESS_THAN;
+        };
+    }
+
+    public RuleType ruleTypeDtoToModel(final RuleTypeDto ruleTypeDto) {
+        return switch (ruleTypeDto) {
+            case EQUALS -> RuleType.EQUALS;
+            case GREATER_THAN -> RuleType.GREATER_THAN;
+            case LESS_THAN -> RuleType.LESS_THAN;
+        };
     }
 
 }

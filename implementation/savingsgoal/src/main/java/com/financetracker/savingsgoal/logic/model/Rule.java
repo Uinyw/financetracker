@@ -25,5 +25,5 @@ public class Rule {
 
     private MonetaryAmount target;
 
-    private RuleType ruleType;
+    private RuleType type;
 }
