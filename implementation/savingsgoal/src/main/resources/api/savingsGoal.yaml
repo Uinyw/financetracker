@@ -235,6 +235,23 @@ components:
               type: string
             periodicity:
               $ref: '#/components/schemas/PeriodicityDto'
+            savingsRecords:
+              type: array
+              items:
+                $ref: '#/components/schemas/SavingsRecordDto'
+
+    SavingsRecordDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        date:
+          type: string
+        amount:
+          $ref: '#/components/schemas/MonetaryAmountDto'
+        achievementStatus:
+          $ref: '#/components/schemas/AchievementStatusDto'
 
     RuleBasedSavingsGoalDto:
       type: object

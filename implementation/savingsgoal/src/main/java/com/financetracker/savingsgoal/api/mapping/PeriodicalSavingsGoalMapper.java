@@ -3,14 +3,18 @@ package com.financetracker.savingsgoal.api.mapping;
 import com.financetracker.savingsgoal.logic.model.Duration;
 import com.financetracker.savingsgoal.logic.model.PeriodicalSavingsGoal;
 import com.financetracker.savingsgoal.logic.model.Periodicity;
+import com.financetracker.savingsgoal.logic.model.SavingsRecord;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.PeriodicalSavingsGoalDto;
 import org.openapitools.model.PeriodicityDto;
+import org.openapitools.model.SavingsRecordDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -31,6 +35,7 @@ public class PeriodicalSavingsGoalMapper {
                 .recurringAmount(commonMapper.monetaryAmountModelToDto(periodicalSavingsGoal.getRecurringAmount()))
                 .duration(durationToString(periodicalSavingsGoal.getDuration()))
                 .periodicity(periodicityModelToDto(periodicalSavingsGoal.getPeriodicity()))
+                .savingsRecords(periodicalSavingsGoal.getSavingsRecords().stream().map(this::savingsRecordModelToDto).toList())
                 .build();
     }
 
@@ -47,6 +52,26 @@ public class PeriodicalSavingsGoalMapper {
                 .recurringAmount(new com.financetracker.savingsgoal.logic.model.MonetaryAmount(periodicalSavingsGoalDto.getRecurringAmount().getAmount()))
                 .duration(stringToDuration(periodicalSavingsGoalDto.getDuration()))
                 .periodicity(periodicityDtoToModel(periodicalSavingsGoalDto.getPeriodicity()))
+                .savingsRecords(periodicalSavingsGoalDto.getSavingsRecords().stream().map(s -> savingsRecordDtoToModel(periodicalSavingsGoalDto.getId(), s)).collect(Collectors.toSet()))
+                .build();
+    }
+
+    private SavingsRecordDto savingsRecordModelToDto(final SavingsRecord savingsRecord) {
+        return SavingsRecordDto.builder()
+                .id(savingsRecord.getId())
+                .date(savingsRecord.getDate().toString())
+                .amount(commonMapper.monetaryAmountModelToDto(savingsRecord.getAmount()))
+                .achievementStatus(commonMapper.achievementStatusModelToDto(savingsRecord.getAchievementStatus()))
+                .build();
+    }
+
+    private SavingsRecord savingsRecordDtoToModel(final UUID savingsGoalId, final SavingsRecordDto savingsRecordDto) {
+        return SavingsRecord.with()
+                .id(savingsRecordDto.getId())
+                .savingsGoalId(savingsGoalId)
+                .date(LocalDate.parse(savingsRecordDto.getDate(), getDateTimeFormatter()))
+                .amount(commonMapper.monetaryAmountDtoToModel(savingsRecordDto.getAmount()))
+                .achievementStatus(commonMapper.achievementStatusDtoToModel(savingsRecordDto.getAchievementStatus()))
                 .build();
     }
 
@@ -69,26 +94,24 @@ public class PeriodicalSavingsGoalMapper {
     }
 
     private String durationToString(Duration duration) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-        formatter = formatter.withLocale( Locale.GERMAN );
-        String startDate = duration.getStart().format(formatter);
-        String endDate = duration.getEnd().format(formatter);
+        String startDate = duration.getStart().format(getDateTimeFormatter());
+        String endDate = duration.getEnd().format(getDateTimeFormatter());
         String result = startDate + ";" + endDate;
         return result;
     }
 
-
     private Duration stringToDuration(String durationString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-        formatter = formatter.withLocale( Locale.GERMAN );
-
         Duration duration = new Duration();
         String[] durations = durationString.split(";");
 
-        LocalDate startDate = LocalDate.parse(durations[0], formatter);
-        LocalDate endDate = LocalDate.parse(durations[1], formatter);
+        LocalDate startDate = LocalDate.parse(durations[0], getDateTimeFormatter());
+        LocalDate endDate = LocalDate.parse(durations[1], getDateTimeFormatter());
         duration.setStart(startDate);
         duration.setEnd(endDate);
         return duration;
+    }
+
+    private DateTimeFormatter getDateTimeFormatter() {
+        return DateTimeFormatter.ofPattern("yyyy-MMM-dd").withLocale( Locale.GERMAN );
     }
 }
