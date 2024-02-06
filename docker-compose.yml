@@ -50,6 +50,16 @@ services:
     environment:
       TRANSACTION: transaction
 
+  savingsgoal:
+    container_name: savingsgoal
+    build: ./implementation/savingsgoal
+    ports:
+      - 8084:8084
+    environment:
+      BANK-ACCOUNT: bankaccount
+      TRANSACTION: transaction
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
+
   ui:
     container_name: ui
     build: ./implementation/ui-financetracker

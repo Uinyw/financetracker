@@ -98,6 +98,17 @@
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>kafka</artifactId>
+			<version>1.19.3</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -119,9 +130,10 @@
 						</goals>
 						<configuration>
 							<skipValidateSpec>true</skipValidateSpec>
-							<inputSpec>implementation/savingsgoal/src/main/resources/savingsGoal.yaml</inputSpec>
+							<inputSpec>implementation/savingsgoal/src/main/resources/api/savingsGoal.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<configOptions>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
 								<openApiNullable>false</openApiNullable>
 								<useJakartaEe>true</useJakartaEe>
 								<interfaceOnly>true</interfaceOnly>

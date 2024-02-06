@@ -76,6 +76,8 @@
 
 [Domain Shopping](./pages/design/domain_shopping.md)
 
+[Domain Analytics](./pages/design/domain_analytics.md)
+
 ## Local Deployment
 
 [Deployment Steps](./pages/deployment/deployment.md)

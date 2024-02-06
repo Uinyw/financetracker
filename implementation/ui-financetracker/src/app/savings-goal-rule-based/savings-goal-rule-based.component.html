@@ -1,0 +1,60 @@
+<h1>Rule Based Savings Goals</h1>
+
+
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
+</mat-form-field>
+
+<div  class="mat-elevation-z8">
+    <button mat-button (click)="openAddDialog()">
+        <mat-icon>add</mat-icon>
+    </button>
+    <table mat-table [dataSource]="savingsGoals" matSort>
+  
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let savingsGoal"> {{savingsGoal.id}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let savingsGoal"> {{savingsGoal.name}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let savingsGoal"> {{savingsGoal.description}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Matching Type </th>
+            <td mat-cell *matCellDef="let savingsGoal"> {{savingsGoal.matchingType}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Achievement Status </th>
+            <td mat-cell *matCellDef="let savingsGoal"> {{savingsGoal.achievementStatus}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let savingsGoal">
+                <button mat-button [routerLink]="['/savings-goals/rule-based/', savingsGoal.id]" >
+                    <mat-icon>expand_all</mat-icon>
+                </button>
+                <button mat-button (click)="openEditDialog(savingsGoal)" >
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-button (click)="deleteSavingsGoal(savingsGoal.id)" >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+</div>
+

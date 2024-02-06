@@ -36,6 +36,10 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { ShoppingCartDialogComponent } from './shopping-cart-dialog/shopping-cart-dialog.component';
 import { SuppliesComponent } from './supplies/supplies.component';
 import { SuppliesDialogComponent } from './supplies-dialog/supplies-dialog.component';
+import { SavingsGoalRuleBasedComponent } from './savings-goal-rule-based/savings-goal-rule-based.component';
+import { SavingsGoalRuleBasedDialogComponent } from './savings-goal-rule-based-dialog/savings-goal-rule-based-dialog.component';
+import { SavingsGoalRuleBasedDetailComponent } from './savings-goal-rule-based-detail/savings-goal-rule-based-detail.component';
+import { SavingsGoalRuleBasedDetailDialogComponent } from './savings-goal-rule-based-detail-dialog/savings-goal-rule-based-detail-dialog.component';
 
 
 @NgModule({
@@ -57,6 +61,10 @@ import { SuppliesDialogComponent } from './supplies-dialog/supplies-dialog.compo
     ShoppingCartDialogComponent,
     SuppliesComponent,
     SuppliesDialogComponent,
+    SavingsGoalRuleBasedComponent,
+    SavingsGoalRuleBasedDialogComponent,
+    SavingsGoalRuleBasedDetailComponent,
+    SavingsGoalRuleBasedDetailDialogComponent,
   ],
   imports: [
     BrowserModule,
