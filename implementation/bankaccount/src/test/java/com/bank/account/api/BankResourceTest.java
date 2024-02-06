@@ -2,10 +2,12 @@ package com.bank.account.api;
 
 import com.bank.account.IntegrationTestBase;
 import com.bank.account.data.TestBankAccountBuilder;
+import com.bank.account.infrastructure.kafka.MessagePublisher;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.MonetaryAmountDto;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
@@ -15,6 +17,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 
 class BankResourceTest extends IntegrationTestBase {
+
+    @MockBean
+    private MessagePublisher messagePublisher;
 
     @BeforeEach
     void setUp() {
