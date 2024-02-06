@@ -32,7 +32,7 @@ jobs:
       run: mvn -B package -Pcoverage --file implementation/bankaccount/pom.xml
 
     - name: Generate JaCoCo badge
-      id: jacoco
+      id: jacoco-bankaccount
       uses: cicirello/jacoco-badge-generator@v2
       with:
         badges-directory: badges
