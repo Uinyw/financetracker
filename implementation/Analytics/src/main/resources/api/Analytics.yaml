@@ -1,0 +1,247 @@
+openapi: 3.0.0
+info:
+  title: Analytics
+  version: 1.0.0
+  description: |
+    Welcome to the RestAPI, a comprehensive interface catering to various banking and financial management needs. This API acts as a central hub, facilitating communication between different components for seamless execution of RESTful operations.
+
+
+tags: 
+  - name: Analytics
+
+paths:
+  /budgetPlan:
+    get:
+      summary: Get a budget plan of all the data
+      tags: 
+        - Analytics
+      responses:
+        '200':
+          description: Retrieve a budget plan of all the categories
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/PudgetPlanDTO'
+                    
+  /forecast{months}:
+    get:
+      summary: Create a new budget forecast for the bank accounts
+      tags: 
+        - Analytics
+      parameters:
+        - name: months
+          in: path
+          required: true
+          description: Retrieve a detailed forcast using its unique identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forecast'
+        '404':
+          description: Forecast not createable
+          
+  /nutrition{days}:
+    get:
+      summary: Create a new budget forecast for the bank accounts
+      tags: 
+        - Analytics
+      parameters:
+        - name: days
+          in: path
+          required: true
+          description: Retrieve detailed information about the nutrition at a point in time using its unique identifier.
+          schema:
+            $ref: '#/components/schemas/Nutrition'
+            
+      responses:
+        '200':
+          description: Forecast created.
+          
+  /report:
+    get:
+      summary: Get a report plan of all the data
+      tags: 
+        - Analytics
+      responses:
+        '200':
+          description: Retrieve a budget plan of all the categories
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Report'
+
+  
+components:
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          example: {"message": "Resource not found"}
+
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          example: {"message": "Bad request"}
+  
+  schemas:
+    Report:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        bankAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccount'
+        duration:
+          $ref: '#/components/schemas/Duration'
+          
+    
+    BankAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        balance:
+          $ref: '#/components/schemas/MonetaryAmount'
+        dispoLimit:
+          $ref: '#/components/schemas/MonetaryAmount'
+        labels:
+          type: array
+          items:
+            type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+    Transaction:
+      type: object
+      properties:
+        referenceID:
+          type: string
+        labels:
+          type: array
+          items: 
+            type: string
+        amount:
+          $ref: '#/components/schemas/MonetaryAmount'
+        description:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum: [incoming, outgoing]
+        
+
+    MonetaryAmount:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+        
+    Duration:
+      type: object
+      properties:
+        startTime:
+          type: string
+          format: localDate
+        endTime:
+          type: string
+          format: localDate
+        
+    Category:
+      type: string
+      
+    PudgetPlanDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        achievementStatus:
+          $ref: '#/components/schemas/BudgetAchievementStatus'
+        plan:        # <---- dictionary
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BudgetElement'
+        date:
+          type: string
+          format: localDate
+
+    BudgetElement:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/Category'
+        monetaryAmount:
+          $ref: '#/components/schemas/MonetaryAmount'
+
+    ForecastElement:
+      type: object
+      properties:
+        bankAccount:
+          type: string
+          format: uuid
+        monetaryAmount:
+          $ref: '#/components/schemas/MonetaryAmount'
+    
+    Forecast:
+      type: object
+      properties:
+        months:
+          type: integer
+        plan:        # <---- dictionary
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ForecastElement'
+        date:
+          type: string
+          format: localDate
+          
+    Nutrition:
+      type: object
+      properties:
+        servingSize:
+          type: number
+          format: double
+        calories:
+          type: number
+          format: double
+        carbohydrates:
+          type: number
+          format: double
+        protein:
+          type: number
+          format: double
+        fat:
+          type: number
+          format: double
+        sugar:
+          type: number
+          format: double
+
+          
+    BudgetAchievementStatus:
+        type: string
+        enum: [ACHIEVED, FAILED]
+    
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/TOBIASKAESSMANN/RestAPI/1.0.0
