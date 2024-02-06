@@ -2,8 +2,9 @@
 
 ## Code Coverage
 
-![coverage](../badges/jacoco.svg)
-![branches coverage](../badges/branches.svg)
+| Component | Coverage |
+| :--- | :--- |
+| MS-Transaction | ![coverage](../badges/jacoco.svg) ![branches coverage](../badges/branches.svg) |
 
 
 ## Analysis
