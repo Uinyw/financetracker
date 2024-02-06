@@ -1,14 +1,17 @@
 package com.bank.account.api;
 
 import com.bank.account.IntegrationTestBase;
-import com.bank.account.data.TestBankAccountBuilder;
 import com.bank.account.infrastructure.kafka.MessagePublisher;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.model.BankAccountDto;
 import org.openapitools.model.MonetaryAmountDto;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+
+import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -28,7 +31,14 @@ class BankResourceTest extends IntegrationTestBase {
 
     @Test
     void givenBankAccountDto_whenCreateBankAccount_thenBankAccountExists() {
-        final var bankAccountDto = TestBankAccountBuilder.buildWithDefaults();
+        final var bankAccountDto = BankAccountDto.builder()
+                .id(UUID.randomUUID())
+                .name("Bank Account")
+                .description("Description for Bank Account")
+                .balance(MonetaryAmountDto.builder().amount(1.0).build())
+                .dispositionLimit(MonetaryAmountDto.builder().amount(2.0).build())
+                .labels(List.of("Label"))
+                .build();
 
         given().port(port)
                 .get(LOCAL_BASE_URL_WITHOUT_PORT + "/bankAccounts")
@@ -53,7 +63,13 @@ class BankResourceTest extends IntegrationTestBase {
 
     @Test
     void givenBankAccount_whenGetBankAccountById_thenBankAccountReturned() {
-        final var bankAccountDto = TestBankAccountBuilder.buildWithDefaults();
+        final var bankAccountDto = BankAccountDto.builder()
+                .id(UUID.randomUUID())
+                .name("Bank Account")
+                .description("Description for Bank Account")
+                .balance(MonetaryAmountDto.builder().amount(1.0).build())
+                .dispositionLimit(MonetaryAmountDto.builder().amount(2.0).build())
+                .build();
 
         given().port(port)
                 .contentType(ContentType.JSON)
@@ -71,7 +87,14 @@ class BankResourceTest extends IntegrationTestBase {
 
     @Test
     void givenBankAccount_whenDeleteBankAccountById_thenBankAccountDoesNotExistAnymore() {
-        final var bankAccountDto = TestBankAccountBuilder.buildWithDefaults();
+        final var bankAccountDto = BankAccountDto.builder()
+                .id(UUID.randomUUID())
+                .name("Bank Account")
+                .description("Description for Bank Account")
+                .balance(MonetaryAmountDto.builder().amount(1.0).build())
+                .dispositionLimit(MonetaryAmountDto.builder().amount(2.0).build())
+                .labels(List.of("Label"))
+                .build();
 
         given().port(port)
                 .contentType(ContentType.JSON)
@@ -94,7 +117,14 @@ class BankResourceTest extends IntegrationTestBase {
 
     @Test
     void givenBankAccount_whenPatchBankAccountById_thenBankAccountIsUpdated() {
-        final var bankAccountDto = TestBankAccountBuilder.buildWithDefaults();
+        final var bankAccountDto = BankAccountDto.builder()
+                .id(UUID.randomUUID())
+                .name("Bank Account")
+                .description("Description for Bank Account")
+                .balance(MonetaryAmountDto.builder().amount(1.0).build())
+                .dispositionLimit(MonetaryAmountDto.builder().amount(2.0).build())
+                .labels(List.of("Label"))
+                .build();
 
         given().port(port)
                 .contentType(ContentType.JSON)

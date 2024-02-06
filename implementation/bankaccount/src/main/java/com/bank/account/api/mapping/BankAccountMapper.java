@@ -23,7 +23,7 @@ public class BankAccountMapper {
                 .name(bankAccountDto.getName())
                 .description(bankAccountDto.getDescription())
                 .balance(mapMonetaryAmountDtoToModel(bankAccountDto.getBalance()))
-                .dispositionLimit(bankAccountDto.getDispositionLimit() != null ? mapMonetaryAmountDtoToModel(bankAccountDto.getDispositionLimit()) : MonetaryAmount.DEFAULT)
+                .dispositionLimit(mapMonetaryAmountDtoToModel(bankAccountDto.getDispositionLimit()))
                 .labels(mapLabelDtoToModel(bankAccountDto.getLabels()))
                 .build();
     }
