@@ -1,6 +1,6 @@
 package com.financetracker.product;
 
-import com.financetracker.product.infrastructure.db.ProductEntryCollectionRepository;
+import com.financetracker.product.infrastructure.db.ProductEntryRepository;
 import com.financetracker.product.infrastructure.db.ProductRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ public class IntegrationTestBase {
     protected ProductRepository productRepository;
 
     @Autowired
-    protected ProductEntryCollectionRepository productEntryCollectionRepository;
+    protected ProductEntryRepository productEntryRepository;
 
     @AfterEach
     void tearDown() {
-        productEntryCollectionRepository.deleteAll();
+        productEntryRepository.deleteAll();
         productRepository.deleteAll();
     }
 }
