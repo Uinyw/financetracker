@@ -183,8 +183,6 @@ class SuppliesResourceTest extends IntegrationTestBase {
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
         given().port(port)
-                .contentType(ContentType.JSON)
-                .body(productEntryDto)
                 .delete(LOCAL_BASE_URL_WITHOUT_PORT + "/supplies/entries/" + UUID.randomUUID())
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
@@ -289,5 +287,51 @@ class SuppliesResourceTest extends IntegrationTestBase {
                 .and().body("productEntries.size()", is(1))
                 .and().body("productEntries[0].id", is(productEntryDto.getId().toString()))
                 .and().body("productEntries[0].quantity", is(1F));
+    }
+
+    @Test
+    void givenProductInSuppliesWithDesiredQuantityHigherThanQuantity_whenShopNeededSupplies_thenProductIsAddedToShoppingCart() {
+        final var productDto = ProductDto.builder()
+                .id(UUID.randomUUID())
+                .name("GlassCleaner")
+                .description("Keep the bath clean.")
+                .category(CategoryDto.HOUSEHOLD)
+                .price(MonetaryAmountDto.builder().amount(2.39).build())
+                .labels(List.of("EssentialProduct"))
+                .build();
+
+        final var productEntryDto = ProductEntryDto.builder()
+                .id(UUID.randomUUID())
+                .quantity(BigDecimal.ZERO)
+                .desiredQuantity(BigDecimal.ONE)
+                .purchased(false)
+                .product(productDto)
+                .build();
+
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(productEntryDto)
+                .post(LOCAL_BASE_URL_WITHOUT_PORT + "/supplies/entries")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+
+        given().port(port)
+                .get(LOCAL_BASE_URL_WITHOUT_PORT + "/shopping-cart")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and().body("productEntries.size()", is(0));
+
+        given().port(port)
+                .post(LOCAL_BASE_URL_WITHOUT_PORT + "/supplies/shop")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+
+        given().port(port)
+                .get(LOCAL_BASE_URL_WITHOUT_PORT + "/shopping-cart")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and().body("productEntries.size()", is(1))
+                .and().body("productEntries[0].quantity", is(1F))
+                .and().body("productEntries[0].product.id", is(productDto.getId().toString()));
     }
 }

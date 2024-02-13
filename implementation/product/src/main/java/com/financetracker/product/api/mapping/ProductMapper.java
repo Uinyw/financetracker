@@ -77,7 +77,7 @@ public class ProductMapper {
 
     private MonetaryAmountDto mapMonetaryAmountModelToDto(final MonetaryAmount amount) {
         return MonetaryAmountDto.builder()
-                .amount(amount != null && amount.amount() != null ? amount.amount().doubleValue() : null)
+                .amount(amount.amount().doubleValue())
                 .build();
     }
 

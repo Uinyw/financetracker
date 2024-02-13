@@ -194,4 +194,45 @@ class ProductResourceTest extends IntegrationTestBase {
                 .and().body("id", is(productDto.getId().toString()))
                 .and().body("name", is("New Milk"));
     }
+
+    @Test
+    void givenExistingProduct_whenPatchProductByInvalidId_thenProductIsNotUpdated() {
+        final var productDto = ProductDto.builder()
+                .id(UUID.randomUUID())
+                .name("Broom")
+                .description("Not for flying, but for cleaning.")
+                .category(CategoryDto.ESSENTIALS)
+                .price(MonetaryAmountDto.builder().amount(1.49).build())
+                .build();
+
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(productDto)
+                .post(LOCAL_BASE_URL_WITHOUT_PORT + "/products")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+
+        given().port(port)
+                .get(LOCAL_BASE_URL_WITHOUT_PORT + "/products/" + productDto.getId().toString())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and().body("id", is(productDto.getId().toString()))
+                .and().body("name", is("Broom"));
+
+        productDto.setName("New Broom");
+
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(productDto)
+                .patch(LOCAL_BASE_URL_WITHOUT_PORT + "/products/" + UUID.randomUUID())
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+
+        given().port(port)
+                .get(LOCAL_BASE_URL_WITHOUT_PORT + "/products/" + productDto.getId().toString())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and().body("id", is(productDto.getId().toString()))
+                .and().body("name", is("Broom"));
+    }
 }
