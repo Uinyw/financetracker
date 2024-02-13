@@ -1,7 +1,6 @@
 package com.financetracker.transaction.api;
 
 import com.financetracker.transaction.IntegrationTestBase;
-import com.financetracker.transaction.data.TestRecurringTransactionBuilder;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 @Disabled
 class RecurringTransactionCRUDTest extends IntegrationTestBase {
-
+/*
     @BeforeEach
     void setUp() {
         when(bankAccountProvider.getBankAccount(anyString())).thenReturn(Optional.of(new BankAccountDto()));
@@ -196,4 +195,6 @@ class RecurringTransactionCRUDTest extends IntegrationTestBase {
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
+
+ */
 }

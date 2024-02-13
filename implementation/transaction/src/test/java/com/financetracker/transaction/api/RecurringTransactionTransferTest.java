@@ -1,7 +1,6 @@
 package com.financetracker.transaction.api;
 
 import com.financetracker.transaction.IntegrationTestBase;
-import com.financetracker.transaction.data.TestRecurringTransactionBuilder;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -21,7 +20,7 @@ import static org.mockito.Mockito.doReturn;
 
 @Disabled
 class RecurringTransactionTransferTest extends IntegrationTestBase {
-
+/*
     private RecurringTransactionDto recurringTransaction;
 
     @BeforeEach
@@ -70,4 +69,6 @@ class RecurringTransactionTransferTest extends IntegrationTestBase {
                 .balance(MonetaryAmountDto.builder().amount(balance).build())
                 .build();
     }
+
+ */
 }

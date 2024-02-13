@@ -1,7 +1,5 @@
 package com.financetracker.transaction;
 
-import com.financetracker.transaction.api.mapping.OneTimeTransactionMapper;
-import com.financetracker.transaction.api.mapping.RecurringTransactionMapper;
 import com.financetracker.transaction.infrastructure.client.BankAccountProvider;
 import com.financetracker.transaction.infrastructure.db.OneTimeTransactionRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -21,11 +19,6 @@ public class IntegrationTestBase {
 
     @Autowired
     private OneTimeTransactionRepository oneTimeTransactionRepository;
-
-    @Autowired
-    public OneTimeTransactionMapper oneTimeTransactionMapper;
-    @Autowired
-    public RecurringTransactionMapper recurringTransactionMapper;
 
     @SpyBean
     public BankAccountProvider bankAccountProvider;
