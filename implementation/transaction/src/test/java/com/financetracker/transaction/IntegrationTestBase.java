@@ -2,6 +2,7 @@ package com.financetracker.transaction;
 
 import com.financetracker.transaction.infrastructure.client.BankAccountProvider;
 import com.financetracker.transaction.infrastructure.db.OneTimeTransactionRepository;
+import com.financetracker.transaction.infrastructure.db.RecurringTransactionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class IntegrationTestBase {
     @Autowired
     private OneTimeTransactionRepository oneTimeTransactionRepository;
 
+    @Autowired
+    private RecurringTransactionRepository recurringTransactionRepository;
+
     @SpyBean
     public BankAccountProvider bankAccountProvider;
 
@@ -27,5 +31,6 @@ public class IntegrationTestBase {
     void tearDown() {
         Mockito.reset(bankAccountProvider);
         oneTimeTransactionRepository.deleteAll();
+        recurringTransactionRepository.deleteAll();
     }
 }
