@@ -123,6 +123,67 @@ class TransactionResourceRecurringTest extends IntegrationTestBase {
     }
 
     @Test
+    void givenExistingRecurringTransaction_whenGetTransactionByTargetBankAccount_thenTransactionIsReturned() {
+        doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
+
+        final var recurringTransaction = RecurringTransactionDto.builder()
+                .id(UUID.randomUUID())
+                .name("Employment Income")
+                .description("Employer: KIT")
+                .type(TypeDto.INCOME)
+                .startDate(LocalDate.now().toString())
+                .fixedAmount(MonetaryAmountDto.builder().amount(1300.0).build())
+                .periodicity(PeriodicityDto.MONTHLY)
+                .transfer(TransferDto.builder().externalSourceId("KIT").targetBankAccountId(UUID.randomUUID()).build())
+                .labels(List.of("KIT"))
+                .build();
+
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(recurringTransaction)
+                .post(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/recurring")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+
+        given().port(port)
+                .get(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/recurring?targetBankAccount=" + recurringTransaction.getTransfer().getTargetBankAccountId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and().body("size()", is(1))
+                .and().body("[0].id", is(recurringTransaction.getId().toString()));
+    }
+
+    @Test
+    void givenExistingRecurringTransaction_whenGetTransactionBySourceBankAccount_thenTransactionIsReturned() {
+        doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
+
+        final var recurringTransaction = RecurringTransactionDto.builder()
+                .id(UUID.randomUUID())
+                .name("Rent")
+                .description("Landlord: HaDiKo")
+                .type(TypeDto.EXPENSE)
+                .startDate(LocalDate.now().toString())
+                .fixedAmount(MonetaryAmountDto.builder().amount(300.0).build())
+                .periodicity(PeriodicityDto.MONTHLY)
+                .transfer(TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).externalTargetId("HaDiKo").build())
+                .build();
+
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(recurringTransaction)
+                .post(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/recurring")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+
+        given().port(port)
+                .get(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/recurring?sourceBankAccount=" + recurringTransaction.getTransfer().getSourceBankAccountId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and().body("size()", is(1))
+                .and().body("[0].id", is(recurringTransaction.getId().toString()));
+    }
+
+    @Test
     void givenExistingRecurringTransaction_whenGetTransactionByInvalidId_thenNotFound() {
         doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
 

@@ -92,6 +92,65 @@ class TransactionResourceOneTimeTest extends IntegrationTestBase {
     }
 
     @Test
+    void givenExistingOneTimeTransaction_whenGetTransactionByTargetBankAccount_thenTransactionIsReturned() {
+        doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
+
+        final var oneTimeTransaction = OneTimeTransactionDto.builder()
+                .id(UUID.randomUUID())
+                .name("OneTime Income")
+                .description("For pizza last evening.")
+                .date(LocalDate.now().toString())
+                .type(TypeDto.INCOME)
+                .amount(MonetaryAmountDto.builder().amount(14.99).build())
+                .transfer(TransferDto.builder().externalSourceId("Marks BankAccount").targetBankAccountId(UUID.randomUUID()).build())
+                .build();
+
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(oneTimeTransaction)
+                .post(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/onetime")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+
+        given().port(port)
+                .get(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/onetime?targetBankAccount=" + oneTimeTransaction.getTransfer().getTargetBankAccountId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and().body("size()", is(1))
+                .and().body("[0].id", is(oneTimeTransaction.getId().toString()));
+    }
+
+    @Test
+    void givenExistingOneTimeTransaction_whenGetTransactionBySourceBankAccount_thenTransactionIsReturned() {
+        doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
+
+        final var oneTimeTransaction = OneTimeTransactionDto.builder()
+                .id(UUID.randomUUID())
+                .name("OneTime Payment")
+                .description("For pizza last evening.")
+                .date(LocalDate.now().toString())
+                .type(TypeDto.EXPENSE)
+                .amount(MonetaryAmountDto.builder().amount(14.99).build())
+                .transfer(TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).externalTargetId("Thomas BankAccount").build())
+                .labels(List.of("Friend"))
+                .build();
+
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(oneTimeTransaction)
+                .post(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/onetime")
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+
+        given().port(port)
+                .get(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/onetime?sourceBankAccount=" + oneTimeTransaction.getTransfer().getSourceBankAccountId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and().body("size()", is(1))
+                .and().body("[0].id", is(oneTimeTransaction.getId().toString()));
+    }
+
+    @Test
     void givenExistingOneTimeTransaction_whenGetTransactionById_thenTransactionIsReturned() {
         doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
 
