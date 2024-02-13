@@ -1,4 +1,4 @@
-name: MS-Transaction Code Coverage
+name: MS-Transaction
 
 on:
   push:
