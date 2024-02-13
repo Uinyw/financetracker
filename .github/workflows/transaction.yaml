@@ -1,4 +1,4 @@
-name: MS-Transaction Code Coverage
+name: MS-Transaction
 
 on:
   push:
@@ -37,6 +37,8 @@ jobs:
       with:
         badges-directory: badges
         generate-branches-badge: true
+        coverage-badge-filename: jacoco-transaction.svg
+        branches-badge-filename: branches-transaction.svg
         generate-summary: true
         jacoco-csv-file: >
           implementation/transaction/target/site/jacoco/jacoco.csv
