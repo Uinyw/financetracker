@@ -38,7 +38,7 @@ jobs:
       run: mvn -B package -Pcoverage --file implementation/product/pom.xml
 
     - name: Generate JaCoCo badge BankAccount
-      id: jacoco
+      id: jacoco-bankaccount
       uses: cicirello/jacoco-badge-generator@v2
       with:
         badges-directory: badges
@@ -50,7 +50,7 @@ jobs:
           implementation/bankaccount/target/site/jacoco/jacoco.csv
 
     - name: Generate JaCoCo badge Transaction
-      id: jacoco
+      id: jacoco-transaction
       uses: cicirello/jacoco-badge-generator@v2
       with:
         badges-directory: badges
@@ -62,7 +62,7 @@ jobs:
           implementation/transaction/target/site/jacoco/jacoco.csv
 
     - name: Generate JaCoCo badge Product
-      id: jacoco
+      id: jacoco-product
       uses: cicirello/jacoco-badge-generator@v2
       with:
         badges-directory: badges
