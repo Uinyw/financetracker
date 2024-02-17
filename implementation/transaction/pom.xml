@@ -147,6 +147,7 @@
 				<configuration>
 					<excludes>
 						<exclude>org/openapitools/**/*</exclude>
+						<exclude>com/financetracker/transaction/TransactionApplication.*</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

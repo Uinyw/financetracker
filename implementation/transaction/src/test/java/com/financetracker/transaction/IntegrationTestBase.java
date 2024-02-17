@@ -3,6 +3,8 @@ package com.financetracker.transaction;
 import com.financetracker.transaction.infrastructure.client.BankAccountProvider;
 import com.financetracker.transaction.infrastructure.db.OneTimeTransactionRepository;
 import com.financetracker.transaction.infrastructure.db.RecurringTransactionRepository;
+import com.financetracker.transaction.logic.operations.OneTimeTransactionService;
+import com.financetracker.transaction.logic.operations.RecurringTransactionService;
 import org.junit.jupiter.api.AfterEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +21,19 @@ public class IntegrationTestBase {
     protected static final String LOCAL_BASE_URL_WITHOUT_PORT = "http://localhost";
 
     @Autowired
-    private OneTimeTransactionRepository oneTimeTransactionRepository;
+    protected OneTimeTransactionService oneTimeTransactionService;
 
     @Autowired
-    private RecurringTransactionRepository recurringTransactionRepository;
+    protected RecurringTransactionService recurringTransactionService;
+
+    @Autowired
+    protected OneTimeTransactionRepository oneTimeTransactionRepository;
+
+    @Autowired
+    protected RecurringTransactionRepository recurringTransactionRepository;
 
     @SpyBean
-    public BankAccountProvider bankAccountProvider;
+    protected BankAccountProvider bankAccountProvider;
 
     @AfterEach
     void tearDown() {

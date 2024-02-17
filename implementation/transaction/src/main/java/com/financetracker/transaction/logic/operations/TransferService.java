@@ -18,13 +18,17 @@ public class TransferService {
 
     private final BankAccountProvider bankAccountProvider;
 
-    public boolean requiredBankAccountsDoNotExist(final Transfer transfer) {
+    public boolean requiredBankAccountsDoesNotExist(final Transfer transfer) {
         return (transfer.hasInternalSource() && bankAccountProvider.getBankAccount(transfer.getSourceBankAccountId()).isEmpty())
                 || (transfer.hasInternalTarget() && bankAccountProvider.getBankAccount(transfer.getTargetBankAccountId()).isEmpty());
     }
 
     public void transfer(final Transfer transfer, final Transferable transferable) {
-        if (transferable.getTransferStatus().equals(TransferStatus.SUCCESSFUL)) {
+        transfer(transfer, transferable, transferable.getTransferStatus());
+    }
+
+    private void transfer(final Transfer transfer, final Transferable transferable, final TransferStatus transferStatus) {
+        if (transferStatus.equals(TransferStatus.SUCCESSFUL)) {
             return;
         }
 
@@ -52,7 +56,7 @@ public class TransferService {
             return;
         }
 
-        transfer(transfer.invert(), transferable);
+        transfer(transfer.invert(), transferable, TransferStatus.INITIAL);
     }
 
     private void withdrawFromBankAccount(final String bankAccountId, final BigDecimal amount) {

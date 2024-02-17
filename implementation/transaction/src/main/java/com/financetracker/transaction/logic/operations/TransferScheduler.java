@@ -1,8 +1,6 @@
 package com.financetracker.transaction.logic.operations;
 
 import com.financetracker.transaction.infrastructure.config.Configuration;
-import com.financetracker.transaction.infrastructure.db.OneTimeTransactionRepository;
-import com.financetracker.transaction.infrastructure.db.RecurringTransactionRepository;
 import com.financetracker.transaction.logic.model.RecurringTransaction;
 import com.financetracker.transaction.logic.model.TransactionRecord;
 import com.financetracker.transaction.logic.model.TransferStatus;
@@ -21,15 +19,13 @@ public class TransferScheduler {
     private final Clock clock;
     private final OneTimeTransactionService oneTimeTransactionService;
     private final RecurringTransactionService recurringTransactionService;
-    private final OneTimeTransactionRepository oneTimeTransactionRepository;
-    private final RecurringTransactionRepository recurringTransactionRepository;
 
     /**
      * Runs every day at 6am.
      */
     @Scheduled(cron = "0 0 6 * * *", zone = Configuration.TIME_ZONE)
     public void transferOneTimeTransactionsOnDueDate() {
-        oneTimeTransactionRepository.findAll().forEach(transaction -> {
+        oneTimeTransactionService.getOneTimeTransactions().forEach(transaction -> {
             if (transaction.getTransferStatus().equals(TransferStatus.INITIAL) && transactionIsDue(transaction.getDate())) {
                 oneTimeTransactionService.transferOneTimeTransactionAndSetStatus(transaction.getId());
             }
@@ -41,7 +37,7 @@ public class TransferScheduler {
      */
     @Scheduled(cron = "0 0 6 * * *", zone = Configuration.TIME_ZONE)
     public void transferRecurringTransactionsOnDueDate() {
-        recurringTransactionRepository.findAll().forEach(transaction -> {
+        recurringTransactionService.getRecurringTransactions().forEach(transaction -> {
             if (!transaction.isEnabledForAutomaticScheduling()) {
                 return;
             }
@@ -67,9 +63,8 @@ public class TransferScheduler {
                 .date(date)
                 .transferStatus(TransferStatus.INITIAL)
                 .build();
-        transaction.getTransactionRecords().add(transactionRecord);
-        recurringTransactionRepository.save(transaction);
 
+        recurringTransactionService.createTransactionRecordForRecurringTransaction(transactionRecord);
         recurringTransactionService.transferTransactionRecordAndSetStatus(transaction.getId(), transactionRecord.getId());
 
         transferRecurringTransactionOnDate(transaction, date.plusMonths(transaction.getPeriodicity().getMonths()));
