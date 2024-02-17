@@ -4,9 +4,9 @@
 
 | Component | Coverage |
 | :--- | :--- |
-| MS-BankAccount | ![coverage](../badges/jacoco-bankaccount.svg) ![branches coverage](../badges/branches-bankaccount.svg) |
-| MS-Transaction | ![coverage](../badges/jacoco-transaction.svg) ![branches coverage](../badges/branches-transaction.svg) |
-| MS-Product | ![coverage](../badges/jacoco-product.svg) ![branches coverage](../badges/branches-product.svg) |
+| MS-BankAccount | ![coverage](../badges-bankaccount/jacoco-bankaccount.svg) |
+| MS-Transaction | ![coverage](../badges/jacoco-transaction.svg) |
+| MS-Product | ![coverage](../badges/jacoco-product.svg) |
 
 
 ## Analysis
