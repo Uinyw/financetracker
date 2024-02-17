@@ -4,7 +4,7 @@
 
 | Component | Coverage |
 | :--- | :--- |
-| MS-BankAccount | ![coverage](../badges-bankaccount/jacoco-bankaccount.svg) |
+| MS-BankAccount | ![coverage](../badges/jacoco-bankaccount.svg) |
 | MS-Transaction | ![coverage](../badges/jacoco-transaction.svg) |
 | MS-Product | ![coverage](../badges/jacoco-product.svg) |
 
