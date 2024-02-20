@@ -4,6 +4,7 @@ import org.openapitools.client.ApiException;
 import org.openapitools.client.api.BankAccountApi;
 import org.openapitools.client.model.BankAccountDto;
 import org.openapitools.client.model.MonetaryAmountDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,11 @@ public class BankAccountClient implements BankAccountProvider {
     private final BankAccountApi bankAccountApi;
 
     public BankAccountClient() {
-        bankAccountApi = new BankAccountApi();
+        this.bankAccountApi = new BankAccountApi();
+    }
+
+    public BankAccountClient(final BankAccountApi bankAccountApi) {
+        this.bankAccountApi = bankAccountApi;
     }
 
     @Override

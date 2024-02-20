@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -28,8 +29,8 @@ public class PeriodicalSavingsGoalMapper {
                 .name(periodicalSavingsGoal.getName())
                 .description(periodicalSavingsGoal.getDescription())
                 .achievementStatus(commonMapper.achievementStatusModelToDto(periodicalSavingsGoal.getAchievementStatus()))
-                .sourceBankAccountID(periodicalSavingsGoal.getSourceBankAccountId())
-                .targetBankAccountID(periodicalSavingsGoal.getTargetBankAccountId())
+                .sourceBankAccountId(periodicalSavingsGoal.getSourceBankAccountId())
+                .targetBankAccountId(periodicalSavingsGoal.getTargetBankAccountId())
                 .goal(commonMapper.monetaryAmountModelToDto(periodicalSavingsGoal.getGoal()))
                 .recurringRate(periodicalSavingsGoal.getRecurringRate())
                 .recurringAmount(commonMapper.monetaryAmountModelToDto(periodicalSavingsGoal.getRecurringAmount()))
@@ -45,8 +46,8 @@ public class PeriodicalSavingsGoalMapper {
                 .name(periodicalSavingsGoalDto.getName())
                 .description(periodicalSavingsGoalDto.getDescription())
                 .achievementStatus(commonMapper.achievementStatusDtoToModel(periodicalSavingsGoalDto.getAchievementStatus()))
-                .sourceBankAccountId(periodicalSavingsGoalDto.getSourceBankAccountID())
-                .targetBankAccountId(periodicalSavingsGoalDto.getTargetBankAccountID())
+                .sourceBankAccountId(periodicalSavingsGoalDto.getSourceBankAccountId())
+                .targetBankAccountId(periodicalSavingsGoalDto.getTargetBankAccountId())
                 .goal(new com.financetracker.savingsgoal.logic.model.MonetaryAmount(periodicalSavingsGoalDto.getGoal().getAmount()))
                 .recurringRate(periodicalSavingsGoalDto.getRecurringRate())
                 .recurringAmount(new com.financetracker.savingsgoal.logic.model.MonetaryAmount(periodicalSavingsGoalDto.getRecurringAmount().getAmount()))
@@ -95,9 +96,8 @@ public class PeriodicalSavingsGoalMapper {
 
     private String durationToString(Duration duration) {
         String startDate = duration.getStart().format(getDateTimeFormatter());
-        String endDate = duration.getEnd().format(getDateTimeFormatter());
-        String result = startDate + ";" + endDate;
-        return result;
+        String endDate = duration.getEnd() != null ? duration.getEnd().format(getDateTimeFormatter()) : null;
+        return startDate + ";" + Optional.ofNullable(endDate).orElse("");
     }
 
     private Duration stringToDuration(String durationString) {
@@ -105,13 +105,13 @@ public class PeriodicalSavingsGoalMapper {
         String[] durations = durationString.split(";");
 
         LocalDate startDate = LocalDate.parse(durations[0], getDateTimeFormatter());
-        LocalDate endDate = LocalDate.parse(durations[1], getDateTimeFormatter());
+        LocalDate endDate = durations.length == 2 ? LocalDate.parse(durations[1], getDateTimeFormatter()) : null;
         duration.setStart(startDate);
         duration.setEnd(endDate);
         return duration;
     }
 
     private DateTimeFormatter getDateTimeFormatter() {
-        return DateTimeFormatter.ofPattern("yyyy-MMM-dd").withLocale( Locale.GERMAN );
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale( Locale.GERMAN );
     }
 }

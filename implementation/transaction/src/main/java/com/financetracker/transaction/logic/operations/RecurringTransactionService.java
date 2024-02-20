@@ -29,7 +29,7 @@ public class RecurringTransactionService {
     }
 
     public void createRecurringTransaction(final RecurringTransaction recurringTransaction) {
-        if (transferService.requiredBankAccountsDoNotExist(recurringTransaction.getTransfer())) {
+        if (transferService.requiredBankAccountsDoesNotExist(recurringTransaction.getTransfer())) {
             throw new NotParseableException();
         }
 
@@ -53,7 +53,7 @@ public class RecurringTransactionService {
     }
 
     public void updateRecurringTransaction(final String transactionId, final RecurringTransaction recurringTransaction) {
-        if (transferService.requiredBankAccountsDoNotExist(recurringTransaction.getTransfer())) {
+        if (transferService.requiredBankAccountsDoesNotExist(recurringTransaction.getTransfer())) {
             throw new NotParseableException();
         }
 

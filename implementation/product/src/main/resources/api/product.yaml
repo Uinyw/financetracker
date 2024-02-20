@@ -323,6 +323,8 @@ components:
           type: string
         category:
           $ref: '#/components/schemas/CategoryDto'
+        size:
+          type: number
         nutrition:
           $ref: '#/components/schemas/NutritionDto'
         price:

@@ -10,6 +10,8 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { SuppliesComponent } from './supplies/supplies.component';
 import { SavingsGoalRuleBasedComponent } from './savings-goal-rule-based/savings-goal-rule-based.component';
 import { SavingsGoalRuleBasedDetailComponent } from './savings-goal-rule-based-detail/savings-goal-rule-based-detail.component';
+import { SavingsGoalPeriodicalComponent } from './savings-goal-periodical/savings-goal-periodical.component';
+import { SavingsGoalPeriodicalDetailComponent } from './savings-goal-periodical-detail/savings-goal-periodical-detail.component';
 
 const routes: Routes = [
   { path: 'bank-accounts', component: BankAccountComponent },
@@ -22,6 +24,8 @@ const routes: Routes = [
   { path: 'supplies', component: SuppliesComponent },
   { path: 'savings-goals/rule-based', component: SavingsGoalRuleBasedComponent },
   { path: 'savings-goals/rule-based/:id', component: SavingsGoalRuleBasedDetailComponent },
+  { path: 'savings-goals/periodical', component: SavingsGoalPeriodicalComponent },
+  { path: 'savings-goals/periodical/:id', component: SavingsGoalPeriodicalDetailComponent },
 ];
 
 @NgModule({

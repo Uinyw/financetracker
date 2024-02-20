@@ -27,6 +27,7 @@ public class ProductEntry {
     @Setter
     private BigDecimal quantity;
 
+    @Setter
     private BigDecimal desiredQuantity;
 
     @Setter

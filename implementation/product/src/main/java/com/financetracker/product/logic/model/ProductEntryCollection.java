@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import java.util.HashSet;
 import java.util.Set;
 
-@Builder(builderMethodName = "with")
-@AllArgsConstructor
 @Getter
 @NoArgsConstructor
 @Table(name = "product_entry_collection")

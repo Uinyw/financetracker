@@ -8,6 +8,7 @@ import org.openapitools.client.model.MonetaryAmountDto;
 import org.openapitools.client.model.OneTimeTransactionDto;
 import org.openapitools.client.model.TransferDto;
 import org.openapitools.client.model.TypeDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +26,14 @@ public class TransactionClient implements TransactionProvider {
     private final Clock clock;
     private final OneTimeTransactionApi transactionApi;
 
+    @Autowired
     public TransactionClient(final Clock clock) {
-        transactionApi = new OneTimeTransactionApi();
+        this.transactionApi = new OneTimeTransactionApi();
+        this.clock = clock;
+    }
+
+    public TransactionClient(final Clock clock, final OneTimeTransactionApi transactionApi) {
+        this.transactionApi = transactionApi;
         this.clock = clock;
     }
 

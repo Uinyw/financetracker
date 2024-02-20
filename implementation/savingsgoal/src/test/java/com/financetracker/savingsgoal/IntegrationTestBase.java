@@ -1,16 +1,13 @@
-package com.financetracker.savingsgoal.TestSetup;
+package com.financetracker.savingsgoal;
 
 import com.financetracker.savingsgoal.infrastructure.client.bankaccount.BankAccountProvider;
 import com.financetracker.savingsgoal.infrastructure.client.transaction.TransactionProvider;
-import com.financetracker.savingsgoal.infrastructure.kafka.MessageConsumer;
 import com.financetracker.savingsgoal.infrastructure.db.PeriodicalSavingsGoalRepository;
-import com.financetracker.savingsgoal.api.mapping.RuleBasedSavingsGoalMapper;
 import com.financetracker.savingsgoal.infrastructure.db.RuleBasedSavingsGoalRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.kafka.test.context.EmbeddedKafka;
@@ -19,11 +16,13 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
-public class IntegrationTest {
+@EmbeddedKafka(topics = "bankaccount-update")
+public class IntegrationTestBase {
 
     @LocalServerPort
     protected int port;
+
+    protected static final String LOCAL_BASE_URL_WITHOUT_PORT = "http://localhost";
 
     @Autowired
     private RuleBasedSavingsGoalRepository ruleBasedSavingsGoalRepository;
@@ -31,17 +30,11 @@ public class IntegrationTest {
     @Autowired
     public PeriodicalSavingsGoalRepository periodicalSavingsGoalRepository;
 
-    @Autowired
-    public RuleBasedSavingsGoalMapper ruleBasedSavingsGoalMapper;
-
     @SpyBean
     public BankAccountProvider bankAccountProvider;
 
     @SpyBean
     public TransactionProvider transactionProvider;
-
-    @MockBean
-    public MessageConsumer messageConsumer;
 
     @AfterEach
     void tearDown() {

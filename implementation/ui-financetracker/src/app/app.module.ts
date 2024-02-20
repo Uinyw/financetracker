@@ -40,6 +40,9 @@ import { SavingsGoalRuleBasedComponent } from './savings-goal-rule-based/savings
 import { SavingsGoalRuleBasedDialogComponent } from './savings-goal-rule-based-dialog/savings-goal-rule-based-dialog.component';
 import { SavingsGoalRuleBasedDetailComponent } from './savings-goal-rule-based-detail/savings-goal-rule-based-detail.component';
 import { SavingsGoalRuleBasedDetailDialogComponent } from './savings-goal-rule-based-detail-dialog/savings-goal-rule-based-detail-dialog.component';
+import { SavingsGoalPeriodicalComponent } from './savings-goal-periodical/savings-goal-periodical.component';
+import { SavingsGoalPeriodicalDetailComponent } from './savings-goal-periodical-detail/savings-goal-periodical-detail.component';
+import { SavingsGoalPeriodicalDialogComponent } from './savings-goal-periodical-dialog/savings-goal-periodical-dialog.component';
 
 
 @NgModule({
@@ -65,6 +68,9 @@ import { SavingsGoalRuleBasedDetailDialogComponent } from './savings-goal-rule-b
     SavingsGoalRuleBasedDialogComponent,
     SavingsGoalRuleBasedDetailComponent,
     SavingsGoalRuleBasedDetailDialogComponent,
+    SavingsGoalPeriodicalComponent,
+    SavingsGoalPeriodicalDetailComponent,
+    SavingsGoalPeriodicalDialogComponent,
   ],
   imports: [
     BrowserModule,

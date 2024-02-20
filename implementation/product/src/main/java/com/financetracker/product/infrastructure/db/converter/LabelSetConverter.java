@@ -15,11 +15,11 @@ public class LabelSetConverter implements AttributeConverter<Set<Label>, String>
 
     @Override
     public String convertToDatabaseColumn(Set<Label> labels) {
-        return labels != null && !labels.isEmpty() ? String.join(SPLIT_CHAR, labels.stream().map(Label::name).collect(Collectors.toSet())) : "";
+        return !labels.isEmpty() ? String.join(SPLIT_CHAR, labels.stream().map(Label::name).collect(Collectors.toSet())) : "";
     }
 
     @Override
     public Set<Label> convertToEntityAttribute(String string) {
-        return string != null && !string.isEmpty() ? Arrays.stream((string.split(SPLIT_CHAR))).map(Label::new).collect(Collectors.toSet()) : Collections.emptySet();
+        return !string.isEmpty() ? Arrays.stream((string.split(SPLIT_CHAR))).map(Label::new).collect(Collectors.toSet()) : Collections.emptySet();
     }
 }
