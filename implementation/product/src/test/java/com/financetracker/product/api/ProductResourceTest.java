@@ -39,6 +39,7 @@ class ProductResourceTest extends IntegrationTestBase {
                 .name("Milk")
                 .description("Tasty Drink")
                 .category(CategoryDto.DRINKS)
+                .size(new BigDecimal("500"))
                 .price(MonetaryAmountDto.builder().amount(1.49).build())
                 .labels(List.of("EssentialProduct"))
                 .build();
@@ -65,6 +66,7 @@ class ProductResourceTest extends IntegrationTestBase {
                 .and().body("[0].name", is(productDto.getName()))
                 .and().body("[0].description", is(productDto.getDescription()))
                 .and().body("[0].category", is(productDto.getCategory().toString()))
+                .and().body("[0].size", is(500F))
                 .and().body("[0].nutrition.servingSize", is(100F))
                 .and().body("[0].nutrition.calories", is(30F))
                 .and().body("[0].nutrition.carbohydrates", is(60F))

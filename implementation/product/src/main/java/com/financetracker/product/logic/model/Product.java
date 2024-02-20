@@ -4,6 +4,7 @@ import com.financetracker.product.infrastructure.db.converter.LabelSetConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ public class Product {
     private MonetaryAmount price;
 
     private Category category;
+
+    private BigDecimal size;
 
     @Setter
     @Embedded

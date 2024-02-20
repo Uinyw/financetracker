@@ -23,6 +23,7 @@ public class ProductMapper {
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(mapMonetaryAmountDtoToModel(product.getPrice()))
+                .size(product.getSize())
                 .category(mapCategoryDtoToModel(product.getCategory()))
                 .labels(mapLabelDtoToModel(product.getLabels()))
                 .build();
@@ -34,6 +35,7 @@ public class ProductMapper {
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(mapMonetaryAmountModelToDto(product.getPrice()))
+                .size(product.getSize())
                 .category(mapCategoryModelToDto(product.getCategory()))
                 .labels(mapLabelModelToDto(product.getLabels()))
                 .nutrition(mapNutritionModelToDto(product.getNutrition()))
