@@ -1,14 +1,13 @@
 package com.example.Analytics.DietFunctionality.DietMapper;
 
-import com.example.Analytics.DietFunctionality.Consumption;
 import com.example.Analytics.DietFunctionality.Nutrition;
 import com.example.Analytics.DietFunctionality.Product;
 import org.openapitools.client.model.NutritionDto;
 import org.openapitools.client.model.ProductDto;
+import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
-public class DietMapper {
+@Component
+public class ProductMapper {
     public Product productFromDTO(ProductDto productDto){
         return Product.builder()
                 .id(productDto.getId())
@@ -37,5 +36,21 @@ public class DietMapper {
                 && nutrition.getCalories() != null && nutrition.getProtein() != null
                 && nutrition.getCarbohydrates() != null && nutrition.getFat() != null
                 && nutrition.getSugar() != null;
+    }
+
+    private com.example.Analytics.DietFunctionality.Nutrition nutritionDTOtoNutrition(NutritionDto nutritionDto){
+        //TODO überarbeiten mit builder
+        com.example.Analytics.DietFunctionality.Nutrition nutrition;
+        assert nutritionDto.getCalories() != null;
+        nutrition.setCalories(nutritionDto.getCalories().doubleValue());
+        assert nutritionDto.getFat() != null;
+        nutrition.setFat(nutritionDto.getFat().doubleValue());
+        assert nutritionDto.getCarbohydrates() != null;
+        nutrition.setCarbohydrates(nutritionDto.getCarbohydrates().doubleValue());
+        assert nutritionDto.getProtein() != null;
+        nutrition.setProtein(nutritionDto.getProtein().doubleValue());
+        assert nutritionDto.getServingSize() != null;
+        nutrition.setServingSize(nutritionDto.getServingSize().doubleValue());
+        return nutrition;
     }
 }
