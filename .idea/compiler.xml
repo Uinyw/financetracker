@@ -8,9 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="savingsgoal" />
+        <module name="openapi-spring" />
         <module name="bankaccount" />
         <module name="openapi-java-client (2)" />
         <module name="openapi-java-client (1)" />
+        <module name="financetracker" />
         <module name="transaction" />
         <module name="Analytics" />
         <module name="openapi-java-client" />
@@ -24,9 +26,10 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Analytics" options="-parameters" />
+      <module name="Analytics" options="" />
       <module name="bankaccount" options="-parameters" />
       <module name="demo" options="-parameters" />
+      <module name="financetracker" options="-parameters" />
       <module name="kafka-example" options="-parameters" />
       <module name="kafkaproducer" options="-parameters" />
       <module name="openapi-java-client" options="-Xlint:all -J-Xss4m" />

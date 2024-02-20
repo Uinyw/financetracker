@@ -24,8 +24,8 @@ public class ProductMapper {
                 .name(productDto.getName())
                 .nutrition(nutritionFromDTO(productDto.getNutrition()))
                 .consumption(consumption)
+                .size(productDto.getSize().doubleValue())
                 .build();
-        //.size();//TODO in product dto
     }
     public Nutrition nutritionFromDTO(NutritionDto nutrition){
         if(!isNutritionDTOValid(nutrition))

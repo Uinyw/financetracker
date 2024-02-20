@@ -16,7 +16,7 @@ public class KafkaMessageConsumer implements MessageConsumer {
     private final ProductService productService;
 
     @KafkaListener(topics = "product-update", groupId = "product")
-    public void listenBankAccountChange(ConsumerRecord<String, ProductDto> cr, @Payload ProductDto payload) {
+    public void listenProductChange(ConsumerRecord<String, ProductDto> cr, @Payload ProductDto payload) {
         productService.receiveProduct(payload);
     }
 
