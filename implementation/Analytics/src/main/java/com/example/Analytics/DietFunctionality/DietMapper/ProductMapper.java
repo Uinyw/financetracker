@@ -1,22 +1,31 @@
 package com.example.Analytics.DietFunctionality.DietMapper;
 
+import com.example.Analytics.BudgetFunctionality.DateConverter;
+import com.example.Analytics.DietFunctionality.Consumption;
 import com.example.Analytics.DietFunctionality.Nutrition;
 import com.example.Analytics.DietFunctionality.Product;
 import org.openapitools.client.model.NutritionDto;
 import org.openapitools.client.model.ProductDto;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Component
 public class ProductMapper {
-    public Product productFromDTO(ProductDto productDto){
+    public Product productFromDTO(ProductDto productDto, double amount){
+        Consumption consumption = Consumption.builder()
+                .date(LocalDate.now())
+                .amount(amount)
+                .build();
+
         return Product.builder()
                 .id(productDto.getId())
                 .name(productDto.getName())
                 .nutrition(nutritionFromDTO(productDto.getNutrition()))
+                .consumption(consumption)
                 .build();
-
-        //.size();//TODO how to get this
-        //.consumption(); //TODO calculation,..
+        //.size();//TODO in product dto
     }
     public Nutrition nutritionFromDTO(NutritionDto nutrition){
         if(!isNutritionDTOValid(nutrition))
@@ -37,7 +46,7 @@ public class ProductMapper {
                 && nutrition.getCarbohydrates() != null && nutrition.getFat() != null
                 && nutrition.getSugar() != null;
     }
-
+/*
     private com.example.Analytics.DietFunctionality.Nutrition nutritionDTOtoNutrition(NutritionDto nutritionDto){
         //TODO überarbeiten mit builder
         com.example.Analytics.DietFunctionality.Nutrition nutrition;
@@ -52,5 +61,5 @@ public class ProductMapper {
         assert nutritionDto.getServingSize() != null;
         nutrition.setServingSize(nutritionDto.getServingSize().doubleValue());
         return nutrition;
-    }
+    }*/
 }

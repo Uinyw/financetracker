@@ -4,7 +4,6 @@ import com.example.Analytics.BankAccount;
 import lombok.Getter;
 import lombok.Setter;
 import org.openapitools.client.model.MonetaryAmount;
-import org.openapitools.model.Periodicity;
 
 import java.util.Date;
 import java.util.List;

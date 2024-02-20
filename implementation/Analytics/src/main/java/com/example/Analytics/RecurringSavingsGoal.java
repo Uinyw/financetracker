@@ -1,8 +1,8 @@
 package com.example.Analytics;
 
 import com.example.Analytics.BankAccount;
-import org.openapitools.model.MonetaryAmount;
-import org.openapitools.model.Periodicity;
+import com.example.Analytics.BudgetFunctionality.Periodicity;
+import org.openapitools.client.model.MonetaryAmount;
 
 import java.util.UUID;
 

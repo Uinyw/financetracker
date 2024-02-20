@@ -3,7 +3,7 @@ package com.example.Analytics.BudgetFunctionality;
 import com.example.Analytics.AchievementStatus;
 import com.example.Analytics.Category;
 import com.example.Analytics.Type;
-import org.openapitools.model.MonetaryAmount;
+import org.openapitools.client.model.MonetaryAmount;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;

@@ -4,8 +4,6 @@ import com.example.Analytics.BudgetFunctionality.DateConverter;
 import com.example.Analytics.DietFunctionality.DietMapper.ProductService;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.ProductApi;
-import org.openapitools.client.model.NutritionDto;
-import org.openapitools.client.model.ProductDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,7 +13,6 @@ import java.util.List;
 @Service
 public class Diet {
 
-    private ProductApi productApi;
     private ProductService productService;
     private DateConverter dateConverter;
 
@@ -33,26 +30,25 @@ public class Diet {
         for(Product product: productList){
             Consumption consumption = product.getConsumption();
             if(withinDuration(duration, consumption.getDate()) && product.getNutrition() != null){
-                nutrition = addToNutrition(nutrition, product.getNutrition(), consumption.getAmount());
+                nutrition = addNutritionValues(nutrition, product.getNutrition(), consumption.getAmount(), product.getSize());
             }
 
         }
         return nutrition;
     }
 
-    private boolean withinDuration(Duration duration, Date date){
-        return dateConverter.dateToLocalDate(date).isBefore(duration.getEndTime())
-                && dateConverter.dateToLocalDate(date).isAfter(duration.getStartTime());
+    private boolean withinDuration(Duration duration, LocalDate date){
+        return date.isBefore(duration.getEndTime())
+                && date.isAfter(duration.getStartTime());
     }
 
-    private Nutrition addToNutrition(Nutrition nutrition1, Nutrition nutrition2, int amount){
-        //TODO amount of products
-        nutrition1.setServingSize(nutrition2.getServingSize()*amount);
-        nutrition1.setProtein(nutrition2.getProtein()*amount);
-        nutrition1.setCarbohydrates(nutrition2.getCarbohydrates()*amount);
-        nutrition1.setFat(nutrition2.getFat()*amount);
-        nutrition1.setSugar(nutrition2.getSugar()*amount);
-        nutrition1.setCalories(nutrition2.getCalories()*amount);
+    private Nutrition addNutritionValues(Nutrition nutrition1, Nutrition nutrition2, double amount, double size){
+        nutrition1.setServingSize(nutrition2.getServingSize()*amount*size/100);
+        nutrition1.setProtein(nutrition2.getProtein()*amount*size/100);
+        nutrition1.setCarbohydrates(nutrition2.getCarbohydrates()*amount*size/100);
+        nutrition1.setFat(nutrition2.getFat()*amount*size/100);
+        nutrition1.setSugar(nutrition2.getSugar()*amount*size/100);
+        nutrition1.setCalories(nutrition2.getCalories()*amount*size/100);
         return nutrition1;
     }
 }
