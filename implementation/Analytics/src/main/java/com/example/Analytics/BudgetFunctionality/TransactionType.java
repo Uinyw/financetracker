@@ -1,4 +1,4 @@
-package com.example.Analytics.DietFunctionality.BudgetFunctionality;
+package com.example.Analytics.BudgetFunctionality;
 
 import org.openapitools.client.model.RecurringTransactionDto;
 

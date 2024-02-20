@@ -1,4 +1,4 @@
-package com.example.Analytics.DietFunctionality.BudgetFunctionality;
+package com.example.Analytics.BudgetFunctionality;
 
 import com.example.Analytics.AchievementStatus;
 import com.example.Analytics.Category;
@@ -14,5 +14,5 @@ public class BudgetPlan {
 private UUID id;
 private Map<Category, MonetaryAmount> plan;
 private Date startDate;
-private AchievementStatus currentstatus;
+private AchievementStatus currentStatus;
 }

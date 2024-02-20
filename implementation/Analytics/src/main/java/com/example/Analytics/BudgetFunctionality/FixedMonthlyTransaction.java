@@ -1,10 +1,8 @@
-package com.example.Analytics.DietFunctionality.BudgetFunctionality;
+package com.example.Analytics.BudgetFunctionality;
 
 import com.example.Analytics.Type;
 import lombok.Getter;
-import org.openapitools.model.MonetaryAmount;
 
-import java.util.List;
 import java.util.UUID;
 
 @Getter

@@ -1,9 +1,9 @@
-package com.example.Analytics.DietFunctionality.BudgetFunctionality;
+package com.example.Analytics.BudgetFunctionality;
 
 import com.example.Analytics.Category;
 import com.example.Analytics.Type;
+import lombok.Builder;
 import lombok.Getter;
-import org.openapitools.model.MonetaryAmount;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 @Getter
+@Builder
 public class VariableMonthlyTransactions {
     private UUID id;
     private String name;

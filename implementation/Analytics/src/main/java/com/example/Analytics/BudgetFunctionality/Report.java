@@ -1,4 +1,4 @@
-package com.example.Analytics.DietFunctionality.BudgetFunctionality;
+package com.example.Analytics.BudgetFunctionality;
 
 import com.example.Analytics.FilterElement;
 

@@ -20,7 +20,6 @@
       <module name="demo" target="17" />
       <module name="kafka-example" target="17" />
       <module name="kafkaproducer" target="17" />
-      <module name="openapi-spring" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -33,7 +32,7 @@
       <module name="openapi-java-client" options="-Xlint:all -J-Xss4m" />
       <module name="openapi-java-client (1)" options="-Xlint:all -J-Xss4m" />
       <module name="openapi-java-client (2)" options="-Xlint:all -J-Xss4m" />
-      <module name="openapi-spring" options="-Xlint:all -J-Xss4m" />
+      <module name="openapi-spring" options="" />
       <module name="savingsgoal" options="-parameters" />
       <module name="transaction" options="-parameters" />
     </option>
