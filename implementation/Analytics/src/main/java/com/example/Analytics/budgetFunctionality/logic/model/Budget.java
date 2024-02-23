@@ -13,8 +13,8 @@ import java.util.*;
 @Component
 public class Budget {
     private UUID id;
-    private List<VariableMonthlyTransactions> history;
-    private List<VariableMonthlyTransactions> currentMonth;
+    private List<VariableMonthlyTransaction> history;
+    private List<VariableMonthlyTransaction> currentMonth;
     private List<FixedMonthlyTransaction> reoccurringExpenses;
     private MonetaryAmount amount; //how much is there after everything
     //TODO was machst amount konkret
@@ -40,7 +40,7 @@ public class Budget {
         //TODO this is only equal distribution -> todo fix
         Map<Category, MonetaryAmount> categoryMonetaryAmountMap = new HashMap<>();
         double amountPerCategory = moneyLeftTillMonthEnd / currentMonth.size();
-        for (VariableMonthlyTransactions transaction : currentMonth) {
+        for (VariableMonthlyTransaction transaction : currentMonth) {
             MonetaryAmount money = new MonetaryAmount();
             if(transaction.getType().equals(Type.EXPENSE)){
                 money.setAmount(transaction.getAverageAmount()-amountPerCategory);
@@ -58,7 +58,7 @@ public class Budget {
     }
 
 
-    public void budgetUpdate(List<VariableMonthlyTransactions> history,
+    public void budgetUpdate(List<VariableMonthlyTransaction> history,
                               List<FixedMonthlyTransaction> reoccurringExpenses){
         this.history = history;
         this.currentMonth = getCurrentMonth(history);
@@ -66,14 +66,14 @@ public class Budget {
     }
 
 
-    private double getVariableMonthlyIncomes(List<VariableMonthlyTransactions> variableTransaction){
+    private double getVariableMonthlyIncomes(List<VariableMonthlyTransaction> variableTransaction){
         return variableTransaction.stream().map(transaction->
                         (transaction.getType() == Type.INCOME)?
                                 0.0:
                                 calculateAmountAsAverage(transaction))
                 .reduce(0.0, Double::sum);
     }
-    private double getVariableMonthlyExpenses(List<VariableMonthlyTransactions> variableTransaction){
+    private double getVariableMonthlyExpenses(List<VariableMonthlyTransaction> variableTransaction){
         return variableTransaction.stream().map(transaction->
                         (transaction.getType() == Type.EXPENSE)?
                                 0.0:
@@ -81,7 +81,7 @@ public class Budget {
                 .reduce(0.0, Double::sum);
     }
 
-    private double getVariableMonthlyAmount(List<VariableMonthlyTransactions> variableTransaction){
+    private double getVariableMonthlyAmount(List<VariableMonthlyTransaction> variableTransaction){
         return variableTransaction.stream().map(transaction->
                         (transaction.getType() == Type.EXPENSE)?
                                 -calculateAmountAsAverage(transaction):
@@ -98,15 +98,15 @@ public class Budget {
         ).reduce(0.0, Double::sum);
     }
 
-    public List<VariableMonthlyTransactions> getCurrentMonth(List<VariableMonthlyTransactions> transactions){
-        List<VariableMonthlyTransactions> currentMonth = new ArrayList<>();
-        for(VariableMonthlyTransactions transaction : transactions){
+    public List<VariableMonthlyTransaction> getCurrentMonth(List<VariableMonthlyTransaction> transactions){
+        List<VariableMonthlyTransaction> currentMonth = new ArrayList<>();
+        for(VariableMonthlyTransaction transaction : transactions){
             List<Transaction> transactionThisMonth = transaction.getReferenceTransactions()
                     .stream().filter(trans ->
                             getMonthDifference(dateToLocalDate(trans.getDate()), LocalDate.now()) > 0
                     ).toList();
             if(!transactionThisMonth.isEmpty())
-                currentMonth.add(VariableMonthlyTransactions.builder()
+                currentMonth.add(VariableMonthlyTransaction.builder()
                         .name(transaction.getName())
                         .id(UUID.randomUUID())
                         .referenceTransactions(transactionThisMonth)
@@ -135,7 +135,7 @@ public class Budget {
     }
 
 
-    public double calculateAmountAsAverage(VariableMonthlyTransactions transaction){
+    public double calculateAmountAsAverage(VariableMonthlyTransaction transaction){
         //Calculates the Weighted Moving Average
         double sum = 0.0;
         if(transaction.getReferenceTransactions().isEmpty())

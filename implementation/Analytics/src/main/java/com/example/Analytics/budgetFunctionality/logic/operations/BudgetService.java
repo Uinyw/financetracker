@@ -4,7 +4,7 @@ import com.example.Analytics.budgetFunctionality.logic.model.Budget;
 import com.example.Analytics.budgetFunctionality.logic.model.FixedMonthlyTransaction;
 import com.example.Analytics.budgetFunctionality.infrastructure.db.FixedMonthlyTransactionsRepository;
 import com.example.Analytics.budgetFunctionality.infrastructure.db.VariableMonthlyTransactionsRepository;
-import com.example.Analytics.budgetFunctionality.logic.model.VariableMonthlyTransactions;
+import com.example.Analytics.budgetFunctionality.logic.model.VariableMonthlyTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,20 +19,20 @@ public class BudgetService {
     private final Budget budget;
 
 
-    public List<VariableMonthlyTransactions> getVariableMonthlyTransactions(){
+    public List<VariableMonthlyTransaction> getVariableMonthlyTransactions(){
         return variableMonthlyTransactionsRepository.findAll();
     }
 
 
-    public Optional<VariableMonthlyTransactions> getVariableMonthlyTransaction(final String variableMonthlyTransactionsId) {
+    public Optional<VariableMonthlyTransaction> getVariableMonthlyTransaction(final String variableMonthlyTransactionsId) {
         return variableMonthlyTransactionsRepository.findById(variableMonthlyTransactionsId);
     }
 
-    public void createVariableMonthlyTransactions(final VariableMonthlyTransactions variableMonthlyTransaction) {
+    public void createVariableMonthlyTransactions(final VariableMonthlyTransaction variableMonthlyTransaction) {
         variableMonthlyTransactionsRepository.save(variableMonthlyTransaction);
     }
 
-    public void updateVariableMonthlyTransactions(final VariableMonthlyTransactions variableMonthlyTransaction) {
+    public void updateVariableMonthlyTransactions(final VariableMonthlyTransaction variableMonthlyTransaction) {
         variableMonthlyTransactionsRepository.save(variableMonthlyTransaction);
     }
 
@@ -66,11 +66,26 @@ public class BudgetService {
 
     public void budgetUpdate(){
         //TODO muss verwendet werden
-        List<VariableMonthlyTransactions> variableMonthlyTransactions = getVariableMonthlyTransactions();
+        List<VariableMonthlyTransaction> variableMonthlyTransactions = getVariableMonthlyTransactions();
         List<FixedMonthlyTransaction> fixedMonthlyTransactions = getFixedMonthlyTransactions();
         this.budget.budgetUpdate(variableMonthlyTransactions, fixedMonthlyTransactions);
     }
 
 
+    public void receivedOneTimeTransactionUpdate(){
+        //TODO update transaction
+        /*
+        switch (payload){
+            case "CREATE":
+
+                break;
+            case "UPDATE":
+
+                break;
+            case "DELETE":
+
+                break;
+        }*/
+    }
 
 }

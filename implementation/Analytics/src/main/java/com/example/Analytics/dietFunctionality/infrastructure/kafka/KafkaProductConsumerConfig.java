@@ -1,4 +1,4 @@
-package com.example.Analytics.budgetFunctionality.infrastructure.kafka;
+package com.example.Analytics.dietFunctionality.infrastructure.kafka;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -15,7 +15,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @RequiredArgsConstructor
 @EnableKafka
 @Configuration
-public class KafkaConsumerConfig {
+public class KafkaProductConsumerConfig {
     private final KafkaProperties kafkaProperties;
 
     @Bean

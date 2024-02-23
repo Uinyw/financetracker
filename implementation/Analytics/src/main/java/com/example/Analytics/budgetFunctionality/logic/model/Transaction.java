@@ -4,14 +4,16 @@ import com.example.Analytics.forecast.BankAccount;
 import com.example.Analytics.Label;
 import com.example.Analytics.LabelSetConverter;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.openapitools.client.model.MonetaryAmount;
 
 import java.util.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "transaction")
 @Entity
 public class Transaction {
@@ -23,13 +25,12 @@ public class Transaction {
     private String name;
     @Column(name = "transactionType")
     private TransactionType transactionType;
-    @Column(name = "periodicity")
-    private Periodicity periodicity;
-
-    @ManyToOne
-    private BankAccount sourceBankAccount;
-    @ManyToOne
-    private BankAccount targetBankAccount;
+    //@Column(name = "periodicity")
+    //private Periodicity periodicity;
+    @Column(name = "sourceBankAccount")
+    private UUID sourceBankAccount;
+    @Column(name = "targetBankAccount")
+    private UUID targetBankAccount;
 
     @Embedded
     @AttributeOverride(name = "amount", column = @Column(name = "monetaryAmount", precision = 27, scale = 6))

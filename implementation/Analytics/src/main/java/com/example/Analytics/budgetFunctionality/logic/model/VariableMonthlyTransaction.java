@@ -2,9 +2,7 @@ package com.example.Analytics.budgetFunctionality.logic.model;
 
 import com.example.Analytics.Category;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.*;
 
@@ -12,8 +10,10 @@ import java.util.*;
 @Builder
 @Table(name = "variable_monthly_transactions")
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
-public class VariableMonthlyTransactions {
+public class VariableMonthlyTransaction {
     @Id
     private UUID id;
     @Column(name = "name")
@@ -27,19 +27,4 @@ public class VariableMonthlyTransactions {
     private double averageAmount;
     @Column(name = "type")
     private Type type;
-
-    public VariableMonthlyTransactions() {
-
-    }
-    public VariableMonthlyTransactions(UUID id, String name, Category category, List<Transaction> transactions, double averageAmount, Type type) {
-        this.id = id;
-        this.name = name;
-        this.category = category;
-        this.referenceTransactions = transactions;
-        this.averageAmount = averageAmount;
-        this.type = type;
-    }
-
-
-
 }

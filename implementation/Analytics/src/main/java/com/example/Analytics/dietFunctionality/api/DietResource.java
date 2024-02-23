@@ -1,7 +1,7 @@
 package com.example.Analytics.dietFunctionality.api;
 
 import com.example.Analytics.dietFunctionality.api.mapping.ProductMapper;
-import com.example.Analytics.dietFunctionality.api.mapping.ProductService;
+import com.example.Analytics.dietFunctionality.logic.operations.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

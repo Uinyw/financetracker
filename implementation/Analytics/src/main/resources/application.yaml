@@ -20,5 +20,7 @@ server:
 
 tpd:
   topic-product-update-update: product-update
+  topic-oneTimeTransaction-update: oneTimeTransaction-update
+  topic-recurringTransaction-update: recurringTransaction-update
   messages-per-request: 1
 

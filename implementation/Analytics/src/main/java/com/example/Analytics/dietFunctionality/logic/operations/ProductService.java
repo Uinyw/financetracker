@@ -1,6 +1,7 @@
-package com.example.Analytics.dietFunctionality.api.mapping;
+package com.example.Analytics.dietFunctionality.logic.operations;
 
 
+import com.example.Analytics.dietFunctionality.api.mapping.ProductMapper;
 import com.example.Analytics.dietFunctionality.logic.model.Consumption;
 import com.example.Analytics.dietFunctionality.logic.model.Product;
 import com.example.Analytics.dietFunctionality.infrastructure.db.ProductRepository;
@@ -48,9 +49,8 @@ public class ProductService {
         productRepository.deleteById(productId);
     }
 
-    public void receiveProduct(ProductDto productDto){
-        //TODO hier muss der amount noch irgendwie über die Json Labels? geändert werden
-        Product product = productMapper.productFromDTO(productDto, 0);
+    public void receiveProduct(ProductDto productDto, double amount){
+        Product product = productMapper.productFromDTO(productDto, amount);
         createProduct(product);
     }
 }

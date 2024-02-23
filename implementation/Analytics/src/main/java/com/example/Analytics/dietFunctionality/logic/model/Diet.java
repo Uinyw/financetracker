@@ -1,8 +1,8 @@
 package com.example.Analytics.dietFunctionality.logic.model;
 
 
-import com.example.Analytics.budgetFunctionality.logic.model.DateConverter;
-import com.example.Analytics.dietFunctionality.api.mapping.ProductService;
+import com.example.Analytics.DateConverter;
+import com.example.Analytics.dietFunctionality.logic.operations.ProductService;
 import org.openapitools.client.ApiException;
 import org.springframework.stereotype.Service;
 

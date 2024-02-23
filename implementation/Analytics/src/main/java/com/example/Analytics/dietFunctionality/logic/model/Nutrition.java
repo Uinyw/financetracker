@@ -1,12 +1,16 @@
 package com.example.Analytics.dietFunctionality.logic.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.*;
 
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Embeddable
 public class Nutrition {
     private double servingSize;
     private double calories;
