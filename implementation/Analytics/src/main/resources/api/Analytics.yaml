@@ -21,7 +21,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/PudgetPlanDTO'
+                  $ref: '#/components/schemas/BudgetPlanDTO'
                     
   /forecast{months}:
     get:
@@ -41,27 +41,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Forecast'
+                $ref: '#/components/schemas/ForecastDto'
         '404':
           description: Forecast not createable
           
-  /nutrition{days}:
-    get:
-      summary: Create a new budget forecast for the bank accounts
+  /nutrition:
+    post:
+      summary: Get the Nutrition in a given timeframe
       tags: 
         - Analytics
-      parameters:
-        - name: days
-          in: path
-          required: true
-          description: Retrieve detailed information about the nutrition at a point in time using its unique identifier.
-          schema:
-            $ref: '#/components/schemas/Nutrition'
-            
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DurationDto'
       responses:
         '200':
-          description: Forecast created.
-          
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NutritionDto'
+        '404':
+          description: Nutrition values for this timeframe could not be found
+  
   /report:
     get:
       summary: Get a report plan of all the data
@@ -73,7 +77,9 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Report'
+                  $ref: '#/components/schemas/ReportDto'
+        '404':
+          description: Report cound not be created
 
   
 components:
@@ -91,7 +97,7 @@ components:
           example: {"message": "Bad request"}
   
   schemas:
-    Report:
+    ReportDto:
       type: object
       properties:
         categories:
@@ -102,9 +108,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BankAccount'
-        duration:
-          $ref: '#/components/schemas/Duration'
-          
+        DurationDto:
+          $ref: '#/components/schemas/DurationDto'
+        
     
     BankAccount:
       type: object
@@ -155,7 +161,7 @@ components:
           type: number
           format: double
         
-    Duration:
+    DurationDto:
       type: object
       properties:
         startTime:
@@ -168,7 +174,7 @@ components:
     Category:
       type: string
       
-    PudgetPlanDTO:
+    BudgetPlanDTO:
       type: object
       properties:
         id:
@@ -177,9 +183,7 @@ components:
         achievementStatus:
           $ref: '#/components/schemas/BudgetAchievementStatus'
         plan:        # <---- dictionary
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/BudgetElement'
+          $ref: '#/components/schemas/BudgetElement'
         date:
           type: string
           format: localDate
@@ -201,12 +205,12 @@ components:
         monetaryAmount:
           $ref: '#/components/schemas/MonetaryAmount'
     
-    Forecast:
+    ForecastDto:
       type: object
       properties:
         months:
           type: integer
-        plan:        # <---- dictionary
+        plan:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ForecastElement'
@@ -214,7 +218,7 @@ components:
           type: string
           format: localDate
           
-    Nutrition:
+    NutritionDto:
       type: object
       properties:
         servingSize:

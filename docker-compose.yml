@@ -60,6 +60,16 @@ services:
       TRANSACTION: transaction
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
 
+  analytics:
+    container_name: analytics
+    build: ./implementation/analytics
+    ports:
+      - 8085:8085
+    environment:
+      BANK-ACCOUNT: bankaccount
+      TRANSACTION: transaction
+      PRODUCT: product
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
 #  ui:
 #    container_name: ui
 #    build: ./implementation/ui-financetracker

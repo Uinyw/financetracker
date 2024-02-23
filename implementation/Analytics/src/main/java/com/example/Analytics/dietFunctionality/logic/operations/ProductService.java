@@ -2,9 +2,9 @@ package com.example.Analytics.dietFunctionality.logic.operations;
 
 
 import com.example.Analytics.dietFunctionality.api.mapping.ProductMapper;
-import com.example.Analytics.dietFunctionality.logic.model.Consumption;
-import com.example.Analytics.dietFunctionality.logic.model.Product;
+import com.example.Analytics.dietFunctionality.logic.model.*;
 import com.example.Analytics.dietFunctionality.infrastructure.db.ProductRepository;
+import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ProductDto;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +15,7 @@ import java.util.Optional;
 public class ProductService {
     private ProductRepository productRepository;
     private ProductMapper productMapper;
+    private Diet diet;
 
     public List<Product> getProducts() {
         return productRepository.findAll();
@@ -52,5 +53,9 @@ public class ProductService {
     public void receiveProduct(ProductDto productDto, double amount){
         Product product = productMapper.productFromDTO(productDto, amount);
         createProduct(product);
+    }
+
+    public void getDiet(Duration duration) throws ApiException {
+        diet.getNutritionForDuration(duration);
     }
 }
