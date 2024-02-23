@@ -1,7 +1,6 @@
 package com.example.Analytics;
 
 import com.example.Analytics.dietFunctionality.logic.model.Duration;
-import com.example.Analytics.forecast.BankAccount;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,5 +1,6 @@
 package com.example.Analytics.dietFunctionality.infrastructure.kafka;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.openapitools.client.model.ProductDto;
@@ -19,8 +20,8 @@ public class KafkaProductConsumerConfig {
     private final KafkaProperties kafkaProperties;
 
     @Bean
-    public ConsumerFactory<String, ProductDto> consumerFactory() {
-        final JsonDeserializer<ProductDto> productDtoJsonDeserializer = new JsonDeserializer<>(ProductDto.class, false);
+    public ConsumerFactory<String, JsonNode> consumerFactory() {
+        final JsonDeserializer<JsonNode> productDtoJsonDeserializer = new JsonDeserializer<>(JsonNode.class, false);
         productDtoJsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
@@ -31,8 +32,8 @@ public class KafkaProductConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ProductDto> kafkaListenerContainerFactory() {
-        final ConcurrentKafkaListenerContainerFactory<String, ProductDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, JsonNode> kafkaListenerContainerFactory() {
+        final ConcurrentKafkaListenerContainerFactory<String, JsonNode> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }

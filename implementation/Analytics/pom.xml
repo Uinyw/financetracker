@@ -114,6 +114,24 @@
 		</dependency>
 
 		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.30</version>
@@ -141,33 +159,34 @@
 				<version>7.1.0</version>
 				<executions>
 					<execution>
-						<id>Analytics-client</id>
+						<id>analytics-api</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<skipValidateSpec>true</skipValidateSpec>
 							<inputSpec>implementation/Analytics/src/main/resources/api/Analytics.yaml</inputSpec>
-							<generatorName>java</generatorName>
-							<generateModelTests>false</generateModelTests>
-							<generateApiTests>false</generateApiTests>
+							<generatorName>spring</generatorName>
 							<configOptions>
-								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+								<additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor @lombok.NoArgsConstructor</additionalModelTypeAnnotations>
 								<sourceFolder>src/main/java</sourceFolder>
-								<useJakartaEe>true</useJakartaEe>
 								<openApiNullable>false</openApiNullable>
+								<interfaceOnly>true</interfaceOnly>
+								<useJakartaEe>true</useJakartaEe>
 							</configOptions>
 						</configuration>
 					</execution>
 					<execution>
-						<id>savings-goal-api</id>
+						<id>savings-goal-client</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<skipValidateSpec>true</skipValidateSpec>
+							<generateModelTests>false</generateModelTests>
+							<generateApiTests>false</generateApiTests>
 							<inputSpec>implementation/savingsgoal/src/main/resources/api/savingsGoal.yaml</inputSpec>
-							<generatorName>spring</generatorName>
+							<generatorName>java</generatorName>
 							<configOptions>
 								<openApiNullable>false</openApiNullable>
 								<useJakartaEe>true</useJakartaEe>
