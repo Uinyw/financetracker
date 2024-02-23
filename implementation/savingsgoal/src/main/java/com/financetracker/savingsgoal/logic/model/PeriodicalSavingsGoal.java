@@ -26,7 +26,7 @@ public class PeriodicalSavingsGoal {
     private String name;
 
     @Column(name = "achievement_status")
-    private AchievementStatus achievementStatus;
+    private com.financetracker.savingsgoal.logic.model.AchievementStatus achievementStatus;
 
     @Column(name = "source_bank_account_id")
     private UUID sourceBankAccountId;
@@ -36,28 +36,28 @@ public class PeriodicalSavingsGoal {
 
     @Embedded
     @AttributeOverride(name = "amount", column = @Column(name = "goal_amount"))
-    private MonetaryAmount goal;
+    private com.financetracker.savingsgoal.logic.model.MonetaryAmount goal;
 
     @Column(name = "recurring_rate")
     private Double recurringRate;
 
     @Embedded
     @AttributeOverride(name = "amount", column = @Column(name = "recurring_amount_amount"))
-    private MonetaryAmount recurringAmount;
+    private com.financetracker.savingsgoal.logic.model.MonetaryAmount recurringAmount;
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "start", column = @Column(name = "start_date")),
             @AttributeOverride(name = "end", column = @Column(name = "end_date"))
     })
-    private Duration duration;
+    private com.financetracker.savingsgoal.logic.model.Duration duration;
 
     @Column(name = "periodicity")
-    private Periodicity periodicity;
+    private com.financetracker.savingsgoal.logic.model.Periodicity periodicity;
 
     @Setter
     @JoinColumn(name = "savings_goal_id", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<SavingsRecord> savingsRecords = new HashSet<>();
+    private Set<com.financetracker.savingsgoal.logic.model.SavingsRecord> savingsRecords = new HashSet<>();
 
 }
