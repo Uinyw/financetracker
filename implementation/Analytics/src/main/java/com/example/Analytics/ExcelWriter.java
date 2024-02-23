@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ExcelWriter {
-
+    
     public void createNutritionExcel(Nutrition nutritionData){
         try (Workbook workbook = new XSSFWorkbook()) {
             createNutritionSheet(workbook, nutritionData);

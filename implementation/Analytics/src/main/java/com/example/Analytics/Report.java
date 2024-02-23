@@ -13,10 +13,9 @@ public class Report {
     private FilterElement filter;
     private ExcelWriter excelWriter;
     private Diet diet;
-    private org.openapitools.client.model.Report generateReport() throws ApiException {
+    private void generateReport() throws ApiException {
         //TODO generate report
-        diet.getNutritionForDuration(filter.getDuration());
-        return null;
+        generateDietReport(filter.getDuration());
     }
     public void generateDietReport(Duration duration) throws ApiException {
         Nutrition nutrition = diet.getNutritionForDuration(duration);
