@@ -2,8 +2,7 @@ openapi: 3.0.0
 info:
   title: Analytics
   version: 1.0.0
-  description: |
-    Welcome to the RestAPI, a comprehensive interface catering to various banking and financial management needs. This API acts as a central hub, facilitating communication between different components for seamless execution of RESTful operations.
+  description: Analyse finance data.
 
 
 tags: 
@@ -46,7 +45,7 @@ paths:
           description: Forecast not createable
           
   /nutrition:
-    post:
+    get:
       summary: Get the Nutrition in a given timeframe
       tags: 
         - Analytics
@@ -166,10 +165,8 @@ components:
       properties:
         startTime:
           type: string
-          format: localDate
         endTime:
           type: string
-          format: localDate
         
     Category:
       type: string

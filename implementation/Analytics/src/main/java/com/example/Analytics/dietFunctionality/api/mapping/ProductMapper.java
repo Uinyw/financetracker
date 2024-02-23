@@ -1,6 +1,5 @@
 package com.example.Analytics.dietFunctionality.api.mapping;
 
-import com.example.Analytics.DateConverter;
 import com.example.Analytics.dietFunctionality.logic.model.Consumption;
 import com.example.Analytics.dietFunctionality.logic.model.Nutrition;
 import com.example.Analytics.dietFunctionality.logic.model.Product;
@@ -12,10 +11,6 @@ import java.time.LocalDate;
 
 @Component
 public class ProductMapper {
-
-    private DateConverter dateConverter;
-
-
 
     public Product productFromDTO(ProductDto productDto, double amount){
         Consumption consumption = Consumption.builder()

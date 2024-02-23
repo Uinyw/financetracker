@@ -15,19 +15,20 @@ import org.springframework.stereotype.Component;
 public class KafkaProductMessageConsumer implements ProductMessageConsumer {
 
     private final ProductService productService;
-    private static ObjectMapper mapper = new ObjectMapper();
 
     @KafkaListener(topics = "product-update", groupId = "product")
     public void listenProductChange(ConsumerRecord<String, JsonNode> cr, @Payload JsonNode payload){
         JsonNode product = payload.get("product");
         JsonNode amount = payload.get("amount");
 
+        final var objectMapper = new ObjectMapper();
+
         ProductDto productDto = null;
         double productAmount = 0.0;
 
         try{
-            productDto = mapper.treeToValue(product, ProductDto.class);
-            productAmount = mapper.treeToValue(amount, double.class);
+            productDto = objectMapper.treeToValue(product, ProductDto.class);
+            productAmount = objectMapper.treeToValue(amount, double.class);
         }catch (Exception e){
             System.out.println("Json Parsing error\n"+e);
         }

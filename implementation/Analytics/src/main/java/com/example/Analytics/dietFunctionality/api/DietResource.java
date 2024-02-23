@@ -1,8 +1,7 @@
 package com.example.Analytics.dietFunctionality.api;
 
-import com.example.Analytics.dietFunctionality.api.mapping.ProductMapper;
+import com.example.Analytics.dietFunctionality.logic.model.Diet;
 import com.example.Analytics.dietFunctionality.logic.model.Duration;
-import com.example.Analytics.dietFunctionality.logic.operations.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.NutritionApi;
 import org.openapitools.model.DurationDto;
@@ -15,16 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class DietResource implements NutritionApi {
-    //todo implements dietApi
-    private final ProductService productService;
-    private final ProductMapper productMapper;
 
+    private final Diet diet;
 
     @CrossOrigin(origins = "*")
     @Override
-    public ResponseEntity<NutritionDto> nutritionPost(final DurationDto duration) {
-
-        productService.getDiet(Duration.builder().startTime(duration.getStartTime()).endTime(duration.getEndTime()).build());
+    public ResponseEntity<NutritionDto> nutritionGet(final DurationDto duration) {
+        final var nutrition = diet.getNutritionForDuration(new Duration(duration.getStartTime(), duration.getEndTime()));
+        var x = 0;
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 

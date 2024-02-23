@@ -1,21 +1,19 @@
 package com.example.Analytics.dietFunctionality.logic.model;
 
-
-import com.example.Analytics.DateConverter;
 import com.example.Analytics.dietFunctionality.logic.operations.ProductService;
-import org.openapitools.client.ApiException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class Diet {
 
-    private ProductService productService;
-    private DateConverter dateConverter;
+    private final ProductService productService;
 
-    public Nutrition getNutritionForDuration(Duration duration) throws ApiException {
+    public Nutrition getNutritionForDuration(Duration duration) {
         List<Product> productList = productService.getProducts();
         Nutrition nutrition = Nutrition.builder()
                 .fat(0.0)

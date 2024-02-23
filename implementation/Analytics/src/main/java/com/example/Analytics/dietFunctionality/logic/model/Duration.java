@@ -1,6 +1,5 @@
 package com.example.Analytics.dietFunctionality.logic.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +7,12 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Builder
 public class Duration {
-    LocalDate startTime;
-    LocalDate endTime;
+    private final LocalDate startTime;
+    private final LocalDate endTime;
+
+    public Duration(final String startTime, final String endTime) {
+        this.startTime = LocalDate.parse(startTime);
+        this.endTime = LocalDate.parse(endTime);
+    }
 }
