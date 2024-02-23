@@ -26,7 +26,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Analytics" options="" />
+      <module name="Analytics" options="-parameters" />
       <module name="bankaccount" options="-parameters" />
       <module name="demo" options="-parameters" />
       <module name="financetracker" options="-parameters" />

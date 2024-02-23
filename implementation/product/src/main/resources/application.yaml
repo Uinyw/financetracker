@@ -10,8 +10,17 @@ spring:
     h2:
         console:
             enabled: true
+    kafka:
+        consumer:
+            group-id: tpd-loggers
+            auto-offset-reset: earliest
+        bootstrap-servers: localhost:9093
 
 server:
     port: 8083
 
 transaction: localhost
+
+tpd:
+    topic-product-update: product-update
+    messages-per-request: 1
