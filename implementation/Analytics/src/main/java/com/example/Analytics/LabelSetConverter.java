@@ -1,5 +1,6 @@
 package com.example.Analytics;
 
+import com.example.Analytics.logic.model.generalModel.Label;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

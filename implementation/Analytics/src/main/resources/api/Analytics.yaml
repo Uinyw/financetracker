@@ -9,11 +9,18 @@ tags:
   - name: Analytics
 
 paths:
-  /budgetPlan:
+  /budgetPlan{monthlyAmount}:
     get:
       summary: Get a budget plan of all the data
       tags: 
         - Analytics
+      parameters:
+        - name: monthlyAmount
+          in: path
+          required: true
+          description: Retrieve the amount of money that has to be saved each month
+          schema:
+            type: string
       responses:
         '200':
           description: Retrieve a budget plan of all the categories
@@ -33,7 +40,7 @@ paths:
           required: true
           description: Retrieve a detailed forcast using its unique identifier.
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Successful response
@@ -79,6 +86,22 @@ paths:
                   $ref: '#/components/schemas/ReportDto'
         '404':
           description: Report cound not be created
+          
+  /testTransfer:
+    post:
+      summary: Create a new Transaction
+      tags: 
+        - Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OneTimeTransactionDto'
+        
+      responses:
+        '200':
+          description: Bank Account created.
 
   
 components:
@@ -241,6 +264,74 @@ components:
     BudgetAchievementStatus:
         type: string
         enum: [ACHIEVED, FAILED]
+    
+    
+    
+    
+    OneTimeTransactionDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/TransactionDto'
+        - $ref: '#/components/schemas/TransferableDto'
+        
+    TransactionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          $ref: '#/components/schemas/TypeDto'
+        labels:
+          type: array
+          items:
+            type: string
+        transfer:
+          $ref: '#/components/schemas/TransferDto'
+          
+    TransferableDto:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/MonetaryAmountDto'
+        date:
+          type: string
+          format: Date
+        transferStatus:
+          $ref: '#/components/schemas/TransferStatusDto'
+    TypeDto:
+      type: string
+      enum: [ SHIFT, INCOME, EXPENSE ]
+
+    TransferStatusDto:
+      type: string
+      enum: [ INITIAL, FAILED, SUCCESSFUL ]
+    
+    TransferDto:
+      type: object
+      properties:
+        sourceBankAccountId:
+          type: string
+          format: uuid
+        externalSourceId:
+          type: string
+        targetBankAccountId:
+          type: string
+          format: uuid
+        externalTargetId:
+          type: string
+
+    MonetaryAmountDto:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+
     
 servers:
   # Added by API Auto Mocking Plugin

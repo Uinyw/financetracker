@@ -1,6 +1,6 @@
 package com.example.Analytics;
 
-import com.example.Analytics.dietFunctionality.logic.model.Nutrition;
+import com.example.Analytics.logic.model.productModel.Nutrition;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
