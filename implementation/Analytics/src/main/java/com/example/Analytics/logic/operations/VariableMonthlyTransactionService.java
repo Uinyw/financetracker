@@ -37,7 +37,25 @@ public class VariableMonthlyTransactionService {
         return variableMonthlyTransactionRepository.findAll();
     }
 
-    public List<VariableMonthlyTransaction> variableMonthlyTransactionChange(List<VariableMonthlyTransaction> variableMonthlyTransactionList){
+    public List<VariableMonthlyTransaction> variableMonthlyTransactionDelete(List<VariableMonthlyTransaction> variableMonthlyTransactionList){
+        for(VariableMonthlyTransaction newTransaction : variableMonthlyTransactionList){
+            for(VariableMonthlyTransaction existingTransaction: getVariableMonthlyTransaction()){
+                for(Transaction transactionToBeDeleted : newTransaction.getReferenceTransactions()){
+                    for(Transaction transaction : existingTransaction.getReferenceTransactions()){
+                        if(transactionToBeDeleted.getId().equals(transaction.getReferenceId())){
+                            deleteVariableMonthlyTransaction(existingTransaction.getId().toString());
+                            existingTransaction.getReferenceTransactions().remove(transaction);
+                            if(!existingTransaction.getReferenceTransactions().isEmpty())
+                                saveVariableMonthlyTransaction(existingTransaction);
+                        }
+                    }
+                }
+            }
+        }
+        return getVariableMonthlyTransaction();
+    }
+
+    public List<VariableMonthlyTransaction> variableMonthlyTransactionCreate(List<VariableMonthlyTransaction> variableMonthlyTransactionList){
         for(VariableMonthlyTransaction newTransaction : variableMonthlyTransactionList){
             boolean categoryAlreadyExists = false;
             for(VariableMonthlyTransaction existingTransaction: getVariableMonthlyTransaction()){
@@ -47,7 +65,6 @@ public class VariableMonthlyTransactionService {
                         appendTransaction(existingTransaction, transaction);
                         saveVariableMonthlyTransaction(existingTransaction);
                     });
-                    //updateVariableMonthlyTransaction(existingTransaction);//TODO remove?
                     categoryAlreadyExists = true;
                 }
             }
