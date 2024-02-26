@@ -2,23 +2,36 @@ package com.example.Analytics.logic.operations;
 
 import com.example.Analytics.ExcelWriter;
 import com.example.Analytics.logic.model.generalModel.FilterElement;
+import com.example.Analytics.logic.model.generalModel.MoneyPerCategory;
 import com.example.Analytics.logic.model.productModel.Duration;
 import com.example.Analytics.logic.model.productModel.Nutrition;
-import org.openapitools.client.ApiException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
 public class ReportService {
 
     private FilterElement filter;
+    @Autowired
     private ExcelWriter excelWriter;
+    @Autowired
     private DietService dietService;
+    @Autowired
     private BudgetService budgetService;
 
-    private void generateReport() throws ApiException {
+    public void generateReport(){
         //TODO generate report
-        generateDietReport(filter.getDuration());
+        //Nutrition nutritionData = generateDietReport(filter.getDuration());//TODO test with
+        List<MoneyPerCategory> budgetData = budgetService.moneySpendPerCategory();
+        excelWriter.createNutritionExcel(null, budgetData);
     }
-    public void generateDietReport(Duration duration) throws ApiException {
-        Nutrition nutrition = dietService.getNutritionForDuration(duration);
-        excelWriter.createNutritionExcel(nutrition);
+    private Nutrition generateDietReport(Duration duration) {
+        return dietService.getNutritionForDuration(duration);
     }
+
+
 }

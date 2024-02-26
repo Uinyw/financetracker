@@ -38,20 +38,31 @@ public class VariableMonthlyTransactionService {
     }
 
     public List<VariableMonthlyTransaction> variableMonthlyTransactionDelete(List<VariableMonthlyTransaction> variableMonthlyTransactionList){
+        List<UUID> uuidsToBeDeleted = new ArrayList<>();
         for(VariableMonthlyTransaction newTransaction : variableMonthlyTransactionList){
+            for(Transaction transactionToBeDeleted : newTransaction.getReferenceTransactions()){
+                uuidsToBeDeleted.add(transactionToBeDeleted.getReferenceId());
+            }
+        }
+        List<VariableMonthlyTransaction> saveDelete=new ArrayList<>();
+        for(UUID uuidToBeDeleted : uuidsToBeDeleted){
             for(VariableMonthlyTransaction existingTransaction: getVariableMonthlyTransaction()){
-                for(Transaction transactionToBeDeleted : newTransaction.getReferenceTransactions()){
-                    for(Transaction transaction : existingTransaction.getReferenceTransactions()){
-                        if(transactionToBeDeleted.getId().equals(transaction.getReferenceId())){
-                            deleteVariableMonthlyTransaction(existingTransaction.getId().toString());
-                            existingTransaction.getReferenceTransactions().remove(transaction);
-                            if(!existingTransaction.getReferenceTransactions().isEmpty())
-                                saveVariableMonthlyTransaction(existingTransaction);
-                        }
+                for(Transaction transaction : existingTransaction.getReferenceTransactions()){
+                    if(uuidToBeDeleted.equals(transaction.getReferenceId())){
+                        saveDelete.add(existingTransaction);
                     }
                 }
             }
         }
+        for(UUID uuidToBeDeleted : uuidsToBeDeleted) {
+            for (VariableMonthlyTransaction hasChildToBeDeleted : saveDelete) {
+                deleteVariableMonthlyTransaction(hasChildToBeDeleted.getId().toString());
+                hasChildToBeDeleted.getReferenceTransactions().removeIf(transaction -> transaction.getReferenceId().equals(uuidToBeDeleted));
+                if(!hasChildToBeDeleted.getReferenceTransactions().isEmpty())
+                    saveVariableMonthlyTransaction(hasChildToBeDeleted);
+            }
+        }
+
         return getVariableMonthlyTransaction();
     }
 
@@ -69,7 +80,6 @@ public class VariableMonthlyTransactionService {
                 }
             }
             if(!categoryAlreadyExists){
-                System.out.println("no category");
                 saveVariableMonthlyTransaction(createMonthEntry(newTransaction, newTransaction.getReferenceTransactions()));
 
             }

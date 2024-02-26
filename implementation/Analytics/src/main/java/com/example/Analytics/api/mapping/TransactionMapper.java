@@ -5,8 +5,7 @@ import com.example.Analytics.logic.model.budgetModel.Transaction;
 import com.example.Analytics.logic.model.budgetModel.TransactionType;
 import com.example.Analytics.logic.model.budgetModel.VariableMonthlyTransaction;
 import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
-import org.openapitools.client.model.OneTimeTransactionDto;
-import org.openapitools.client.model.TransferDto;
+import org.openapitools.client.model.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -29,6 +28,13 @@ public class TransactionMapper {
 
         return variableMonthlyTransactionList;
     }
+
+    public List<VariableMonthlyTransaction> oneTimeTransactionDtoToVariableMonthlyTransaction(org.openapitools.model.OneTimeTransactionDto oneTimeTransactionDto){
+        return oneTimeTransactionDtoToVariableMonthlyTransaction(oneTimeTransactionDTOMapping(oneTimeTransactionDto));
+    }
+
+
+
 
     private Transaction createTransactionFromDto(OneTimeTransactionDto oneTimeTransactionDto) {
         TransferDto transfer = oneTimeTransactionDto.getTransfer();
@@ -90,5 +96,50 @@ public class TransactionMapper {
             case SHIFT -> null; //TODO how to deal with those?
         };
     }
+
+
+    private org.openapitools.client.model.OneTimeTransactionDto oneTimeTransactionDTOMapping(org.openapitools.model.OneTimeTransactionDto oneTimeTransactionDto){
+        return org.openapitools.client.model.OneTimeTransactionDto.builder()
+                .id(oneTimeTransactionDto.getId())
+                .type(typeDtoMapper(oneTimeTransactionDto.getType()))
+                .date(oneTimeTransactionDto.getDate())
+                .name(oneTimeTransactionDto.getName())
+                .amount(typeDtoMapper(oneTimeTransactionDto.getAmount()))
+                .description(oneTimeTransactionDto.getDescription())
+                .labels(oneTimeTransactionDto.getLabels())
+                .transfer(typeDtoMapper(oneTimeTransactionDto.getTransfer()))
+                .transferStatus(typeDtoMapper(oneTimeTransactionDto.getTransferStatus()))
+                .build();
+
+    }
+
+    private TransferStatusDto typeDtoMapper(org.openapitools.model.TransferStatusDto transferStatusDto){
+        return switch (transferStatusDto){
+            case INITIAL -> TransferStatusDto.INITIAL;
+            case FAILED -> TransferStatusDto.FAILED;
+            case SUCCESSFUL -> TransferStatusDto.SUCCESSFUL;
+        };
+    }
+    private TransferDto typeDtoMapper(org.openapitools.model.TransferDto transferDto){
+        return TransferDto.builder()
+                .sourceBankAccountId(transferDto.getSourceBankAccountId())
+                .externalTargetId(transferDto.getExternalTargetId())
+                .targetBankAccountId(transferDto.getTargetBankAccountId())
+                .externalSourceId(transferDto.getExternalSourceId())
+                .build();
+    }
+
+    private MonetaryAmountDto typeDtoMapper(org.openapitools.model.MonetaryAmountDto monetaryAmountDto){
+        return MonetaryAmountDto.builder().amount(monetaryAmountDto.getAmount()).build();
+    }
+
+    private TypeDto typeDtoMapper(org.openapitools.model.TypeDto typeDto){
+        return switch (typeDto){
+            case SHIFT -> TypeDto.SHIFT;
+            case EXPENSE -> TypeDto.EXPENSE;
+            case INCOME -> TypeDto.INCOME;
+        };
+    }
+
 
 }

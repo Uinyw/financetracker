@@ -1,7 +1,7 @@
 package com.example.Analytics.logic.model.budgetModel;
 
-import com.example.Analytics.logic.model.generalModel.BankAccount;
-import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
+import com.example.Analytics.logic.model.generalModel.AmountMonthsAgo;
+import com.example.Analytics.logic.model.generalModel.YearlyMonth;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -114,35 +114,5 @@ public class VariableMonthlyTransaction {
         return new ArrayList<>(monthList.values());
     }
 
-    class AmountMonthsAgo{
-        private int monthsAgo;
-        private double amount;
 
-        public AmountMonthsAgo(int months, double amount){
-            this.monthsAgo = months;
-            this.amount = amount;
-        }
-
-        public double getAmount() {
-            return amount;
-        }
-
-        public int getMonthsAgo() {
-            return monthsAgo;
-        }
-    }
-
-
-    class YearlyMonth{
-        private int month;
-        private int year;
-
-        public YearlyMonth(int month, int year){
-            this.month = month;
-            this.year = year;
-        }
-        public String getString(){
-            return year + "-" + month;
-        }
-    }
 }

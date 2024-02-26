@@ -1,6 +1,7 @@
 package com.example.Analytics.api;
 
 import com.example.Analytics.api.mapping.TransactionMapper;
+import com.example.Analytics.infrastructure.kafka.config.UpdateType;
 import com.example.Analytics.logic.model.budgetModel.VariableMonthlyTransaction;
 import com.example.Analytics.logic.operations.BudgetService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,8 @@ public class AnalyticsTestResource implements TestTransferApi {
     @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> testTransferPost(final OneTimeTransactionDto oneTimeTransactionDto) {
-        budgetService.variableMonthlyTransactionChange(oneTimeTransactionDto, null);
+        budgetService.createRandomEntry(5);
+        budgetService.variableMonthlyTransactionChange(oneTimeTransactionDto, UpdateType.UPDATE);
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
