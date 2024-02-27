@@ -1,6 +1,7 @@
 package com.example.Analytics.logic.operations;
 
 import com.example.Analytics.ExcelWriter;
+import com.example.Analytics.logic.model.budgetModel.BudgetPlan;
 import com.example.Analytics.logic.model.generalModel.FilterElement;
 import com.example.Analytics.logic.model.generalModel.MoneyPerCategory;
 import com.example.Analytics.logic.model.productModel.Duration;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,10 +27,16 @@ public class ReportService {
     private BudgetService budgetService;
 
     public void generateReport(){
-        //TODO generate report
-        //Nutrition nutritionData = generateDietReport(filter.getDuration());//TODO test with
-        List<MoneyPerCategory> budgetData = budgetService.moneySpendPerCategory();
-        excelWriter.createNutritionExcel(null, budgetData);
+        this.filter = FilterElement.builder().bankAccountList(new ArrayList<>())
+                .categoryList(new ArrayList<>())
+                .duration(new Duration(LocalDate.now().minusYears(2).toString(),
+                        LocalDate.now().toString()))
+                .build();
+
+        //TODO generate report, delete code above, use the bank account
+        Nutrition nutritionData = generateDietReport(filter.getDuration());
+        BudgetPlan budgetData = budgetService.moneySpendPerCategory();
+        excelWriter.createNutritionExcel(nutritionData, budgetData);
     }
     private Nutrition generateDietReport(Duration duration) {
         return dietService.getNutritionForDuration(duration);

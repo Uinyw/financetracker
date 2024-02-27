@@ -19,12 +19,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class KafkaProductMessageConsumer{ //implements ProductMessageConsumer, VariableMonthlyTransactionMessageConsumer{//, FixedMonthlyTransactionMessageConsumer{
+public class KafkaProductMessageConsumer implements ProductMessageConsumer {//}, VariableMonthlyTransactionMessageConsumer{//, FixedMonthlyTransactionMessageConsumer{
 
     private final ProductService productService;
     private final BudgetService budgetService;
 
-    /*
+
     @KafkaListener(topics = "product-update", groupId = "product")
     public void listenProductChange(ConsumerRecord<String, JsonNode> cr, @Payload JsonNode payload){
         JsonNode product = payload.get("product");
@@ -44,7 +44,7 @@ public class KafkaProductMessageConsumer{ //implements ProductMessageConsumer, V
 
         productService.receiveProduct(productDto, productAmount);
     }
-*/
+
     /*
     @KafkaListener(topics = "oneTimeTransaction-update", groupId = "budget")
     public void listenFixedMonthlyTransactionChange(ConsumerRecord<String, JsonNode> cr, JsonNode payload) {

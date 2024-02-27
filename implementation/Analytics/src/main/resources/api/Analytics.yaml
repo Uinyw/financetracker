@@ -5,14 +5,14 @@ info:
   description: Analyse finance data.
 
 
-tags: 
+tags:
   - name: Analytics
 
 paths:
   /budgetPlan{monthlyAmount}:
     get:
       summary: Get a budget plan of all the data
-      tags: 
+      tags:
         - Analytics
       parameters:
         - name: monthlyAmount
@@ -27,12 +27,12 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/BudgetPlanDTO'
-                    
+                $ref: '#/components/schemas/BudgetPlanDTO'
+
   /forecast{months}:
     get:
       summary: Create a new budget forecast for the bank accounts
-      tags: 
+      tags:
         - Analytics
       parameters:
         - name: months
@@ -50,11 +50,11 @@ paths:
                 $ref: '#/components/schemas/ForecastDto'
         '404':
           description: Forecast not createable
-          
+
   /nutrition:
-    get:
+    post:
       summary: Get the Nutrition in a given timeframe
-      tags: 
+      tags:
         - Analytics
       requestBody:
         required: true
@@ -71,11 +71,11 @@ paths:
                 $ref: '#/components/schemas/NutritionDto'
         '404':
           description: Nutrition values for this timeframe could not be found
-  
+
   /report:
     get:
       summary: Get a report plan of all the data
-      tags: 
+      tags:
         - Analytics
       responses:
         '200':
@@ -83,14 +83,14 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/ReportDto'
+                $ref: '#/components/schemas/ReportDto'
         '404':
           description: Report cound not be created
-          
+
   /testTransfer:
     post:
       summary: Create a new Transaction
-      tags: 
+      tags:
         - Transaction
       requestBody:
         required: true
@@ -98,12 +98,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/OneTimeTransactionDto'
-        
+
       responses:
         '200':
           description: Bank Account created.
 
-  
+
 components:
   responses:
     NotFound:
@@ -117,7 +117,7 @@ components:
       content:
         application/json:
           example: {"message": "Bad request"}
-  
+
   schemas:
     ReportDto:
       type: object
@@ -132,8 +132,8 @@ components:
             $ref: '#/components/schemas/BankAccount'
         DurationDto:
           $ref: '#/components/schemas/DurationDto'
-        
-    
+
+
     BankAccount:
       type: object
       properties:
@@ -163,7 +163,7 @@ components:
           type: string
         labels:
           type: array
-          items: 
+          items:
             type: string
         amount:
           $ref: '#/components/schemas/MonetaryAmount'
@@ -174,7 +174,7 @@ components:
         type:
           type: string
           enum: [incoming, outgoing]
-        
+
 
     MonetaryAmount:
       type: object
@@ -182,7 +182,7 @@ components:
         amount:
           type: number
           format: double
-        
+
     DurationDto:
       type: object
       properties:
@@ -190,10 +190,10 @@ components:
           type: string
         endTime:
           type: string
-        
+
     Category:
       type: string
-      
+
     BudgetPlanDTO:
       type: object
       properties:
@@ -202,13 +202,15 @@ components:
           format: uuid
         achievementStatus:
           $ref: '#/components/schemas/BudgetAchievementStatus'
-        plan:        # <---- dictionary
-          $ref: '#/components/schemas/BudgetElement'
+        plan:
+          type: array
+          items: # <---- dictionary
+            $ref: '#/components/schemas/BudgetElementDto'
         date:
           type: string
           format: localDate
 
-    BudgetElement:
+    BudgetElementDto:
       type: object
       properties:
         category:
@@ -224,7 +226,7 @@ components:
           format: uuid
         monetaryAmount:
           $ref: '#/components/schemas/MonetaryAmount'
-    
+
     ForecastDto:
       type: object
       properties:
@@ -237,7 +239,7 @@ components:
         date:
           type: string
           format: localDate
-          
+
     NutritionDto:
       type: object
       properties:
@@ -260,12 +262,10 @@ components:
           type: number
           format: double
 
-          
+
     BudgetAchievementStatus:
-        type: string
-        enum: [ACHIEVED, FAILED]
-    
-    
+      type: string
+      enum: [ACHIEVED, FAILED]
     
     
     OneTimeTransactionDto:
@@ -273,7 +273,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/TransactionDto'
         - $ref: '#/components/schemas/TransferableDto'
-        
+
     TransactionDto:
       type: object
       properties:
@@ -292,7 +292,7 @@ components:
             type: string
         transfer:
           $ref: '#/components/schemas/TransferDto'
-          
+
     TransferableDto:
       type: object
       properties:
@@ -332,7 +332,7 @@ components:
           type: number
           format: double
 
-    
+
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking

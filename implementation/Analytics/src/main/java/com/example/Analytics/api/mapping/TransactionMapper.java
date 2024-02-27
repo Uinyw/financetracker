@@ -1,11 +1,10 @@
 package com.example.Analytics.api.mapping;
 
-import com.example.Analytics.logic.model.budgetModel.Category;
-import com.example.Analytics.logic.model.budgetModel.Transaction;
-import com.example.Analytics.logic.model.budgetModel.TransactionType;
-import com.example.Analytics.logic.model.budgetModel.VariableMonthlyTransaction;
+import com.example.Analytics.logic.model.budgetModel.*;
 import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
 import org.openapitools.client.model.*;
+import org.openapitools.model.BudgetAchievementStatus;
+import org.openapitools.model.BudgetPlanDTO;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -46,6 +45,27 @@ public class TransactionMapper {
                 .amount(getMonetaryAmountFromDto(oneTimeTransactionDto))
                 .referenceId(oneTimeTransactionDto.getId())
                 .id(UUID.randomUUID())
+                .build();
+    }
+
+    public BudgetPlanDTO budgetPlanToDto(BudgetPlan budgetPlan){
+        return BudgetPlanDTO.builder()
+                .id(budgetPlan.getId())
+                .achievementStatus(achievementStatusToDto(budgetPlan.getCurrentStatus()))
+                .date(budgetPlan.getStartDate().toString())
+                .plan(budgetPlan.getBudgetElementList().stream().map(this::budgetElementToDto).toList())
+                .build();
+    }
+    private BudgetAchievementStatus achievementStatusToDto(AchievementStatus achievementStatus){
+        return switch (achievementStatus){
+            case FAILED -> BudgetAchievementStatus.FAILED;
+            case ACHIEVED -> BudgetAchievementStatus.ACHIEVED;
+        };
+    }
+    private org.openapitools.model.BudgetElementDto budgetElementToDto(BudgetElement budgetElement){
+        return org.openapitools.model.BudgetElementDto.builder()
+                .category(budgetElement.getCategory().getName())
+                .monetaryAmount(budgetElement.getMonetaryAmount())
                 .build();
     }
 

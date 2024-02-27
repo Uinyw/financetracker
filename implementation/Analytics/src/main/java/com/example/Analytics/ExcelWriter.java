@@ -1,5 +1,7 @@
 package com.example.Analytics;
 
+import com.example.Analytics.logic.model.budgetModel.BudgetElement;
+import com.example.Analytics.logic.model.budgetModel.BudgetPlan;
 import com.example.Analytics.logic.model.generalModel.MoneyPerCategory;
 import com.example.Analytics.logic.model.productModel.Nutrition;
 import org.apache.poi.ss.usermodel.*;
@@ -13,9 +15,9 @@ import java.util.List;
 @Component
 public class ExcelWriter {
     
-    public void createNutritionExcel(Nutrition nutritionData, List<MoneyPerCategory> budgetData){
+    public void createNutritionExcel(Nutrition nutritionData, BudgetPlan budgetData){
         try (Workbook workbook = new XSSFWorkbook()) {
-            //createNutritionSheet(workbook, nutritionData);//TODO test with
+            createNutritionSheet(workbook, nutritionData);
             createBudgetSheet(workbook, budgetData);
 
             try (FileOutputStream fileOut = new FileOutputStream("Report.xlsx")) {
@@ -29,7 +31,7 @@ public class ExcelWriter {
         }
     }
 
-    private static void createBudgetSheet(Workbook workbook, List<MoneyPerCategory> budgetData) {
+    private static void createBudgetSheet(Workbook workbook, BudgetPlan budgetData) {
         Sheet sheet = workbook.createSheet("budget");
 
         Row headerRow = sheet.createRow(0);
@@ -37,9 +39,9 @@ public class ExcelWriter {
         headerRow.createCell(1).setCellValue("Amount in €");
 
         int rowNum = 1;
-        for(MoneyPerCategory entry : budgetData){
-            sheet.createRow(rowNum++).createCell(0).setCellValue(entry.getCategory().getName());
-            sheet.getRow(rowNum - 1).createCell(1).setCellValue(entry.getMoney());
+        for(BudgetElement budgetElement : budgetData.getBudgetElementList()){
+            sheet.createRow(rowNum++).createCell(0).setCellValue(budgetElement.getCategory().getName());
+            sheet.getRow(rowNum - 1).createCell(1).setCellValue(budgetElement.getMonetaryAmount().getAmount());
         }
     }
 

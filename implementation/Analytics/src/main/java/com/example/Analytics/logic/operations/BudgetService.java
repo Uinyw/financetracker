@@ -2,11 +2,12 @@ package com.example.Analytics.logic.operations;
 
 import com.example.Analytics.api.mapping.TransactionMapper;
 import com.example.Analytics.infrastructure.kafka.config.UpdateType;
-import com.example.Analytics.logic.model.budgetModel.Category;
-import com.example.Analytics.logic.model.budgetModel.VariableMonthlyTransaction;
+import com.example.Analytics.logic.model.budgetModel.*;
+import com.example.Analytics.logic.model.budgetModel.BudgetElement;
 import com.example.Analytics.logic.model.generalModel.MoneyPerCategory;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.client.model.*;
+import org.openapitools.model.*;
 import org.openapitools.model.MonetaryAmountDto;
 import org.openapitools.model.OneTimeTransactionDto;
 import org.openapitools.model.TransferStatusDto;
@@ -39,7 +40,6 @@ public class BudgetService {
 
     public void variableMonthlyTransactionChange(OneTimeTransactionDto oneTimeTransactionDto, UpdateType updateType){
         List<VariableMonthlyTransaction> variableMonthlyTransactionList = transactionMapper.oneTimeTransactionDtoToVariableMonthlyTransaction(oneTimeTransactionDto);
-        //TODO test update and delete
         switch(updateType){
             case DELETE -> variableMonthlyTransactionDelete(variableMonthlyTransactionList);
             case CREATE -> variableMonthlyTransactionCreate(variableMonthlyTransactionList);
@@ -51,51 +51,73 @@ public class BudgetService {
 
         printFunction();
         System.out.println("\n======================\n");
-        List<MoneyPerCategory> tmp = calculateSavingPerCategory(1200.0);
-        double m1 = tmp.stream().map(MoneyPerCategory::getMoney).mapToDouble(Double::doubleValue).sum();
-        double m2 = tmp.stream().map(MoneyPerCategory::getMoneyToBeSaved).mapToDouble(Double::doubleValue).sum();
+        BudgetPlan bp = moneySpendPerCategory();
+        List<BudgetElement> oldBudgetList = bp.getBudgetElementList();
+        List<BudgetElement> newBudgetList = calculateSavingPerCategory(1200.0, bp).getBudgetElementList();
+        double m1 = bp.getBudgetElementList().stream().map(be -> be.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
+        double m2 = newBudgetList.stream().map(be -> be.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
         System.out.println("Total\t[" + m1 + "] - goal -> ["+m2+"]" );
-        for(MoneyPerCategory moneyPerCategory : tmp)
-            System.out.println(moneyPerCategory.getCategory().getName() + "\t["+ moneyPerCategory.getMoney() + "] -> ["+moneyPerCategory.getMoneyToBeSaved() + "€ ]");
+        for (int index = 0; index < oldBudgetList.size(); index++) {
+            System.out.println(oldBudgetList.get(index).getCategory().getName() + "\t["+ oldBudgetList.get(index).getMonetaryAmount().getAmount() + "] -> ["+newBudgetList.get(index).getMonetaryAmount().getAmount() + "€ ]");
+        }
+        System.out.println(newBudgetList.get(newBudgetList.size()-1).getCategory().getName() + " -> " + newBudgetList.get(newBudgetList.size()-1).getMonetaryAmount().getAmount());
+
     }
 
     public void fixedMonthlyTransactionChange(RecurringTransactionDto recurringTransactionDto, UpdateType updateType){
         //TODO implement
     }
 
-    public List<MoneyPerCategory> moneySpendPerCategory(){
+    public BudgetPlan moneySpendPerCategory(){
         //todo ggf handle duplicates
-        return new ArrayList<>(history.stream().map(transaction -> new MoneyPerCategory(transaction.getCategory(), transaction.calculateAmountAsAverage())).toList());
+        List<BudgetElement> budgetElementList = new ArrayList<>(history.stream().map(transaction ->
+                BudgetElement.builder()
+                .category(transaction.getCategory())
+                .monetaryAmount(new MonetaryAmount(roundToTwoDecimalPlaces(transaction.calculateAmountAsAverage()))).build()
+        ).toList());
+
+        return BudgetPlan.builder().startDate(LocalDate.now()).budgetElementList(budgetElementList).id(UUID.randomUUID()).currentStatus(AchievementStatus.ACHIEVED).build();
+    }
+    public BudgetPlan calculateSavingPerCategory(double amountToBeSaved){
+        return calculateSavingPerCategory(amountToBeSaved, moneySpendPerCategory());
     }
 
-    public List<MoneyPerCategory> calculateSavingPerCategory(double amountToBeSaved){
-        //TODO return a budgetplan DTO
-        List<MoneyPerCategory> moneyPerCategories = moneySpendPerCategory();
-        double totalAverageMonthlyAmount = moneyPerCategories.stream().map(MoneyPerCategory::getMoney).mapToDouble(Double::doubleValue).sum();
+    public BudgetPlan calculateSavingPerCategory(double amountToBeSaved, BudgetPlan budgetPlan){
+        if(budgetPlan.getBudgetElementList() == null || budgetPlan.getBudgetElementList().isEmpty())
+            return BudgetPlan.builder().build();
+
+        List<BudgetElement> budgetElementList = budgetPlan.getBudgetElementList();
+        List<BudgetElement> newBudgetElements = new ArrayList<>();
+        double totalAverageMonthlyAmount = budgetElementList.stream().map(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
         double totalAverageMoneyToBeSaved = amountToBeSaved - totalAverageMonthlyAmount;
-        if(totalAverageMoneyToBeSaved < 0){
-            return new ArrayList<>();
-        }
-        double howMuchSpentOnAverage = Math.abs(moneyPerCategories.stream().map(MoneyPerCategory::getMoney).filter(money->money<0).mapToDouble(Double::doubleValue).sum());
+        double howMuchSpentOnAverage = Math.abs(budgetElementList.stream().map(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).filter(money->money<0).mapToDouble(Double::doubleValue).sum());
         double missingAmount = (howMuchSpentOnAverage-totalAverageMoneyToBeSaved>0)?totalAverageMoneyToBeSaved:howMuchSpentOnAverage;
-        for(MoneyPerCategory moneyCatagory : moneyPerCategories){
-            if(moneyCatagory.getMoney() > 0){
-                moneyCatagory.setMoneyToBeSaved(0);
-                continue;
+
+        if(totalAverageMoneyToBeSaved < 0){
+            return BudgetPlan.builder().build();
+        }
+
+        for(BudgetElement budgetCatagory : budgetElementList){
+            double amountToBeSavedInCategory = 0.0;
+            if(budgetCatagory.getMonetaryAmount().getAmount() < 0){
+                double weightOfCategory = Math.abs(budgetCatagory.getMonetaryAmount().getAmount())/howMuchSpentOnAverage;
+                amountToBeSavedInCategory = roundToTwoDecimalPlaces(weightOfCategory*missingAmount);
             }
-            double weightOfCategory = Math.abs(moneyCatagory.getMoney())/howMuchSpentOnAverage;
-            moneyCatagory.setMoneyToBeSaved(weightOfCategory*missingAmount);
+            newBudgetElements.add(BudgetElement.builder().category(budgetCatagory.getCategory()).monetaryAmount(new MonetaryAmount(amountToBeSavedInCategory)).build());
         }
 
         if(howMuchSpentOnAverage-totalAverageMoneyToBeSaved<0){
-            MoneyPerCategory moneyPerCategory = new MoneyPerCategory(new Category("newIncome"),0.0);
-            moneyPerCategory.setMoneyToBeSaved(Math.abs(howMuchSpentOnAverage-totalAverageMoneyToBeSaved));
-            moneyPerCategories.add(moneyPerCategory);
+            double insufficientAmount = Math.abs(howMuchSpentOnAverage-totalAverageMoneyToBeSaved);
+            BudgetElement newIncome = BudgetElement.builder()
+                    .category(new Category("newIncome"))
+                    .monetaryAmount(new MonetaryAmount(insufficientAmount))
+                    .build();
+            newBudgetElements.add(newIncome);
         }
 
-        //TODO implement
-        return moneyPerCategories;
+        return new BudgetPlan(newBudgetElements);
     }
+
 
     public void createRandomEntry(int amount){
         List<org.openapitools.model.OneTimeTransactionDto> randomDtoList = new ArrayList<>();
@@ -131,7 +153,7 @@ public class BudgetService {
                 .name("randomName")
                 .type(randomSwapper?TypeDto.INCOME:TypeDto.EXPENSE)
                 .date(LocalDate.now().toString())
-                .amount(MonetaryAmountDto.builder().amount(Math.round(Math.random()*10000.0)/100.0).build())
+                .amount(MonetaryAmountDto.builder().amount(roundToTwoDecimalPlaces(Math.random()*100.0)).build())
                 .description("randomDescription")
                 .transfer(org.openapitools.model.TransferDto.builder()
                         .sourceBankAccountId(UUID.randomUUID())
@@ -142,6 +164,10 @@ public class BudgetService {
                 .labels(labels)
                 .transferStatus(TransferStatusDto.SUCCESSFUL)
                 .build();
+    }
+
+    private double roundToTwoDecimalPlaces(double value){
+        return Math.round(value*100.0)/100.0;
     }
 
     private void printFunction(){
