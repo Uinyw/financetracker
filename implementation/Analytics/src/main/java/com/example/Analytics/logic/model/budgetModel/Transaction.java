@@ -22,6 +22,10 @@ public class Transaction {
     @JoinColumn(name = "variable_monthly_transaction_id")
     private VariableMonthlyTransaction variableMonthlyTransaction;
 
+    @ManyToOne
+    @JoinColumn(name = "fixed_transaction_id")
+    private FixedMonthlyTransaction fixedTransaction;
+
     private UUID bankAccountSource;
     private UUID bankAccountTarget;
 

@@ -22,7 +22,7 @@ public class BudgetResource implements BudgetPlanmonthlyAmountApi {
     @Override
     public ResponseEntity<BudgetPlanDTO> budgetPlanmonthlyAmountGet(final String monthlyAmount) {
         double amount = Double.parseDouble(monthlyAmount);
-        BudgetPlan budgetPlan = budgetService.calculateSavingPerCategory(amount);
+        BudgetPlan budgetPlan = budgetService.createSavingsPlan(amount);
         return new ResponseEntity<>(transactionMapper.budgetPlanToDto(budgetPlan), HttpStatus.OK);
     }
 

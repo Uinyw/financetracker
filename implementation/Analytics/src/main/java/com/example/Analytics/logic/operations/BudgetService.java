@@ -4,7 +4,6 @@ import com.example.Analytics.api.mapping.TransactionMapper;
 import com.example.Analytics.infrastructure.kafka.config.UpdateType;
 import com.example.Analytics.logic.model.budgetModel.*;
 import com.example.Analytics.logic.model.budgetModel.BudgetElement;
-import com.example.Analytics.logic.model.generalModel.MoneyPerCategory;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.client.model.*;
 import org.openapitools.model.*;
@@ -51,9 +50,9 @@ public class BudgetService {
 
         printFunction();
         System.out.println("\n======================\n");
-        BudgetPlan bp = moneySpendPerCategory();
+        BudgetPlan bp = spendingPerCategory();
         List<BudgetElement> oldBudgetList = bp.getBudgetElementList();
-        List<BudgetElement> newBudgetList = calculateSavingPerCategory(1200.0, bp).getBudgetElementList();
+        List<BudgetElement> newBudgetList = createSavingsPlan(1200.0, bp).getBudgetElementList();
         double m1 = bp.getBudgetElementList().stream().map(be -> be.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
         double m2 = newBudgetList.stream().map(be -> be.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
         System.out.println("Total\t[" + m1 + "] - goal -> ["+m2+"]" );
@@ -68,7 +67,7 @@ public class BudgetService {
         //TODO implement
     }
 
-    public BudgetPlan moneySpendPerCategory(){
+    public BudgetPlan spendingPerCategory(){
         //todo ggf handle duplicates
         List<BudgetElement> budgetElementList = new ArrayList<>(history.stream().map(transaction ->
                 BudgetElement.builder()
@@ -76,13 +75,18 @@ public class BudgetService {
                 .monetaryAmount(new MonetaryAmount(roundToTwoDecimalPlaces(transaction.calculateAmountAsAverage()))).build()
         ).toList());
 
-        return BudgetPlan.builder().startDate(LocalDate.now()).budgetElementList(budgetElementList).id(UUID.randomUUID()).currentStatus(AchievementStatus.ACHIEVED).build();
+        return BudgetPlan.builder()
+                .startDate(LocalDate.now())
+                .budgetElementList(budgetElementList)
+                .id(UUID.randomUUID()).
+                currentStatus(AchievementStatus.ACHIEVED)
+                .build();
     }
-    public BudgetPlan calculateSavingPerCategory(double amountToBeSaved){
-        return calculateSavingPerCategory(amountToBeSaved, moneySpendPerCategory());
+    public BudgetPlan createSavingsPlan(double amountToBeSaved){
+        return createSavingsPlan(amountToBeSaved, spendingPerCategory());
     }
 
-    public BudgetPlan calculateSavingPerCategory(double amountToBeSaved, BudgetPlan budgetPlan){
+    public BudgetPlan createSavingsPlan(double amountToBeSaved, BudgetPlan budgetPlan){
         if(budgetPlan.getBudgetElementList() == null || budgetPlan.getBudgetElementList().isEmpty())
             return BudgetPlan.builder().build();
 

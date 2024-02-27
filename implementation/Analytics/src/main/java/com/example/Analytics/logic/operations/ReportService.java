@@ -3,7 +3,6 @@ package com.example.Analytics.logic.operations;
 import com.example.Analytics.ExcelWriter;
 import com.example.Analytics.logic.model.budgetModel.BudgetPlan;
 import com.example.Analytics.logic.model.generalModel.FilterElement;
-import com.example.Analytics.logic.model.generalModel.MoneyPerCategory;
 import com.example.Analytics.logic.model.productModel.Duration;
 import com.example.Analytics.logic.model.productModel.Nutrition;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class ReportService {
 
         //TODO generate report, delete code above, use the bank account
         Nutrition nutritionData = generateDietReport(filter.getDuration());
-        BudgetPlan budgetData = budgetService.moneySpendPerCategory();
+        BudgetPlan budgetData = budgetService.spendingPerCategory();
         excelWriter.createNutritionExcel(nutritionData, budgetData);
     }
     private Nutrition generateDietReport(Duration duration) {
