@@ -4,11 +4,11 @@ import com.example.Analytics.api.mapping.TransactionMapper;
 import com.example.Analytics.infrastructure.kafka.config.UpdateType;
 import com.example.Analytics.logic.model.budgetModel.*;
 import com.example.Analytics.logic.model.budgetModel.BudgetElement;
+import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.client.model.*;
-import org.openapitools.model.*;
 import org.openapitools.model.MonetaryAmountDto;
 import org.openapitools.model.OneTimeTransactionDto;
+import org.openapitools.model.RecurringTransactionDto;
 import org.openapitools.model.TransferStatusDto;
 import org.openapitools.model.TypeDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,7 +199,7 @@ public class BudgetService {
                                 "\n\tdate=" + reference.getDate() +
                                 "\n\tbankAccountSource=" + reference.getBankAccountSource() +
                                 "\n\tbankAccountTarget=" + reference.getBankAccountTarget() +
-                                "\n\tamount=" + reference.getAmount().getMoney() +
+                                "\n\tamount=" + reference.getAmount().getAmount() +
                                 "\n\ttype=" + reference.getType() + "\n")
                 );
             }

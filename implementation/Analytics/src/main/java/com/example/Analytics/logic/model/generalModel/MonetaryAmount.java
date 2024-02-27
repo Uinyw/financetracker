@@ -12,5 +12,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @Embeddable
 public class MonetaryAmount {
-    private double money;
+    private double amount;
 }

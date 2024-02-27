@@ -1,9 +1,9 @@
 package com.example.Analytics.logic.model.budgetModel;
 
+import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.openapitools.model.MonetaryAmount;
 
 
 @Builder

@@ -90,10 +90,10 @@ public class VariableMonthlyTransaction {
         double money = 0.0;
         for(Transaction transaction: transactionList){
             if(transaction.getType().equals(TransactionType.EXPENSE))
-                money -= transaction.getAmount().getMoney();
+                money -= transaction.getAmount().getAmount();
 
             if(transaction.getType().equals(TransactionType.INCOME))
-                money += transaction.getAmount().getMoney();
+                money += transaction.getAmount().getAmount();
         }
         return money;
     }

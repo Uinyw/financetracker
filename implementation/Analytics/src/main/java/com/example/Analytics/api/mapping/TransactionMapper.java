@@ -65,15 +65,19 @@ public class TransactionMapper {
     private org.openapitools.model.BudgetElementDto budgetElementToDto(BudgetElement budgetElement){
         return org.openapitools.model.BudgetElementDto.builder()
                 .category(budgetElement.getCategory().getName())
-                .monetaryAmount(budgetElement.getMonetaryAmount())
+                .monetaryAmount(monetaryAmountToDto(budgetElement.getMonetaryAmount()))
                 .build();
+    }
+
+    private org.openapitools.model.MonetaryAmountDto monetaryAmountToDto(MonetaryAmount monetaryAmount){
+        return org.openapitools.model.MonetaryAmountDto.builder().amount(monetaryAmount.getAmount()).build();
     }
 
     private MonetaryAmount getMonetaryAmountFromDto(OneTimeTransactionDto oneTimeTransactionDto){
         MonetaryAmount money = new MonetaryAmount();
         if (oneTimeTransactionDto.getAmount() != null
                 && oneTimeTransactionDto.getAmount().getAmount() != null) {
-            money.setMoney(oneTimeTransactionDto.getAmount().getAmount().doubleValue());
+            money.setAmount(oneTimeTransactionDto.getAmount().getAmount().doubleValue());
         }
 
         return money;

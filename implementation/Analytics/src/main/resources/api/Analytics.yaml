@@ -103,6 +103,21 @@ paths:
         '200':
           description: Bank Account created.
 
+  /testTransferFixed:
+    post:
+      summary: Create a new Transaction
+      tags:
+        - Transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecurringTransactionDto'
+
+      responses:
+        '200':
+          description: Bank Account created.
 
 components:
   responses:
@@ -145,9 +160,9 @@ components:
         description:
           type: string
         balance:
-          $ref: '#/components/schemas/MonetaryAmount'
+          $ref: '#/components/schemas/MonetaryAmountDto'
         dispoLimit:
-          $ref: '#/components/schemas/MonetaryAmount'
+          $ref: '#/components/schemas/MonetaryAmountDto'
         labels:
           type: array
           items:
@@ -166,7 +181,7 @@ components:
           items:
             type: string
         amount:
-          $ref: '#/components/schemas/MonetaryAmount'
+          $ref: '#/components/schemas/MonetaryAmountDto'
         description:
           type: string
         name:
@@ -175,13 +190,6 @@ components:
           type: string
           enum: [incoming, outgoing]
 
-
-    MonetaryAmount:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: double
 
     DurationDto:
       type: object
@@ -216,7 +224,7 @@ components:
         category:
           $ref: '#/components/schemas/Category'
         monetaryAmount:
-          $ref: '#/components/schemas/MonetaryAmount'
+          $ref: '#/components/schemas/MonetaryAmountDto'
 
     ForecastElement:
       type: object
@@ -225,7 +233,7 @@ components:
           type: string
           format: uuid
         monetaryAmount:
-          $ref: '#/components/schemas/MonetaryAmount'
+          $ref: '#/components/schemas/MonetaryAmountDto'
 
     ForecastDto:
       type: object
@@ -266,8 +274,8 @@ components:
     BudgetAchievementStatus:
       type: string
       enum: [ACHIEVED, FAILED]
-    
-    
+
+
     OneTimeTransactionDto:
       type: object
       allOf:
@@ -310,7 +318,7 @@ components:
     TransferStatusDto:
       type: string
       enum: [ INITIAL, FAILED, SUCCESSFUL ]
-    
+
     TransferDto:
       type: object
       properties:
@@ -331,6 +339,36 @@ components:
         amount:
           type: number
           format: double
+
+    RecurringTransactionDto:
+      type: object
+      allOf:
+        - properties:
+            periodicity:
+              $ref: '#/components/schemas/PeriodicityDto'
+            startDate:
+              type: string
+              format: Date
+            fixedAmount:
+              $ref: '#/components/schemas/MonetaryAmountDto'
+            transactionRecords:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionRecordDto'
+        - $ref: '#/components/schemas/TransactionDto'
+
+    TransactionRecordDto:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: '#/components/schemas/TransferableDto'
+
+    PeriodicityDto:
+      type: string
+      enum: [MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY]
 
 
 servers:
