@@ -34,7 +34,19 @@ public class VariableMonthlyTransaction {
         if(referenceTransactions == null){
             referenceTransactions = new ArrayList<>();
         }
-        referenceTransactions.add(transaction);
+        if(referenceIdAndDateMissmatch(transaction))
+            referenceTransactions.add(transaction);
+    }
+    private boolean referenceIdAndDateMissmatch(Transaction transaction){
+        if(referenceTransactions == null || referenceTransactions.isEmpty())
+            return true;
+        boolean missmatch = true;
+        for(Transaction refTransaction : referenceTransactions){
+            if(refTransaction.getReferenceId().equals(transaction.getReferenceId())
+                    && refTransaction.getDate().isEqual(transaction.getDate()))
+                missmatch = false;
+        }
+        return missmatch;
     }
 
     public double calculateAmountAsAverage(){

@@ -29,7 +29,6 @@ public class AnalyticsTestResource implements TestTransferApi, TestTransferFixed
     @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> testTransferPost(final OneTimeTransactionDto oneTimeTransactionDto) {
-        budgetService.createRandomEntry(5);
         budgetService.variableMonthlyTransactionChange(oneTimeTransactionDto, UpdateType.UPDATE);
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
@@ -37,8 +36,7 @@ public class AnalyticsTestResource implements TestTransferApi, TestTransferFixed
     @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> testTransferFixedPost(final RecurringTransactionDto recurringTransactionDto) {
-        budgetService.createRandomEntry(5);
-        budgetService.fixedMonthlyTransactionChange(recurringTransactionDto, UpdateType.CREATE);
+        budgetService.fixedTransactionChange(recurringTransactionDto, UpdateType.DELETE);
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }

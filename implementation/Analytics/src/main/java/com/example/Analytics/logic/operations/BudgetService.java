@@ -4,100 +4,134 @@ import com.example.Analytics.api.mapping.TransactionMapper;
 import com.example.Analytics.infrastructure.kafka.config.UpdateType;
 import com.example.Analytics.logic.model.budgetModel.*;
 import com.example.Analytics.logic.model.budgetModel.BudgetElement;
+import com.example.Analytics.logic.model.budgetModel.Transaction;
 import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.model.MonetaryAmountDto;
-import org.openapitools.model.OneTimeTransactionDto;
-import org.openapitools.model.RecurringTransactionDto;
-import org.openapitools.model.TransferStatusDto;
-import org.openapitools.model.TypeDto;
+import org.openapitools.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class BudgetService {
-    private List<VariableMonthlyTransaction> history;
-    private List<VariableMonthlyTransaction> currentMonth;
-    @Autowired
-    private VariableMonthlyTransactionService variableMonthlyTransactionService;
+    private List<VariableMonthlyTransaction> variableTransactionHistory = new ArrayList<>();
+    private List<FixedTransaction> fixedTransactionHistory = new ArrayList<>();
+    private List<VariableMonthlyTransaction> currentMonth = new ArrayList<>();
     private final TransactionMapper transactionMapper;
 
+    @Autowired
+    private VariableMonthlyTransactionService variableMonthlyTransactionService;
+    @Autowired
+    private FixedTransactionService fixedTransactionService;
 
-    private void variableMonthlyTransactionCreate(List<VariableMonthlyTransaction> variableMonthlyTransactionList){
-        this.history = variableMonthlyTransactionService.variableMonthlyTransactionCreate(variableMonthlyTransactionList);
-        this.currentMonth = variableMonthlyTransactionService.updateMonthlyTransactions(this.history);
-    }
-
-    private void variableMonthlyTransactionDelete(List<VariableMonthlyTransaction> variableMonthlyTransactionList){
-        this.history = variableMonthlyTransactionService.variableMonthlyTransactionDelete(variableMonthlyTransactionList);
-        this.currentMonth = variableMonthlyTransactionService.updateMonthlyTransactions(this.history);
-    }
 
     public void variableMonthlyTransactionChange(OneTimeTransactionDto oneTimeTransactionDto, UpdateType updateType){
+        createRandomVariableMonthlyTransactionEntry(5); // TODO delete
+
         List<VariableMonthlyTransaction> variableMonthlyTransactionList = transactionMapper.oneTimeTransactionDtoToVariableMonthlyTransaction(oneTimeTransactionDto);
-        switch(updateType){
-            case DELETE -> variableMonthlyTransactionDelete(variableMonthlyTransactionList);
-            case CREATE -> variableMonthlyTransactionCreate(variableMonthlyTransactionList);
-            case UPDATE -> {
-                variableMonthlyTransactionDelete(variableMonthlyTransactionList);
-                variableMonthlyTransactionCreate(variableMonthlyTransactionList);
+        this.variableTransactionHistory = switch(updateType){
+            case DELETE -> variableMonthlyTransactionService.variableMonthlyTransactionDelete(variableMonthlyTransactionList);
+            case CREATE -> variableMonthlyTransactionService.variableMonthlyTransactionCreate(variableMonthlyTransactionList);
+            case UPDATE -> variableMonthlyTransactionService.variableMonthlyTransactionUpdate(variableMonthlyTransactionList);
+        };
+
+        this.currentMonth = variableMonthlyTransactionService.updateMonthlyTransactions(this.variableTransactionHistory);
+
+        printFunction(); //TODO remove
+    }
+
+    public void fixedTransactionChange(RecurringTransactionDto recurringTransactionDto, UpdateType updateType){
+        List<FixedTransaction> fixedTransactionList = transactionMapper.recurrinMonthlyTransactionDtoToFixedTransacion(recurringTransactionDto);
+        //TODO mapper
+        this.fixedTransactionHistory = switch(updateType){
+            case DELETE -> fixedTransactionService.fixedTransactionDelete(fixedTransactionList);
+            case CREATE -> fixedTransactionService.fixedTransactionCreate(fixedTransactionList);
+            case UPDATE -> fixedTransactionService.fixedTransactionUpdate(fixedTransactionList);
+        };
+
+        createRandomFixedTransactionEntry(5);
+
+        System.out.println("#############################");
+        for(FixedTransaction fixedTransaction : fixedTransactionHistory){
+            System.out.println( "ID:\t"+
+                    fixedTransaction.getId() + "\nPeriodicity:\t" +
+                    fixedTransaction.getPeriodicity().name() + "\nname:\t" +
+                    fixedTransaction.getCategory().getName() + "\n[ " +
+                    fixedTransaction.calculateAverageAmount().getAmount() + "] \n"
+            );
+            for(Transaction trans : fixedTransaction.getReferenceTransactions()){
+                System.out.println("\tAmount:\t" + trans.getAmount().getAmount()
+                + "\n\tReferenceId:\t" + trans.getReferenceId()
+                        + "\n\tDate:\t" + trans.getDate() );
             }
         }
 
-        printFunction();
-        System.out.println("\n======================\n");
-        BudgetPlan bp = spendingPerCategory();
-        List<BudgetElement> oldBudgetList = bp.getBudgetElementList();
-        List<BudgetElement> newBudgetList = createSavingsPlan(1200.0, bp).getBudgetElementList();
-        double m1 = bp.getBudgetElementList().stream().map(be -> be.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
-        double m2 = newBudgetList.stream().map(be -> be.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
-        System.out.println("Total\t[" + m1 + "] - goal -> ["+m2+"]" );
-        for (int index = 0; index < oldBudgetList.size(); index++) {
-            System.out.println(oldBudgetList.get(index).getCategory().getName() + "\t["+ oldBudgetList.get(index).getMonetaryAmount().getAmount() + "] -> ["+newBudgetList.get(index).getMonetaryAmount().getAmount() + "€ ]");
-        }
-        System.out.println(newBudgetList.get(newBudgetList.size()-1).getCategory().getName() + " -> " + newBudgetList.get(newBudgetList.size()-1).getMonetaryAmount().getAmount());
-
     }
 
-    public void fixedMonthlyTransactionChange(RecurringTransactionDto recurringTransactionDto, UpdateType updateType){
-        //TODO implement
-    }
-
-    public BudgetPlan spendingPerCategory(){
+    public BudgetPlan oneTimeSpendingPerCategory(){
+        //TODO add fixedTransactions
         //todo ggf handle duplicates
-        List<BudgetElement> budgetElementList = new ArrayList<>(history.stream().map(transaction ->
+        List<BudgetElement> budgetElementList = new ArrayList<>(variableTransactionHistory.stream().map(transaction ->
                 BudgetElement.builder()
-                .category(transaction.getCategory())
-                .monetaryAmount(new MonetaryAmount(roundToTwoDecimalPlaces(transaction.calculateAmountAsAverage()))).build()
+                        .category(transaction.getCategory())
+                        .monetaryAmount(new MonetaryAmount(roundToTwoDecimalPlaces(transaction.calculateAmountAsAverage()))).build()
         ).toList());
 
-        return BudgetPlan.builder()
-                .startDate(LocalDate.now())
-                .budgetElementList(budgetElementList)
-                .id(UUID.randomUUID()).
-                currentStatus(AchievementStatus.ACHIEVED)
-                .build();
+        return new BudgetPlan(budgetElementList);
     }
+
+    public BudgetPlan spendingForEachCategory(){
+        List<BudgetElement> mergedList = new ArrayList<>(oneTimeSpendingPerCategory().getBudgetElementList());
+
+        for (BudgetElement budgetElement : fixedSpendingForCategories().getBudgetElementList()){
+            for(BudgetElement existingElement : mergedList){
+                if(budgetElement.getCategory().getName().equals(existingElement.getCategory().getName())){
+                    double money = existingElement.getMonetaryAmount().getAmount() + budgetElement.getMonetaryAmount().getAmount();
+                    existingElement.setMonetaryAmount(new MonetaryAmount(money));
+                }
+            }
+        }
+        return new BudgetPlan(mergedList);
+    }
+
+    private BudgetPlan fixedSpendingForCategories(){
+        //todo ggf handle Category duplicates
+        List<BudgetElement> fixedBudgetElementList =new ArrayList<>(
+                fixedTransactionHistory.stream().map(transaction ->
+                BudgetElement.builder()
+                        .category(transaction.getCategory())
+                        .monetaryAmount(transaction.calculateAverageAmount()).build()
+        ).toList());
+
+        return new BudgetPlan(fixedBudgetElementList);
+    }
+
     public BudgetPlan createSavingsPlan(double amountToBeSaved){
-        return createSavingsPlan(amountToBeSaved, spendingPerCategory());
+        return createSavingsPlan(amountToBeSaved, oneTimeSpendingPerCategory());
     }
 
-    public BudgetPlan createSavingsPlan(double amountToBeSaved, BudgetPlan budgetPlan){
-        if(budgetPlan.getBudgetElementList() == null || budgetPlan.getBudgetElementList().isEmpty())
+    public BudgetPlan createSavingsPlan(double amountToBeSaved, BudgetPlan oneTimeBudgetPlan){
+        if(oneTimeBudgetPlan.getBudgetElementList() == null || oneTimeBudgetPlan.getBudgetElementList().isEmpty())
             return BudgetPlan.builder().build();
-
-        List<BudgetElement> budgetElementList = budgetPlan.getBudgetElementList();
+        //TODO take the fixed transaction money into account
+        List<BudgetElement> budgetElementList = oneTimeBudgetPlan.getBudgetElementList();
+        List<BudgetElement> fixedBudgetElementList = fixedSpendingForCategories().getBudgetElementList();
         List<BudgetElement> newBudgetElements = new ArrayList<>();
-        double totalAverageMonthlyAmount = budgetElementList.stream().map(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
+        double averageMonthlyOneTimeTransactions = budgetElementList.stream().mapToDouble(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).sum();
+        double totalAverageMonthlyAmount = averageMonthlyOneTimeTransactions;
+
+        if(fixedBudgetElementList != null && !fixedBudgetElementList.isEmpty())
+            totalAverageMonthlyAmount += fixedBudgetElementList.stream().mapToDouble(element -> element.getMonetaryAmount().getAmount()).sum();
+
         double totalAverageMoneyToBeSaved = amountToBeSaved - totalAverageMonthlyAmount;
         double howMuchSpentOnAverage = Math.abs(budgetElementList.stream().map(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).filter(money->money<0).mapToDouble(Double::doubleValue).sum());
         double missingAmount = (howMuchSpentOnAverage-totalAverageMoneyToBeSaved>0)?totalAverageMoneyToBeSaved:howMuchSpentOnAverage;
 
-        if(totalAverageMoneyToBeSaved < 0){
+        if(totalAverageMoneyToBeSaved < 0){//todo removeable?
             return BudgetPlan.builder().build();
         }
 
@@ -123,27 +157,44 @@ public class BudgetService {
     }
 
 
-    public void createRandomEntry(int amount){
+    private void createRandomVariableMonthlyTransactionEntry(int amount){
         List<org.openapitools.model.OneTimeTransactionDto> randomDtoList = new ArrayList<>();
+
+        randomDtoList.add(createRandomDtoForLabel(getRandomCategories(), UUID.fromString("497f6eca-3333-1111-bfab-53bbabab6a09")));
+
+        for (int i = 0; i < amount; i++) {
+            randomDtoList.add(createRandomDtoForLabel(getRandomCategories()));
+        }
+
+        for(org.openapitools.model.OneTimeTransactionDto randomDto : randomDtoList){
+            List<VariableMonthlyTransaction> variableMonthlyTransactionList = transactionMapper.oneTimeTransactionDtoToVariableMonthlyTransaction(randomDto);
+            variableMonthlyTransactionService.variableMonthlyTransactionCreate(variableMonthlyTransactionList);
+        }
+    }
+
+    private void createRandomFixedTransactionEntry(int amount){
+        List<RecurringTransactionDto> randomDtoList = new ArrayList<>();
+
+        for (int i = 0; i < amount; i++) {
+            randomDtoList.add(createRandomRecurringDtoForLabel(getRandomCategories()));
+        }
+
+        for(RecurringTransactionDto randomDto : randomDtoList){
+            List<FixedTransaction> fixedTransactionList = transactionMapper.recurrinMonthlyTransactionDtoToFixedTransacion(randomDto);
+            fixedTransactionService.fixedTransactionCreate(fixedTransactionList);
+        }
+
+    }
+    private List<String> getRandomCategories(){
         List<String> wordList = new ArrayList<>();
         wordList.add("uni");
         wordList.add("schuhe");
         wordList.add("kleidung");
         wordList.add("essen");
-
-        randomDtoList.add(createRandomDtoForLabel(wordList.subList(0, 3), UUID.fromString("497f6eca-3333-1111-bfab-53bbabab6a09")));
-
         Collections.shuffle(wordList);
-        for (int i = 0; i < amount; i++) {
-            int endValue = (int) Math.floor(Math.random()* wordList.size());
-            randomDtoList.add(createRandomDtoForLabel(wordList.subList(0, endValue+1)));
-        }
+        int endValue = (int) Math.floor(Math.random()* wordList.size());
 
-
-        for(org.openapitools.model.OneTimeTransactionDto randomDto : randomDtoList){
-            List<VariableMonthlyTransaction> variableMonthlyTransactionList = transactionMapper.oneTimeTransactionDtoToVariableMonthlyTransaction(randomDto);
-            variableMonthlyTransactionCreate(variableMonthlyTransactionList);
-        }
+        return wordList.subList(0, endValue+1);
     }
 
     private org.openapitools.model.OneTimeTransactionDto createRandomDtoForLabel(List<String> labels){
@@ -156,7 +207,7 @@ public class BudgetService {
                 .id(uuid)
                 .name("randomName")
                 .type(randomSwapper?TypeDto.INCOME:TypeDto.EXPENSE)
-                .date(LocalDate.now().toString())
+                .date(createRandomDate().toString())
                 .amount(MonetaryAmountDto.builder().amount(roundToTwoDecimalPlaces(Math.random()*100.0)).build())
                 .description("randomDescription")
                 .transfer(org.openapitools.model.TransferDto.builder()
@@ -170,6 +221,37 @@ public class BudgetService {
                 .build();
     }
 
+
+    private int createRandomIntBetween(int start, int end) {
+        return start + (int) Math.round(Math.random() * (end - start));
+    }
+
+    private LocalDate createRandomDate() {
+        int day = createRandomIntBetween(1, 28);
+        int month = createRandomIntBetween(1, 12);
+        int year = createRandomIntBetween(2022, 2024);
+        return LocalDate.of(year, month, day);
+    }
+    private RecurringTransactionDto createRandomRecurringDtoForLabel(List<String> labels){
+        boolean randomSwapper = Math.random()<0.5;
+        return org.openapitools.model.RecurringTransactionDto.builder()
+                .id(UUID.randomUUID())
+                .name("randomName")
+                .type(randomSwapper?TypeDto.INCOME:TypeDto.EXPENSE)
+                .startDate(createRandomDate().toString())
+                .fixedAmount(MonetaryAmountDto.builder().amount(roundToTwoDecimalPlaces(Math.random()*100.0)).build())
+                .description("randomDescription")
+                .transfer(org.openapitools.model.TransferDto.builder()
+                        .sourceBankAccountId(UUID.randomUUID())
+                        .targetBankAccountId(UUID.randomUUID())
+                        .externalTargetId(UUID.randomUUID().toString())
+                        .externalSourceId(UUID.randomUUID().toString())
+                        .build())
+                .labels(labels)
+                .periodicity(randomSwapper?PeriodicityDto.MONTHLY:PeriodicityDto.YEARLY)
+                .build();
+    }
+
     private double roundToTwoDecimalPlaces(double value){
         return Math.round(value*100.0)/100.0;
     }
@@ -177,11 +259,28 @@ public class BudgetService {
     private void printFunction(){
         //TODO delete
         System.out.println("----------history------------");
-        debugPrint(history);
+        debugPrint(variableTransactionHistory);
         /*
         System.out.println("----------currentMonth------------");
         debugPrint(currentMonth);
         System.out.println("----------------------------------");*/
+        System.out.println("\n======================\n");
+
+        debugPrintSpending(1200.0);
+    }
+
+    private void debugPrintSpending(double amount){
+        BudgetPlan bp = oneTimeSpendingPerCategory();
+        List<BudgetElement> oldBudgetList = bp.getBudgetElementList();
+        List<BudgetElement> newBudgetList = createSavingsPlan(amount, bp).getBudgetElementList();
+        double m1 = bp.getBudgetElementList().stream().map(be -> be.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
+        double m2 = newBudgetList.stream().map(be -> be.getMonetaryAmount().getAmount()).mapToDouble(Double::doubleValue).sum();
+        double monthlyIncome = this.fixedTransactionHistory.stream().mapToDouble(transaction -> transaction.calculateAverageAmount().getAmount()).sum();
+        System.out.println("Total\t[" + m1 + "] - goal -> ["+m2+"]\t("+monthlyIncome+")" );
+        for (int index = 0; index < oldBudgetList.size(); index++) {
+            System.out.println(oldBudgetList.get(index).getCategory().getName() + "\t["+ oldBudgetList.get(index).getMonetaryAmount().getAmount() + "] -> ["+newBudgetList.get(index).getMonetaryAmount().getAmount() + "€ ]");
+        }
+        System.out.println(newBudgetList.get(newBudgetList.size()-1).getCategory().getName() + " -> " + newBudgetList.get(newBudgetList.size()-1).getMonetaryAmount().getAmount());
     }
     private void debugPrint(List<VariableMonthlyTransaction> prints){
         //TODO delete

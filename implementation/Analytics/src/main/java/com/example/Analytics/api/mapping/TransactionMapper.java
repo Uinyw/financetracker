@@ -6,13 +6,13 @@ import org.openapitools.client.model.*;
 import org.openapitools.model.BudgetAchievementStatus;
 import org.openapitools.model.BudgetPlanDTO;
 import org.springframework.stereotype.Component;
+import org.openapitools.model.OneTimeTransactionDto;
+import org.openapitools.model.RecurringTransactionDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 public class TransactionMapper {
@@ -28,18 +28,36 @@ public class TransactionMapper {
         return variableMonthlyTransactionList;
     }
 
-    public List<VariableMonthlyTransaction> oneTimeTransactionDtoToVariableMonthlyTransaction(org.openapitools.model.OneTimeTransactionDto oneTimeTransactionDto){
-        return oneTimeTransactionDtoToVariableMonthlyTransaction(oneTimeTransactionDTOMapping(oneTimeTransactionDto));
+    public List<FixedTransaction> recurrinMonthlyTransactionDtoToFixedTransacion(RecurringTransactionDto recurringTransactionDto){
+        List<FixedTransaction> fixedTransactionList = new ArrayList<>();
+
+        if (recurringTransactionDto.getLabels() != null && recurringTransactionDto.getTransfer() != null) {
+            fixedTransactionList = recurringTransactionDto.getLabels().stream()
+                    .map(label -> createFixedTransaction(label, recurringTransactionDto))
+                    .toList();
+        }
+
+        return fixedTransactionList;
     }
 
-
-
+    private Transaction createTransactionFromDto(RecurringTransactionDto reoccuringTransactionDto) {
+        org.openapitools.model.TransferDto transfer = reoccuringTransactionDto.getTransfer();
+        return Transaction.builder()
+                .type(getType(reoccuringTransactionDto))
+                .date(getLocalDateFromTransactionDto(reoccuringTransactionDto))
+                .bankAccountSource(transfer.getTargetBankAccountId())
+                .bankAccountTarget(transfer.getTargetBankAccountId())
+                .amount(getMonetaryAmountFromDto(reoccuringTransactionDto))
+                .referenceId(reoccuringTransactionDto.getId())
+                .id(UUID.randomUUID())
+                .build();
+    }
 
     private Transaction createTransactionFromDto(OneTimeTransactionDto oneTimeTransactionDto) {
-        TransferDto transfer = oneTimeTransactionDto.getTransfer();
+        org.openapitools.model.TransferDto transfer = oneTimeTransactionDto.getTransfer();
         return Transaction.builder()
                 .type(getType(oneTimeTransactionDto))
-                .date(getLocalDateFromOneTimeTransactionDto(oneTimeTransactionDto))
+                .date(getLocalDateFromTransactionDto(oneTimeTransactionDto))
                 .bankAccountSource(transfer.getTargetBankAccountId())
                 .bankAccountTarget(transfer.getTargetBankAccountId())
                 .amount(getMonetaryAmountFromDto(oneTimeTransactionDto))
@@ -82,11 +100,21 @@ public class TransactionMapper {
 
         return money;
     }
+    private MonetaryAmount getMonetaryAmountFromDto(RecurringTransactionDto recurringTransactionDto){
+        MonetaryAmount money = new MonetaryAmount();
+        if (recurringTransactionDto.getFixedAmount() != null
+                && recurringTransactionDto.getFixedAmount().getAmount() != null) {
+            money.setAmount(recurringTransactionDto.getFixedAmount().getAmount().doubleValue());
+        }
+
+        return money;
+    }
 
     private VariableMonthlyTransaction createVariableMonthlyTransaction(String label, OneTimeTransactionDto oneTimeTransactionDto) {
         Transaction transaction = createTransactionFromDto(oneTimeTransactionDto);
         ArrayList<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
+
         VariableMonthlyTransaction oneTimeTransaction = VariableMonthlyTransaction.builder()
                 .referenceTransactions(transactions)
                 .category(new Category(label))
@@ -98,72 +126,72 @@ public class TransactionMapper {
     }
 
 
-    public LocalDate getLocalDateFromOneTimeTransactionDto(OneTimeTransactionDto oneTimeTransactionDto){
+    private FixedTransaction createFixedTransaction(String label, RecurringTransactionDto recurringTransactionDto) {
+        //for all labels one transaction
+        Transaction transaction = createTransactionFromDto(recurringTransactionDto);
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        FixedTransaction fixedTransaction = FixedTransaction.builder()
+                .referenceTransactions(transactions)
+                .periodicity(periodicityDtoToModel(recurringTransactionDto.getPeriodicity()))
+                .category(new Category(label))
+                .id(UUID.randomUUID())
+                .name(label)
+                .build();
+        transaction.setFixedTransaction(fixedTransaction);
+        return fixedTransaction;
+    }
+
+    private Periodicity periodicityDtoToModel(org.openapitools.model.PeriodicityDto periodicityDto){
+        return switch (periodicityDto){
+            case HALF_YEARLY -> Periodicity.HALF_YEARLY;
+            case QUARTERLY -> Periodicity.QUARTERLY;
+            case YEARLY -> Periodicity.YEARLY;
+            case MONTHLY -> Periodicity.MONTHLY;
+        };
+    }
+
+
+    private LocalDate getLocalDateFromTransactionDto(OneTimeTransactionDto oneTimeTransactionDto){
         if(oneTimeTransactionDto.getDate() == null)
             return null;
+        return getLocalDateFromString(oneTimeTransactionDto.getDate());
+    }
+    private LocalDate getLocalDateFromTransactionDto(RecurringTransactionDto oneTimeTransactionDto){
+        if(oneTimeTransactionDto.getStartDate() == null)
+            return null;
+        return getLocalDateFromString(oneTimeTransactionDto.getStartDate());
+    }
+    private LocalDate getLocalDateFromString(String dateString){
         LocalDate date = null;
         try{
-            date = LocalDate.parse(oneTimeTransactionDto.getDate());
+            date = LocalDate.parse(dateString);
         }catch (Exception e){
             System.out.println(e);
         }
-
         return date;
     }
-    public TransactionType getType(OneTimeTransactionDto oneTimeTransactionDto){
-        if(oneTimeTransactionDto.getType() == null){
+    private TransactionType getType(OneTimeTransactionDto oneTimeTransactionDto){
+        if(oneTimeTransactionDto.getType() == null)
             return null;
-        }
-        return switch (oneTimeTransactionDto.getType()){
+
+        return getType(oneTimeTransactionDto.getType());
+    }
+    private TransactionType getType(org.openapitools.model.TypeDto typeDto){
+        return switch (typeDto){
             case INCOME -> TransactionType.INCOME;
             case EXPENSE -> TransactionType.EXPENSE;
             case SHIFT -> null; //TODO how to deal with those?
         };
     }
+    private TransactionType getType(RecurringTransactionDto recurringTransactionDto){
+        if(recurringTransactionDto.getType() == null)
+            return null;
 
-
-    private org.openapitools.client.model.OneTimeTransactionDto oneTimeTransactionDTOMapping(org.openapitools.model.OneTimeTransactionDto oneTimeTransactionDto){
-        return org.openapitools.client.model.OneTimeTransactionDto.builder()
-                .id(oneTimeTransactionDto.getId())
-                .type(typeDtoMapper(oneTimeTransactionDto.getType()))
-                .date(oneTimeTransactionDto.getDate())
-                .name(oneTimeTransactionDto.getName())
-                .amount(typeDtoMapper(oneTimeTransactionDto.getAmount()))
-                .description(oneTimeTransactionDto.getDescription())
-                .labels(oneTimeTransactionDto.getLabels())
-                .transfer(typeDtoMapper(oneTimeTransactionDto.getTransfer()))
-                .transferStatus(typeDtoMapper(oneTimeTransactionDto.getTransferStatus()))
-                .build();
-
+        return getType(recurringTransactionDto.getType());
     }
 
-    private TransferStatusDto typeDtoMapper(org.openapitools.model.TransferStatusDto transferStatusDto){
-        return switch (transferStatusDto){
-            case INITIAL -> TransferStatusDto.INITIAL;
-            case FAILED -> TransferStatusDto.FAILED;
-            case SUCCESSFUL -> TransferStatusDto.SUCCESSFUL;
-        };
-    }
-    private TransferDto typeDtoMapper(org.openapitools.model.TransferDto transferDto){
-        return TransferDto.builder()
-                .sourceBankAccountId(transferDto.getSourceBankAccountId())
-                .externalTargetId(transferDto.getExternalTargetId())
-                .targetBankAccountId(transferDto.getTargetBankAccountId())
-                .externalSourceId(transferDto.getExternalSourceId())
-                .build();
-    }
-
-    private MonetaryAmountDto typeDtoMapper(org.openapitools.model.MonetaryAmountDto monetaryAmountDto){
-        return MonetaryAmountDto.builder().amount(monetaryAmountDto.getAmount()).build();
-    }
-
-    private TypeDto typeDtoMapper(org.openapitools.model.TypeDto typeDto){
-        return switch (typeDto){
-            case SHIFT -> TypeDto.SHIFT;
-            case EXPENSE -> TypeDto.EXPENSE;
-            case INCOME -> TypeDto.INCOME;
-        };
-    }
 
 
 }

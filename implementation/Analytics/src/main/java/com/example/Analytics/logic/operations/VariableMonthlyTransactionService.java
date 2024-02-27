@@ -20,9 +20,9 @@ public class VariableMonthlyTransactionService {
     @Autowired
     private final VariableMonthlyTransactionRepository variableMonthlyTransactionRepository;
 
-    private void updateVariableMonthlyTransaction(final VariableMonthlyTransaction variableMonthlyTransaction) {
-        deleteVariableMonthlyTransaction(variableMonthlyTransaction.getId().toString());
-        saveVariableMonthlyTransaction(variableMonthlyTransaction);
+    public List<VariableMonthlyTransaction> variableMonthlyTransactionUpdate(List<VariableMonthlyTransaction> variableMonthlyTransactionList){
+        variableMonthlyTransactionDelete(variableMonthlyTransactionList);
+        return variableMonthlyTransactionCreate(variableMonthlyTransactionList);
     }
 
     private void deleteVariableMonthlyTransaction(final String variableMonthlyTransactionId) {
@@ -108,7 +108,7 @@ public class VariableMonthlyTransactionService {
     }
 
 
-    public boolean sameCategory(VariableMonthlyTransaction variableMonthlyTransaction1, VariableMonthlyTransaction variableMonthlyTransaction2){
+    private boolean sameCategory(VariableMonthlyTransaction variableMonthlyTransaction1, VariableMonthlyTransaction variableMonthlyTransaction2){
         return variableMonthlyTransaction1.getCategory().getName().equals(variableMonthlyTransaction2.getCategory().getName());
     }
     public List<VariableMonthlyTransaction> updateMonthlyTransactions(List<VariableMonthlyTransaction> variableMonthlyTransactionList) {
@@ -131,15 +131,7 @@ public class VariableMonthlyTransactionService {
 
     private VariableMonthlyTransaction createMonthEntry(VariableMonthlyTransaction variableMonthlyTransaction, List<Transaction> matchedTransactions) {
         List<Transaction> newEntries = matchedTransactions.stream()
-                .map(t -> Transaction.builder()
-                        .id(UUID.randomUUID())
-                        .referenceId(t.getReferenceId())
-                        .date(t.getDate())
-                        .type(t.getType())
-                        .amount(t.getAmount())
-                        .bankAccountSource(t.getBankAccountSource())
-                        .bankAccountTarget(t.getBankAccountTarget())
-                        .build())
+                .map(this::createNewTransactionEntry)
                 .toList();
 
         VariableMonthlyTransaction var = VariableMonthlyTransaction.builder()

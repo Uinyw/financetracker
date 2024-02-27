@@ -24,7 +24,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "fixed_transaction_id")
-    private FixedMonthlyTransaction fixedTransaction;
+    private FixedTransaction fixedTransaction;
 
     private UUID bankAccountSource;
     private UUID bankAccountTarget;
@@ -33,4 +33,5 @@ public class Transaction {
     private MonetaryAmount amount;
 
     private TransactionType type;
+
 }
