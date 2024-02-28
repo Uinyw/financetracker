@@ -23,7 +23,7 @@ public class FixedTransaction {
     @AttributeOverride(name = "name", column = @Column(name = "category_name"))
     private Category category;
     private String name;
-    @OneToMany(mappedBy = "fixedTransaction", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fixedTransaction", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Transaction> referenceTransactions;
     private Periodicity periodicity;
 

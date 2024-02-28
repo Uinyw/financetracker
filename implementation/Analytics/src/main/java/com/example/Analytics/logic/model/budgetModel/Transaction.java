@@ -18,11 +18,11 @@ public class Transaction {
     private UUID referenceId;
     private LocalDate date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "variable_monthly_transaction_id")
     private VariableMonthlyTransaction variableMonthlyTransaction;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fixed_transaction_id")
     private FixedTransaction fixedTransaction;
 

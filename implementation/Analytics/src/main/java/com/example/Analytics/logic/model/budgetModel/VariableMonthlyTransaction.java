@@ -27,7 +27,7 @@ public class VariableMonthlyTransaction {
     private Category category;
 
 
-    @OneToMany(mappedBy = "variableMonthlyTransaction", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "variableMonthlyTransaction", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Transaction> referenceTransactions;
 
     public void appendTransaction(Transaction transaction){

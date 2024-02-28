@@ -116,6 +116,7 @@ public class VariableMonthlyTransactionService {
             return new ArrayList<>();
 
         return variableMonthlyTransactionList.stream()
+                .filter(list -> !list.getReferenceTransactions().isEmpty())
                 .map(this::filterMonth)
                 .filter(Objects::nonNull)
                 .toList();
