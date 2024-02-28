@@ -48,6 +48,5 @@ public class BankAccountTest {
                 .labels(Set.of(new Label("Basic")))
                 .toString();
         assertTrue(bankAccount.contains("id=" + bankAccountId));
-
     }
 }

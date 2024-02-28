@@ -31,7 +31,7 @@ public class ProductService {
     public void createProduct(final Product product) {
         // if product already present, it's just an update -> check product id
         Optional<Product> optionalProduct = productRepository.findById(product.getId());
-        if(optionalProduct.isEmpty() || product.getConsumption().getDate().equals(optionalProduct.get().getConsumption().getDate())){
+        if(optionalProduct.isEmpty() || !product.getConsumption().getDate().equals(optionalProduct.get().getConsumption().getDate())){
             productRepository.save(product);
         }else{
             Product prod = optionalProduct.get();
