@@ -28,6 +28,18 @@ public class TransactionMapper {
         return variableMonthlyTransactionList;
     }
 
+    public List<FixedTransaction> recurrinMonthlyTransactionDtoToFixedTransacion(org.openapitools.client.model.RecurringTransactionDto recurringTransactionDto){
+        List<FixedTransaction> fixedTransactionList = new ArrayList<>();
+
+        if (recurringTransactionDto.getLabels() != null && recurringTransactionDto.getTransfer() != null) {
+            fixedTransactionList = recurringTransactionDto.getLabels().stream()
+                    .map(label -> createFixedTransaction(label, recurringTransactionDto))
+                    .toList();
+        }
+
+        return fixedTransactionList;
+    }
+
     public List<FixedTransaction> recurrinMonthlyTransactionDtoToFixedTransacion(RecurringTransactionDto recurringTransactionDto){
         List<FixedTransaction> fixedTransactionList = new ArrayList<>();
 
@@ -125,6 +137,22 @@ public class TransactionMapper {
         return oneTimeTransaction;
     }
 
+    private FixedTransaction createFixedTransaction(String label, RecurringTransactionDto recurringTransactionDto) {
+        //for all labels one transaction
+        Transaction transaction = createTransactionFromDto(recurringTransactionDto);
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        FixedTransaction fixedTransaction = FixedTransaction.builder()
+                .referenceTransactions(transactions)
+                .periodicity(periodicityDtoToModel(recurringTransactionDto.getPeriodicity()))
+                .category(new Category(label))
+                .id(UUID.randomUUID())
+                .name(label)
+                .build();
+        transaction.setFixedTransaction(fixedTransaction);
+        return fixedTransaction;
+    }
 
     private FixedTransaction createFixedTransaction(String label, RecurringTransactionDto recurringTransactionDto) {
         //for all labels one transaction

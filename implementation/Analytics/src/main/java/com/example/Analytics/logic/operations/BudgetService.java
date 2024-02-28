@@ -5,6 +5,7 @@ import com.example.Analytics.infrastructure.kafka.config.UpdateType;
 import com.example.Analytics.logic.model.budgetModel.*;
 import com.example.Analytics.logic.model.budgetModel.BudgetElement;
 import com.example.Analytics.logic.model.budgetModel.Transaction;
+import com.example.Analytics.logic.model.generalModel.FilterElement;
 import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.*;
@@ -44,6 +45,11 @@ public class BudgetService {
         printFunction(); //TODO remove
     }
 
+    public void fixedTransactionChange(org.openapitools.client.model.RecurringTransactionDto recurringTransactionDto, UpdateType updateType){
+        transactionMapper.recurrinMonthlyTransactionDtoToFixedTransacion(recurringTransactionDto);
+        fixedTransactionChange(recurringTransactionDto, updateType);
+    }
+
     public void fixedTransactionChange(RecurringTransactionDto recurringTransactionDto, UpdateType updateType){
         List<FixedTransaction> fixedTransactionList = transactionMapper.recurrinMonthlyTransactionDtoToFixedTransacion(recurringTransactionDto);
         //TODO mapper
@@ -69,6 +75,7 @@ public class BudgetService {
                         + "\n\tDate:\t" + trans.getDate() );
             }
         }
+        createSavingsPlan(1200);
 
     }
 
@@ -84,18 +91,25 @@ public class BudgetService {
         return new BudgetPlan(budgetElementList);
     }
 
-    public BudgetPlan spendingForEachCategory(){
+    public BudgetPlan spendingForEachCategory(FilterElement filter){
         List<BudgetElement> mergedList = new ArrayList<>(oneTimeSpendingPerCategory().getBudgetElementList());
 
         for (BudgetElement budgetElement : fixedSpendingForCategories().getBudgetElementList()){
+            boolean mergergedValue = false;
             for(BudgetElement existingElement : mergedList){
                 if(budgetElement.getCategory().getName().equals(existingElement.getCategory().getName())){
                     double money = existingElement.getMonetaryAmount().getAmount() + budgetElement.getMonetaryAmount().getAmount();
                     existingElement.setMonetaryAmount(new MonetaryAmount(money));
+                    mergergedValue = true;
+                    break;
                 }
             }
+            if(!mergergedValue){
+                mergedList.add(budgetElement);
+            }
         }
-        return new BudgetPlan(mergedList);
+        BudgetPlan completeBudgetPlan = new BudgetPlan(mergedList);
+        return new BudgetPlan(getBudgetElementsAndFilterIfExists(completeBudgetPlan, filter));
     }
 
     private BudgetPlan fixedSpendingForCategories(){
@@ -114,17 +128,41 @@ public class BudgetService {
         return createSavingsPlan(amountToBeSaved, oneTimeSpendingPerCategory());
     }
 
-    public BudgetPlan createSavingsPlan(double amountToBeSaved, BudgetPlan oneTimeBudgetPlan){
-        if(oneTimeBudgetPlan.getBudgetElementList() == null || oneTimeBudgetPlan.getBudgetElementList().isEmpty())
-            return BudgetPlan.builder().build();
-        //TODO take the fixed transaction money into account
-        List<BudgetElement> budgetElementList = oneTimeBudgetPlan.getBudgetElementList();
-        List<BudgetElement> fixedBudgetElementList = fixedSpendingForCategories().getBudgetElementList();
+    private boolean containsCategory(Category category, List<Category> categoryList){
+        if(categoryList.isEmpty())
+            return true;
+
+        boolean containsCategory = false;
+        for(Category cat : categoryList){
+            if(cat.getName().equals(category.getName()))
+                containsCategory = true;
+        }
+        return containsCategory;
+    }
+
+    public BudgetPlan createSavingsPlan(double amountToBeSaved, FilterElement filterElement){
+        return createSavingsPlan(amountToBeSaved, oneTimeSpendingPerCategory(), fixedSpendingForCategories(), filterElement);
+    }
+
+    private List<BudgetElement> getBudgetElementsAndFilterIfExists(BudgetPlan budgetPlan, FilterElement filterElement){
+        if (budgetPlan == null)
+            return new ArrayList<>();
+        return budgetPlan.getBudgetElementList().stream().filter(x->containsCategory(x.getCategory(), filterElement.getCategoryList())).toList();
+    }
+
+    public BudgetPlan createSavingsPlan(double amountToBeSaved, BudgetPlan oneTimeBudgetPlan, BudgetPlan recurringBudgetPlan, FilterElement filterElement){
+        List<BudgetElement> budgetElementList = getBudgetElementsAndFilterIfExists(oneTimeBudgetPlan, filterElement);
+        List<BudgetElement> fixedBudgetElementList = getBudgetElementsAndFilterIfExists(recurringBudgetPlan, filterElement);
+
+        if(budgetElementList.isEmpty() && fixedBudgetElementList.isEmpty())
+            return new BudgetPlan();
+
+        //TODO adjust calculation
         List<BudgetElement> newBudgetElements = new ArrayList<>();
         double averageMonthlyOneTimeTransactions = budgetElementList.stream().mapToDouble(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).sum();
         double totalAverageMonthlyAmount = averageMonthlyOneTimeTransactions;
 
-        if(fixedBudgetElementList != null && !fixedBudgetElementList.isEmpty())
+        if(!fixedBudgetElementList.isEmpty())
             totalAverageMonthlyAmount += fixedBudgetElementList.stream().mapToDouble(element -> element.getMonetaryAmount().getAmount()).sum();
 
         double totalAverageMoneyToBeSaved = amountToBeSaved - totalAverageMonthlyAmount;
@@ -132,7 +170,9 @@ public class BudgetService {
         double missingAmount = (howMuchSpentOnAverage-totalAverageMoneyToBeSaved>0)?totalAverageMoneyToBeSaved:howMuchSpentOnAverage;
 
         if(totalAverageMoneyToBeSaved < 0){//todo removeable?
-            return BudgetPlan.builder().build();
+            newBudgetElements.addAll(budgetElementList);
+            newBudgetElements.addAll(fixedBudgetElementList);
+            return new BudgetPlan(newBudgetElements);
         }
 
         for(BudgetElement budgetCatagory : budgetElementList){
@@ -154,6 +194,10 @@ public class BudgetService {
         }
 
         return new BudgetPlan(newBudgetElements);
+    }
+
+    public BudgetPlan createSavingsPlan(double amountToBeSaved, BudgetPlan oneTimeBudgetPlan){
+        return createSavingsPlan(amountToBeSaved, oneTimeBudgetPlan, fixedSpendingForCategories(), FilterElement.builder().categoryList(new ArrayList<>()).bankAccountList(new ArrayList<>()).build());
     }
 
 

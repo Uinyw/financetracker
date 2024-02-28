@@ -19,7 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class KafkaProductMessageConsumer implements ProductMessageConsumer {//}, VariableMonthlyTransactionMessageConsumer{//, FixedMonthlyTransactionMessageConsumer{
+public class KafkaProductMessageConsumer implements ProductMessageConsumer , VariableMonthlyTransactionMessageConsumer{//, FixedMonthlyTransactionMessageConsumer{
 
     private final ProductService productService;
     private final BudgetService budgetService;
@@ -45,7 +45,7 @@ public class KafkaProductMessageConsumer implements ProductMessageConsumer {//},
         productService.receiveProduct(productDto, productAmount);
     }
 
-    /*
+
     @KafkaListener(topics = "oneTimeTransaction-update", groupId = "budget")
     public void listenFixedMonthlyTransactionChange(ConsumerRecord<String, JsonNode> cr, JsonNode payload) {
         JsonNode jsonOneTimeTransactionDto = payload.get("oneTimeTransaction");
@@ -82,7 +82,6 @@ public class KafkaProductMessageConsumer implements ProductMessageConsumer {//},
             System.out.println("Json Parsing error\n"+e);
         }
 
-        budgetService.fixedMonthlyTransactionChange(recurringTransactionDto, updateType);
+        budgetService.fixedTransactionChange(recurringTransactionDto, updateType);
     }
-*/
 }
