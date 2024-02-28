@@ -31,11 +31,11 @@ public class ProductMapper {
             return null;
         return Nutrition.builder()
                 .servingSize(nutrition.getServingSize().doubleValue())
-        .calories(nutrition.getCalories().doubleValue())
-        .carbohydrates(nutrition.getCarbohydrates().doubleValue())
-        .protein(nutrition.getProtein().doubleValue())
-        .fat(nutrition.getFat().doubleValue())
-        .sugar(nutrition.getSugar().doubleValue())
+                .calories(nutrition.getCalories().doubleValue())
+                .carbohydrates(nutrition.getCarbohydrates().doubleValue())
+                .protein(nutrition.getProtein().doubleValue())
+                .fat(nutrition.getFat().doubleValue())
+                .sugar(nutrition.getSugar().doubleValue())
                 .build();
     }
 

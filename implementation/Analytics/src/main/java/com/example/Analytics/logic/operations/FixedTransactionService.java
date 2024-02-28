@@ -15,6 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 public class FixedTransactionService {
+
     @Autowired
     private final FixedTransactionRepository fixedTransactionRepository;
 

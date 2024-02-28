@@ -9,38 +9,44 @@ tags:
   - name: Analytics
 
 paths:
-  /budgetPlan{monthlyAmount}:
+  /budgetPlan:
     get:
       summary: Get a budget plan of all the data
       tags:
         - Analytics
       parameters:
         - name: monthlyAmount
-          in: path
+          in: query
           required: true
           description: Retrieve the amount of money that has to be saved each month
           schema:
-            type: string
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportFilterDto'
       responses:
         '200':
           description: Retrieve a budget plan of all the categories
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BudgetPlanDTO'
+                $ref: '#/components/schemas/BudgetPlanDto'
 
-  /forecast{months}:
+  /forecast:
     get:
       summary: Create a new budget forecast for the bank accounts
       tags:
         - Analytics
       parameters:
-        - name: months
-          in: path
+        - name: date
+          in: query
           required: true
           description: Retrieve a detailed forcast using its unique identifier.
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: Successful response
@@ -52,7 +58,7 @@ paths:
           description: Forecast not createable
 
   /nutrition:
-    post:
+    get:
       summary: Get the Nutrition in a given timeframe
       tags:
         - Analytics
@@ -77,119 +83,34 @@ paths:
       summary: Get a report plan of all the data
       tags:
         - Analytics
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportFilterDto'
       responses:
         '200':
           description: Retrieve a budget plan of all the categories
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReportDto'
         '404':
           description: Report cound not be created
 
-  /testTransfer:
-    post:
-      summary: Create a new Transaction
-      tags:
-        - Transaction
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OneTimeTransactionDto'
-
-      responses:
-        '200':
-          description: Bank Account created.
-
-  /testTransferFixed:
-    post:
-      summary: Create a new Transaction
-      tags:
-        - Transaction
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RecurringTransactionDto'
-
-      responses:
-        '200':
-          description: Bank Account created.
-
 components:
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          example: {"message": "Resource not found"}
-
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          example: {"message": "Bad request"}
-
   schemas:
-    ReportDto:
+    ReportFilterDto:
       type: object
       properties:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/Category'
+            type: string
         bankAccounts:
           type: array
           items:
-            $ref: '#/components/schemas/BankAccount'
+            type: string
+            format: uuid
         DurationDto:
           $ref: '#/components/schemas/DurationDto'
-
-
-    BankAccount:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        balance:
-          $ref: '#/components/schemas/MonetaryAmountDto'
-        dispoLimit:
-          $ref: '#/components/schemas/MonetaryAmountDto'
-        labels:
-          type: array
-          items:
-            type: string
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-    Transaction:
-      type: object
-      properties:
-        referenceID:
-          type: string
-        labels:
-          type: array
-          items:
-            type: string
-        amount:
-          $ref: '#/components/schemas/MonetaryAmountDto'
-        description:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum: [incoming, outgoing]
-
 
     DurationDto:
       type: object
@@ -199,34 +120,46 @@ components:
         endTime:
           type: string
 
-    Category:
-      type: string
-
-    BudgetPlanDTO:
+    BudgetPlanDto:
       type: object
       properties:
         id:
           type: string
           format: uuid
         achievementStatus:
-          $ref: '#/components/schemas/BudgetAchievementStatus'
+          $ref: '#/components/schemas/BudgetAchievementStatusDto'
         plan:
           type: array
-          items: # <---- dictionary
+          items:
             $ref: '#/components/schemas/BudgetElementDto'
         date:
           type: string
           format: localDate
 
+    BudgetAchievementStatusDto:
+      type: string
+      enum: [ ACHIEVED, FAILED ]
+
     BudgetElementDto:
       type: object
       properties:
         category:
-          $ref: '#/components/schemas/Category'
+          type: string
         monetaryAmount:
           $ref: '#/components/schemas/MonetaryAmountDto'
 
-    ForecastElement:
+    ForecastDto:
+      type: object
+      properties:
+        plan:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastElementDto'
+        date:
+          type: string
+          format: localDate
+
+    ForecastElementDto:
       type: object
       properties:
         bankAccount:
@@ -235,18 +168,12 @@ components:
         monetaryAmount:
           $ref: '#/components/schemas/MonetaryAmountDto'
 
-    ForecastDto:
+    MonetaryAmountDto:
       type: object
       properties:
-        months:
-          type: integer
-        plan:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ForecastElement'
-        date:
-          type: string
-          format: localDate
+        amount:
+          type: number
+          format: double
 
     NutritionDto:
       type: object
@@ -269,109 +196,3 @@ components:
         sugar:
           type: number
           format: double
-
-
-    BudgetAchievementStatus:
-      type: string
-      enum: [ACHIEVED, FAILED]
-
-
-    OneTimeTransactionDto:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/TransactionDto'
-        - $ref: '#/components/schemas/TransferableDto'
-
-    TransactionDto:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        type:
-          $ref: '#/components/schemas/TypeDto'
-        labels:
-          type: array
-          items:
-            type: string
-        transfer:
-          $ref: '#/components/schemas/TransferDto'
-
-    TransferableDto:
-      type: object
-      properties:
-        amount:
-          $ref: '#/components/schemas/MonetaryAmountDto'
-        date:
-          type: string
-          format: Date
-        transferStatus:
-          $ref: '#/components/schemas/TransferStatusDto'
-    TypeDto:
-      type: string
-      enum: [ SHIFT, INCOME, EXPENSE ]
-
-    TransferStatusDto:
-      type: string
-      enum: [ INITIAL, FAILED, SUCCESSFUL ]
-
-    TransferDto:
-      type: object
-      properties:
-        sourceBankAccountId:
-          type: string
-          format: uuid
-        externalSourceId:
-          type: string
-        targetBankAccountId:
-          type: string
-          format: uuid
-        externalTargetId:
-          type: string
-
-    MonetaryAmountDto:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: double
-
-    RecurringTransactionDto:
-      type: object
-      allOf:
-        - properties:
-            periodicity:
-              $ref: '#/components/schemas/PeriodicityDto'
-            startDate:
-              type: string
-              format: Date
-            fixedAmount:
-              $ref: '#/components/schemas/MonetaryAmountDto'
-            transactionRecords:
-              type: array
-              items:
-                $ref: '#/components/schemas/TransactionRecordDto'
-        - $ref: '#/components/schemas/TransactionDto'
-
-    TransactionRecordDto:
-      type: object
-      allOf:
-        - properties:
-            id:
-              type: string
-              format: uuid
-        - $ref: '#/components/schemas/TransferableDto'
-
-    PeriodicityDto:
-      type: string
-      enum: [MONTHLY, QUARTERLY, HALF_YEARLY, YEARLY]
-
-
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/TOBIASKAESSMANN/RestAPI/1.0.0

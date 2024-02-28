@@ -4,14 +4,12 @@ import com.example.Analytics.logic.model.forecast.Forecast;
 import com.example.Analytics.logic.model.forecast.ForecastEntities;
 import com.example.Analytics.logic.model.forecast.ForecastEntry;
 import org.openapitools.model.ForecastDto;
-import org.openapitools.model.ForecastElement;
 import org.openapitools.model.MonetaryAmountDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class ForecastMapper {
@@ -23,7 +21,7 @@ public class ForecastMapper {
      */
 
     public ForecastDto forecastToDto(Forecast forecast){
-        ForecastDto forecastDto = ForecastDto.builder()
+        /*ForecastDto forecastDto = ForecastDto.builder()
                 .date(LocalDate.now().toString())
                 .months(0)
                 .plan(getHashMapDto(forecast.getForecastEntitiesList()))
@@ -32,10 +30,11 @@ public class ForecastMapper {
         if(forecast.getForecastEntitiesList() != null){
             forecastDto.setMonths(forecast.getForecastEntitiesList().size());
         }
-        return forecastDto;
+        return forecastDto;*/
+        return null;
     }
 
-    private HashMap<String, ForecastElement> getHashMapDto(List<ForecastEntities> forecastEntitiesList){
+    /*private HashMap<String, ForecastElement> getHashMapDto(List<ForecastEntities> forecastEntitiesList){
         HashMap<String, ForecastElement> newHasmapDto = new HashMap<>();
         if(forecastEntitiesList==null)
             return newHasmapDto;
@@ -59,5 +58,5 @@ public class ForecastMapper {
                 .monetaryAmount(new MonetaryAmountDto(forecastEntry.getMonetaryAmount().getAmount()))
                 .build();
         return newForecastElement;
-    }
+    }*/
 }
