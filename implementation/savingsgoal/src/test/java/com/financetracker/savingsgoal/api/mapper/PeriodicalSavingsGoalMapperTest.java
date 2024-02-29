@@ -21,32 +21,12 @@ public class PeriodicalSavingsGoalMapperTest  extends IntegrationTestBase {
     void testPeriodicalSavingsGoalEntity_whenCreate_existsPeriodicalSavingsGoalDto(){
         UUID uuid = UUID.randomUUID();
         double number = 2.0;
-
-        SavingsRecord savingsRecord = SavingsRecord.with()
-                .savingsGoalId(uuid)
-                .amount(createMonetaryAmount(number))
-                .date(LocalDate.now())
-                .achievementStatus(AchievementStatus.FAILED)
-                .id(uuid)
-                .build();
-
         Set<SavingsRecord> savingsRecordSet = new HashSet<>();
+        SavingsRecord savingsRecord = createSavingsRecords(uuid, number);
         savingsRecordSet.add(savingsRecord);
 
-        PeriodicalSavingsGoal periodicalSavingsGoal= PeriodicalSavingsGoal.with()
-                .id(uuid)
-                .goal(createMonetaryAmount(number))
-                .periodicity(Periodicity.YEARLY)
-                .targetBankAccountId(uuid)
-                .sourceBankAccountId(uuid)
-                .savingsRecords(savingsRecordSet)
-                .achievementStatus(AchievementStatus.ACHIEVED)
-                .name("Periodical Savings Goal")
-                .description("description")
-                .duration(createDuration(number))
-                .recurringAmount(createMonetaryAmount(number))
-                .recurringRate(number)
-                .build();
+        PeriodicalSavingsGoal periodicalSavingsGoal = createPeriodicalSavingsGoal(uuid, number, savingsRecordSet, Periodicity.YEARLY);
+
         PeriodicalSavingsGoalDto periodicalSavingsGoalDto = periodicalSavingsGoalMapper.periodicalSavingsGoalEntityToDto(periodicalSavingsGoal);
         PeriodicalSavingsGoal newPeriodicalSavingsGoal = periodicalSavingsGoalMapper.periodicalSavingsGoalDtoToEntity(periodicalSavingsGoalDto);
 
@@ -72,26 +52,71 @@ public class PeriodicalSavingsGoalMapperTest  extends IntegrationTestBase {
         assertThat(newSavingsRecord.getDate(),is(savingsRecord.getDate()));
         assertThat(newSavingsRecord.getAchievementStatus(),is(savingsRecord.getAchievementStatus()));
 
+
+        periodicalSavingsGoal = createPeriodicalSavingsGoal(uuid, number, savingsRecordSet, Periodicity.QUARTERLY);
+        periodicalSavingsGoalDto = periodicalSavingsGoalMapper.periodicalSavingsGoalEntityToDto(periodicalSavingsGoal);
+        newPeriodicalSavingsGoal = periodicalSavingsGoalMapper.periodicalSavingsGoalDtoToEntity(periodicalSavingsGoalDto);
+
+        assertThat(newPeriodicalSavingsGoal.getId(),is(periodicalSavingsGoal.getId()));
+        assertThat(newPeriodicalSavingsGoal.getGoal().getAmount(),is(periodicalSavingsGoal.getGoal().getAmount()));
+        assertThat(newPeriodicalSavingsGoal.getPeriodicity().getMonths(),is(periodicalSavingsGoal.getPeriodicity().getMonths()));
+        assertThat(newPeriodicalSavingsGoal.getTargetBankAccountId(),is(periodicalSavingsGoal.getTargetBankAccountId()));
+        assertThat(newPeriodicalSavingsGoal.getSourceBankAccountId(),is(periodicalSavingsGoal.getSourceBankAccountId()));
+        assertThat(newPeriodicalSavingsGoal.getSavingsRecords().size(),is(periodicalSavingsGoal.getSavingsRecords().size()));
+        assertThat(newPeriodicalSavingsGoal.getAchievementStatus().name(),is(periodicalSavingsGoal.getAchievementStatus().name()));
+        assertThat(newPeriodicalSavingsGoal.getName(),is(periodicalSavingsGoal.getName()));
+        assertThat(newPeriodicalSavingsGoal.getDescription(),is(periodicalSavingsGoal.getDescription()));
+        assertThat(newPeriodicalSavingsGoal.getDuration().getStart(),is(periodicalSavingsGoal.getDuration().getStart()));
+        assertThat(newPeriodicalSavingsGoal.getDuration().getEnd(),is(periodicalSavingsGoal.getDuration().getEnd()));
+        assertThat(newPeriodicalSavingsGoal.getRecurringAmount().getAmount(),is(periodicalSavingsGoal.getRecurringAmount().getAmount()));
+        assertThat(newPeriodicalSavingsGoal.getRecurringRate(),is(periodicalSavingsGoal.getRecurringRate()));
+
+        periodicalSavingsGoal = createPeriodicalSavingsGoal(uuid, number, savingsRecordSet, Periodicity.HALF_YEARLY);
+        periodicalSavingsGoalDto = periodicalSavingsGoalMapper.periodicalSavingsGoalEntityToDto(periodicalSavingsGoal);
+        newPeriodicalSavingsGoal = periodicalSavingsGoalMapper.periodicalSavingsGoalDtoToEntity(periodicalSavingsGoalDto);
+
+        assertThat(newPeriodicalSavingsGoal.getId(),is(periodicalSavingsGoal.getId()));
+        assertThat(newPeriodicalSavingsGoal.getGoal().getAmount(),is(periodicalSavingsGoal.getGoal().getAmount()));
+        assertThat(newPeriodicalSavingsGoal.getPeriodicity().getMonths(),is(periodicalSavingsGoal.getPeriodicity().getMonths()));
+        assertThat(newPeriodicalSavingsGoal.getTargetBankAccountId(),is(periodicalSavingsGoal.getTargetBankAccountId()));
+        assertThat(newPeriodicalSavingsGoal.getSourceBankAccountId(),is(periodicalSavingsGoal.getSourceBankAccountId()));
+        assertThat(newPeriodicalSavingsGoal.getSavingsRecords().size(),is(periodicalSavingsGoal.getSavingsRecords().size()));
+        assertThat(newPeriodicalSavingsGoal.getAchievementStatus().name(),is(periodicalSavingsGoal.getAchievementStatus().name()));
+        assertThat(newPeriodicalSavingsGoal.getName(),is(periodicalSavingsGoal.getName()));
+        assertThat(newPeriodicalSavingsGoal.getDescription(),is(periodicalSavingsGoal.getDescription()));
+        assertThat(newPeriodicalSavingsGoal.getDuration().getStart(),is(periodicalSavingsGoal.getDuration().getStart()));
+        assertThat(newPeriodicalSavingsGoal.getDuration().getEnd(),is(periodicalSavingsGoal.getDuration().getEnd()));
+        assertThat(newPeriodicalSavingsGoal.getRecurringAmount().getAmount(),is(periodicalSavingsGoal.getRecurringAmount().getAmount()));
+        assertThat(newPeriodicalSavingsGoal.getRecurringRate(),is(periodicalSavingsGoal.getRecurringRate()));
     }
 
 
-    private PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID uuid, double number){
+    private PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID uuid, double number, Set<SavingsRecord> savingsRecordSet, Periodicity periodicity){
         return PeriodicalSavingsGoal.with()
                 .id(uuid)
                 .goal(createMonetaryAmount(number))
-                .periodicity(Periodicity.MONTHLY)
+                .periodicity(periodicity)
                 .targetBankAccountId(uuid)
                 .sourceBankAccountId(uuid)
-                .savingsRecords(new HashSet<>())
+                .savingsRecords(savingsRecordSet)
                 .achievementStatus(AchievementStatus.ACHIEVED)
                 .name("Periodical Savings Goal")
                 .description("description")
                 .duration(createDuration(number))
                 .recurringAmount(createMonetaryAmount(number))
-                .recurringRate(2.0)
+                .recurringRate(number)
                 .build();
     }
 
+    private SavingsRecord createSavingsRecords(UUID uuid, double number){
+        return SavingsRecord.with()
+                .savingsGoalId(uuid)
+                .amount(createMonetaryAmount(number))
+                .date(LocalDate.now())
+                .achievementStatus(AchievementStatus.FAILED)
+                .id(uuid)
+                .build();
+    }
 
     private MonetaryAmount createMonetaryAmount(double number){
         MonetaryAmount monetaryAmount = new MonetaryAmount();
