@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.openapitools.model.PeriodicalSavingsGoalDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -90,6 +92,29 @@ public class PeriodicalSavingsGoalMapperTest  extends IntegrationTestBase {
         assertThat(newPeriodicalSavingsGoal.getRecurringRate(),is(periodicalSavingsGoal.getRecurringRate()));
     }
 
+    @Test
+    void stringToDuration_whenMapped_isEqual() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Duration duration = new Duration();
+        duration.setStart(LocalDate.now());
+        duration.setEnd(null);
+
+        Class<?> clazz = PeriodicalSavingsGoalMapper.class;
+
+        Method durationToStringMethod = clazz.getDeclaredMethod("durationToString", Duration.class);
+        durationToStringMethod.setAccessible(true);
+
+        String resultString = (String) durationToStringMethod.invoke(periodicalSavingsGoalMapper, duration);
+
+        Method stringToDurationMethod = clazz.getDeclaredMethod("stringToDuration", String.class);
+        stringToDurationMethod.setAccessible(true);
+
+        Duration newDuration = (Duration) stringToDurationMethod.invoke(periodicalSavingsGoalMapper, resultString);
+
+
+        assertThat(newDuration.getEnd(),is(duration.getEnd()));
+        assertThat(newDuration.getStart(),is(duration.getStart()));
+
+    }
 
     private PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID uuid, double number, Set<SavingsRecord> savingsRecordSet, Periodicity periodicity){
         return PeriodicalSavingsGoal.with()

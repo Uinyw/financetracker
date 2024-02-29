@@ -12,6 +12,8 @@ import org.openapitools.client.model.MonetaryAmountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +29,20 @@ public class RuleBasedSavingsGoalLogicTest extends IntegrationTestBase {
     @Autowired
     private RuleBasedSavingsGoalMatchingLogic ruleBasedSavingsGoalMatchingLogic;
 
+    @Test
+    void ruleBasedSavingsGoalTestIfMatch_ifexists_returnBoolean() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        UUID bankAccountId = UUID.randomUUID();
+
+        RuleBasedSavingsGoal ruleBasedSavingsGoal = createRuleBasedSavingsGoal(bankAccountId,1.0,UUID.randomUUID());
+
+        Class<?> clazz = RuleBasedSavingsGoalMatchingLogic.class;
+        Method privateMethod = clazz.getDeclaredMethod("savingsGoalIsBasedOnBankAccount", RuleBasedSavingsGoal.class, UUID.class);
+        privateMethod.setAccessible(true);
+        boolean result = (boolean) privateMethod.invoke(ruleBasedSavingsGoalMatchingLogic, ruleBasedSavingsGoal, bankAccountId);
+
+        assertThat(result, is(true));
+
+    }
     @Test
     void ruleBasedSavingsGoalMatchRuleTest_ifNot_ThrowsException() throws NoSuchFieldException, IllegalAccessException {
         Class<?> clazz = RuleBasedSavingsGoalMatchingLogic.class;
@@ -62,8 +78,6 @@ public class RuleBasedSavingsGoalLogicTest extends IntegrationTestBase {
         ruleBasedSavingsGoalMatchingLogic.checkForChanges(ruleBasedSavingsGoal);
         achieved = ruleBasedSavingsGoalMatchingLogic.isSavingsGoalAchieved(ruleBasedSavingsGoal, bankAccountDto);
         assertThat(false, is(achieved));
-
-
     }
     @Test
     void ruleBasedSavingsGoal_whenRepositoryAction_thenExists(){
