@@ -22,15 +22,14 @@ public class PeriodicalSavingsGoalTransferLogicTest extends IntegrationTestBase 
     private PeriodicalSavingsGoalTransferLogic periodicalSavingsGoalTransferLogic;
 
     @Test
-    void test(){
+    void givenTransferObject_testTransferFunctions(){
+        //TODO this test should definitively be better
         UUID uuid = UUID.randomUUID();
         double number = 1.0;
         Set<SavingsRecord> savingsRecordSet = new HashSet<>();
         SavingsRecord savingsRecord = createSavingsRecords(uuid, number);
 
-        // Assuming 'periodicalSavingsGoal' is an instance of PeriodicalSavingsGoal
         PeriodicalSavingsGoal periodicalSavingsGoal = createPeriodicalSavingsGoal(uuid, number, savingsRecordSet, Periodicity.MONTHLY);
-        // Assuming 'date' is an instance of LocalDate
         LocalDate date = LocalDate.now(); // Example date
 
         Class<?> clazz = PeriodicalSavingsGoalTransferLogic.class;
