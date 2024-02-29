@@ -4,9 +4,6 @@ import com.financetracker.savingsgoal.IntegrationTestBase;
 import com.financetracker.savingsgoal.logic.model.AchievementStatus;
 import com.financetracker.savingsgoal.logic.model.MonetaryAmount;
 import com.financetracker.savingsgoal.logic.model.SavingsRecord;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
