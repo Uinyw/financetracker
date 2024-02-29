@@ -32,7 +32,7 @@
       <module name="financetracker" options="-parameters" />
       <module name="kafka-example" options="-parameters" />
       <module name="kafkaproducer" options="-parameters" />
-      <module name="openapi-java-client" options="-Xlint:all -J-Xss4m" />
+      <module name="openapi-java-client" options="" />
       <module name="openapi-java-client (1)" options="-Xlint:all -J-Xss4m" />
       <module name="openapi-java-client (2)" options="-Xlint:all -J-Xss4m" />
       <module name="openapi-spring" options="" />
