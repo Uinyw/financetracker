@@ -29,13 +29,14 @@ public class DietServiceTest extends IntegrationTestBase {
 
         @Mock
         private ProductService productService;
-
         @Mock
         private ProductRepository productRepository;
 
         @BeforeEach
         public void setUp() {
             MockitoAnnotations.initMocks(this);
+            ReflectionTestUtils.setField(productService, "productRepository", productRepository);
+            ReflectionTestUtils.setField(dietService, "productService", productService);
         }
 
 
@@ -72,8 +73,7 @@ public class DietServiceTest extends IntegrationTestBase {
 
             when(productRepository.findAll()).thenReturn(List.of(product1, product2, product3));
             when(productService.getProducts()).thenReturn(List.of(product1, product2, product3));
-            ReflectionTestUtils.setField(productService, "productRepository", productRepository);
-            ReflectionTestUtils.setField(dietService, "productService", productService);
+
 
             Nutrition result = dietService.getNutritionForDuration(twoMonthDuration);
 
