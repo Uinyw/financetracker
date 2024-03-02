@@ -43,18 +43,27 @@ public class AnalyticsProductMapperTest extends IntegrationTestBase {
         assertThat(nutrition.getCarbohydrates(), is(newNutritionDto.getCarbohydrates()));
         assertThat(nutrition.getProtein(), is(newNutritionDto.getProtein()));
         assertThat(nutrition.getSugar(), is(newNutritionDto.getSugar()));
-
-        NutritionDto invalidNutritionDto = NutritionDto.builder()
-                .fat(BigDecimal.ONE)
-                .servingSize(BigDecimal.ONE)
-                .calories(BigDecimal.ONE)
-                .carbohydrates(BigDecimal.ONE)
-                .protein(BigDecimal.ONE)
-                .build();
-        Nutrition invalidNutrition = productMapper.nutritionFromDTO(invalidNutritionDto);
-        assertThat(null, is(invalidNutrition));
     }
 
+
+    @Test
+    void givenNutritionDto_whenMissingValue_thenProductisNull(){
+        NutritionDto invalidNutritionDto = null;
+
+        for (int i = 0; i < 6; i++) {
+            System.out.println(i%7);
+            invalidNutritionDto = NutritionDto.builder()
+                    .fat((i%7 == 0)?null:BigDecimal.ONE)
+                    .servingSize((i%7 == 1)?null:BigDecimal.ONE)
+                    .calories((i%7 == 2)?null:BigDecimal.ONE)
+                    .carbohydrates((i%7 == 3)?null:BigDecimal.ONE)
+                    .protein((i%7 == 4)?null:BigDecimal.ONE)
+                    .sugar((i%7 == 5)?null:BigDecimal.ONE)
+                    .build();
+            Nutrition invalidNutrition = productMapper.nutritionFromDTO(invalidNutritionDto);
+            assertThat(null, is(invalidNutrition));
+        }
+    }
 
     @Test
     void givenProductDto_whenMap_thenProductExists(){
