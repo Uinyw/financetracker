@@ -48,6 +48,17 @@ public class AnalyticsBudgetMapperMapperTest extends IntegrationTestBase {
         assertThat(budgetPlan.getCurrentStatus().toString(), is(budgetPlanDto.getAchievementStatus().getValue()));
         assertThat(budgetElement.getMonetaryAmount().getAmount(), is(budgetElementDto.getMonetaryAmount().getAmount()));
         assertThat(budgetElement.getCategory().getName(), is(budgetElementDto.getCategory()));
+
+        budgetPlan = createBudgetPlan(id, AchievementStatus.FAILED, budgetElementList, startDate);
+        budgetPlanDto = budgetMapper.budgetPlanToDto(budgetPlan);
+        budgetElementDto = budgetPlanDto.getPlan().get(0);
+
+
+        assertThat(budgetPlan.getId(), is(budgetPlanDto.getId()));
+        assertThat(budgetPlan.getStartDate().toString(), is(budgetPlanDto.getDate()));
+        assertThat(budgetPlan.getCurrentStatus().toString(), is(budgetPlanDto.getAchievementStatus().getValue()));
+        assertThat(budgetElement.getMonetaryAmount().getAmount(), is(budgetElementDto.getMonetaryAmount().getAmount()));
+        assertThat(budgetElement.getCategory().getName(), is(budgetElementDto.getCategory()));
     }
 
     @Test
