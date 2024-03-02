@@ -36,17 +36,6 @@ public class DietServiceTest extends IntegrationTestBase {
         @BeforeEach
         public void setUp() {
             MockitoAnnotations.initMocks(this);
-            ReflectionTestUtils.setField(productService, "productRepository", productRepository);
-            final Consumption consumptionDate1 = getConsumption(LocalDate.now());
-            final Consumption consumptionDate2 = getConsumption(LocalDate.now().plusMonths(1));
-            final Consumption consumptionDate3 = getConsumption(LocalDate.now().minusMonths(1));
-
-            final Product product1 = createProduct(UUID.randomUUID(), createNutrition(1.0), consumptionDate1);
-            final Product product2 = createProduct(UUID.randomUUID(), createNutrition(2.0), consumptionDate2);
-            final Product product3 = createProduct(UUID.randomUUID(), createNutrition(3.0), consumptionDate3);
-
-            when(productRepository.findAll()).thenReturn(List.of(product1, product2, product3));
-            when(productService.getProducts()).thenReturn(List.of(product1, product2, product3));
         }
 
 
@@ -62,10 +51,31 @@ public class DietServiceTest extends IntegrationTestBase {
             assertThat(result.getCalories(), is(value));
             assertThat(result.getServingSize(), is(value));
             assertThat(result.getFat(), is(value));
+        }
 
-            twoMonthDuration = new Duration(LocalDate.now().toString(),LocalDate.now().plusMonths(2).plusMonths(2).toString());
-            value = 3.0;
-            result = dietService.getNutritionForDuration(twoMonthDuration);
+        @Test
+        void givenDuration_whenCalled_thenRightValueFound(){
+            Duration twoMonthDuration = new Duration(LocalDate.now().minusDays(1).toString(),LocalDate.now().plusMonths(2).toString());
+            double value = 3.0;
+
+            final LocalDate localDate1 = LocalDate.now();
+            final LocalDate localDate2 = localDate1.plusMonths(1);
+            final LocalDate localDate3 = localDate1.minusMonths(1);
+
+            final Consumption consumptionDate1 = getConsumption(localDate1);
+            final Consumption consumptionDate2 = getConsumption(localDate2);
+            final Consumption consumptionDate3 = getConsumption(localDate3);
+
+            final Product product1 = createProduct(UUID.randomUUID(), createNutrition(1.0), consumptionDate1);
+            final Product product2 = createProduct(UUID.randomUUID(), createNutrition(2.0), consumptionDate2);
+            final Product product3 = createProduct(UUID.randomUUID(), createNutrition(3.0), consumptionDate3);
+
+            when(productRepository.findAll()).thenReturn(List.of(product1, product2, product3));
+            when(productService.getProducts()).thenReturn(List.of(product1, product2, product3));
+            ReflectionTestUtils.setField(productService, "productRepository", productRepository);
+            ReflectionTestUtils.setField(dietService, "productService", productService);
+
+            Nutrition result = dietService.getNutritionForDuration(twoMonthDuration);
 
             assertThat(result.getCarbohydrates(), is(value));
             assertThat(result.getSugar(), is(value));
@@ -106,7 +116,7 @@ public class DietServiceTest extends IntegrationTestBase {
 
     private Consumption getConsumption(LocalDate date){
         return Consumption.builder()
-                .date(LocalDate.now())
+                .date(date)
                 .amount(1.0)
                 .build();
     }
