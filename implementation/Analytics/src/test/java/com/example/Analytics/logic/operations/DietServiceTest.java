@@ -1,74 +1,99 @@
 package com.example.Analytics.logic.operations;
 
 import com.example.Analytics.IntegrationTestBase;
-import com.example.Analytics.api.mapping.ProductMapper;
 import com.example.Analytics.infrastructure.db.ProductRepository;
 import com.example.Analytics.logic.model.productModel.Consumption;
 import com.example.Analytics.logic.model.productModel.Duration;
 import com.example.Analytics.logic.model.productModel.Nutrition;
 import com.example.Analytics.logic.model.productModel.Product;
 import org.junit.jupiter.api.Test;
-import org.openapitools.client.model.NutritionDto;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 public class DietServiceTest extends IntegrationTestBase {
-    @Autowired
-    private ProductRepository productRepository;
+        @InjectMocks
+        private DietService dietService;
 
-    @Autowired
-    private DietService dietService;
+        @Mock
+        private ProductService productService;
 
-    @Test
-    void testProductsWithinDuration() {
-        final Consumption consumptionDate1 = getConsumption(LocalDate.now());
-        final Consumption consumptionDate2 = getConsumption(LocalDate.now().plusMonths(1));
-        final Consumption consumptionDate3 = getConsumption(LocalDate.now().minusMonths(1));
+        @Mock
+        private ProductRepository productRepository;
 
-        final Product product1 = createProduct(UUID.randomUUID(), getNutrition(1.0), consumptionDate1);
-        final Product product2 = createProduct(UUID.randomUUID(), getNutrition(2.0), consumptionDate2);
-        final Product product3 = createProduct(UUID.randomUUID(), getNutrition(3.0), consumptionDate3);
+        @BeforeEach
+        public void setUp() {
+            MockitoAnnotations.initMocks(this);
+            ReflectionTestUtils.setField(productService, "productRepository", productRepository);
+            final Consumption consumptionDate1 = getConsumption(LocalDate.now());
+            final Consumption consumptionDate2 = getConsumption(LocalDate.now().plusMonths(1));
+            final Consumption consumptionDate3 = getConsumption(LocalDate.now().minusMonths(1));
 
-        productRepository.save(product1);
-        productRepository.save(product2);
-        productRepository.save(product3);
+            final Product product1 = createProduct(UUID.randomUUID(), createNutrition(1.0), consumptionDate1);
+            final Product product2 = createProduct(UUID.randomUUID(), createNutrition(2.0), consumptionDate2);
+            final Product product3 = createProduct(UUID.randomUUID(), createNutrition(3.0), consumptionDate3);
 
-        final Duration twoMonthDuration = new Duration(LocalDate.now().toString(),LocalDate.now().plusMonths(2).toString());
-
-        Nutrition addedNutrition = dietService.getNutritionForDuration(twoMonthDuration);
-        //final boolean y = dietService.addNutritionValues(product1.getNutrition(),product2.getNutrition());
-        final boolean x = nutritionMatchesValue(addedNutrition,2.0);
-        //assertTrue(x);
-    }
+            when(productRepository.findAll()).thenReturn(List.of(product1, product2, product3));
+            when(productService.getProducts()).thenReturn(List.of(product1, product2, product3));
+        }
 
 
+        @Test
+        public void givenDuration_whenCalled_thenNoValueFound() {
+            Duration twoMonthDuration = new Duration(LocalDate.now().plusMonths(3).toString(),LocalDate.now().plusMonths(5).plusMonths(2).toString());
+            double value = 0.0;
+            Nutrition result = dietService.getNutritionForDuration(twoMonthDuration);
 
-    private boolean nutritionMatchesValue(Nutrition nutrition, double value){
-        return nutrition.getCarbohydrates()==value
-                && nutrition.getSugar() == value
-                && nutrition.getProtein() == value
-                && nutrition.getCalories() == value
-                && nutrition.getServingSize() == value
-                && nutrition.getFat() == value;
-    }
+            assertThat(result.getCarbohydrates(), is(value));
+            assertThat(result.getSugar(), is(value));
+            assertThat(result.getProtein(), is(value));
+            assertThat(result.getCalories(), is(value));
+            assertThat(result.getServingSize(), is(value));
+            assertThat(result.getFat(), is(value));
 
-    private NutritionDto getNutritionDto(BigDecimal basevalue){
-        return NutritionDto.builder()
-                .fat(basevalue)
-                .servingSize(basevalue)
-                .calories(basevalue)
-                .carbohydrates(basevalue)
-                .protein(basevalue)
-                .sugar(basevalue)
-                .build();
-    }
+            twoMonthDuration = new Duration(LocalDate.now().toString(),LocalDate.now().plusMonths(2).plusMonths(2).toString());
+            value = 3.0;
+            result = dietService.getNutritionForDuration(twoMonthDuration);
 
-    private Product createProduct(){
-        return createProduct(UUID.randomUUID(), getNutrition(2.0), getConsumption(LocalDate.now()));
-    }
+            assertThat(result.getCarbohydrates(), is(value));
+            assertThat(result.getSugar(), is(value));
+            assertThat(result.getProtein(), is(value));
+            assertThat(result.getCalories(), is(value));
+            assertThat(result.getServingSize(), is(value));
+            assertThat(result.getFat(), is(value));
+        }
+
+        @Test
+        void givenNutritionValues_whenAdded_thenCombinedValue() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+            final Nutrition nutrition1 = createNutrition(1.0);
+            final Nutrition nutrition2 = createNutrition(2.0);
+
+            Method addNutritionValuesMethod = DietService.class.getDeclaredMethod("addNutritionValues", Nutrition.class, Nutrition.class, double.class, double.class);
+            addNutritionValuesMethod.setAccessible(true);
+
+            Nutrition nutrition = (Nutrition) addNutritionValuesMethod.invoke(dietService, nutrition1, nutrition2, 1.0, 100.0);
+            double x = 3.0;
+
+            assertThat(nutrition.getCarbohydrates(), is(x));
+            assertThat(nutrition.getSugar(), is(x));
+            assertThat(nutrition.getProtein(), is(x));
+            assertThat(nutrition.getCalories(), is(x));
+            assertThat(nutrition.getServingSize(), is(x));
+            assertThat(nutrition.getFat(), is(x));
+        }
+
     private Product createProduct(UUID id, Nutrition nutrition, Consumption consumption){
         return Product.builder()
                 .id(id)
@@ -85,7 +110,7 @@ public class DietServiceTest extends IntegrationTestBase {
                 .amount(1.0)
                 .build();
     }
-    private Nutrition getNutrition(double basevalue){
+    private Nutrition createNutrition(double basevalue){
         return Nutrition.builder()
                 .fat(basevalue)
                 .servingSize(basevalue)

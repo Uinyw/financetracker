@@ -43,12 +43,12 @@ public class DietService {
     }
 
     private Nutrition addNutritionValues(Nutrition nutrition1, Nutrition nutrition2, double amount, double size){
-        nutrition1.setServingSize(nutrition2.getServingSize()*amount*size/100);
-        nutrition1.setProtein(nutrition2.getProtein()*amount*size/100);
-        nutrition1.setCarbohydrates(nutrition2.getCarbohydrates()*amount*size/100);
-        nutrition1.setFat(nutrition2.getFat()*amount*size/100);
-        nutrition1.setSugar(nutrition2.getSugar()*amount*size/100);
-        nutrition1.setCalories(nutrition2.getCalories()*amount*size/100);
+        nutrition1.setServingSize(nutrition1.getServingSize()+nutrition2.getServingSize()*amount*size/100.0);
+        nutrition1.setProtein(nutrition1.getProtein()+nutrition2.getProtein()*amount*size/100.0);
+        nutrition1.setCarbohydrates(nutrition1.getCarbohydrates()+nutrition2.getCarbohydrates()*amount*size/100.0);
+        nutrition1.setFat(nutrition1.getFat()+nutrition2.getFat()*amount*size/100.0);
+        nutrition1.setSugar(nutrition1.getSugar()+nutrition2.getSugar()*amount*size/100.0);
+        nutrition1.setCalories(nutrition1.getCalories()+nutrition2.getCalories()*amount*size/100.0);
         return nutrition1;
     }
 }
