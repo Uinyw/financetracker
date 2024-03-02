@@ -36,7 +36,6 @@ public class AnalyticsProductMapperTest extends IntegrationTestBase {
         assertThat(nutrition.getProtein(), is(baseValue));
         assertThat(nutrition.getSugar(), is(baseValue));
 
-
         org.openapitools.model.NutritionDto newNutritionDto = productMapper.nutritionDtoFromNutrition(nutrition);
         assertThat(nutrition.getFat(), is(newNutritionDto.getFat()));
         assertThat(nutrition.getServingSize(), is(newNutritionDto.getServingSize()));
@@ -45,6 +44,15 @@ public class AnalyticsProductMapperTest extends IntegrationTestBase {
         assertThat(nutrition.getProtein(), is(newNutritionDto.getProtein()));
         assertThat(nutrition.getSugar(), is(newNutritionDto.getSugar()));
 
+        NutritionDto invalidNutritionDto = NutritionDto.builder()
+                .fat(BigDecimal.ONE)
+                .servingSize(BigDecimal.ONE)
+                .calories(BigDecimal.ONE)
+                .carbohydrates(BigDecimal.ONE)
+                .protein(BigDecimal.ONE)
+                .build();
+        Nutrition invalidNutrition = productMapper.nutritionFromDTO(invalidNutritionDto);
+        assertThat(null, is(invalidNutrition));
     }
 
 
