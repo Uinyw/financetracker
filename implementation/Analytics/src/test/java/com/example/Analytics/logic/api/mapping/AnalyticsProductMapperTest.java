@@ -4,7 +4,6 @@ import com.example.Analytics.IntegrationTestBase;
 import com.example.Analytics.api.mapping.ProductMapper;
 import com.example.Analytics.logic.model.productModel.Nutrition;
 import com.example.Analytics.logic.model.productModel.Product;
-import com.example.Analytics.logic.operations.ProductService;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.CategoryDto;
 import org.openapitools.client.model.MonetaryAmountDto;
@@ -19,10 +18,8 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AnalyticsMapperTest extends IntegrationTestBase {
+public class AnalyticsProductMapperTest extends IntegrationTestBase {
     @Autowired
     private ProductMapper productMapper;
 
@@ -38,6 +35,16 @@ public class AnalyticsMapperTest extends IntegrationTestBase {
         assertThat(nutrition.getCarbohydrates(), is(baseValue));
         assertThat(nutrition.getProtein(), is(baseValue));
         assertThat(nutrition.getSugar(), is(baseValue));
+
+
+        org.openapitools.model.NutritionDto newNutritionDto = productMapper.nutritionDtoFromNutrition(nutrition);
+        assertThat(nutrition.getFat(), is(newNutritionDto.getFat()));
+        assertThat(nutrition.getServingSize(), is(newNutritionDto.getServingSize()));
+        assertThat(nutrition.getCalories(), is(newNutritionDto.getCalories()));
+        assertThat(nutrition.getCarbohydrates(), is(newNutritionDto.getCarbohydrates()));
+        assertThat(nutrition.getProtein(), is(newNutritionDto.getProtein()));
+        assertThat(nutrition.getSugar(), is(newNutritionDto.getSugar()));
+
     }
 
 
@@ -68,6 +75,7 @@ public class AnalyticsMapperTest extends IntegrationTestBase {
         assertThat(prod.getNutrition().getCarbohydrates(), is(getNutrition(2.0).getCarbohydrates()));
         assertThat(prod.getNutrition().getServingSize(), is(getNutrition(2.0).getServingSize()));
         assertThat(prod.getId(), is(uuid));
+
     }
 
 
