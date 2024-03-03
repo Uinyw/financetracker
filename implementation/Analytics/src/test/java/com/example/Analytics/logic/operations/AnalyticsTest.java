@@ -35,7 +35,7 @@ class AnalyticsTest extends IntegrationTestBase {
     private ReportService reportService;
 
     @Test
-    void createReport_ifExists(){
+    void createReport_whenCreate_thenExists(){
         reportService.generateReport();
      }
 

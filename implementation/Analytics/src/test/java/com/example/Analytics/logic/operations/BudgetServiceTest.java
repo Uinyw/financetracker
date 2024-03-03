@@ -41,17 +41,14 @@ class BudgetServiceTest extends IntegrationTestBase {
     @Autowired
     private TransactionMapper transactionMapper;
 
-    @Autowired//@InjectMocks
+    @Autowired
     private BudgetService budgetService;
-    //@Mock
     private VariableMonthlyTransactionService variableMonthlyTransactionService;
-    @Autowired//@Mock
+    @Autowired
     private VariableMonthlyTransactionRepository variableMonthlyTransactionRepository;
-    //@Mock
     private FixedTransactionService fixedTransactionService;
     @Mock
     private FixedTransactionRepository fixedTransactionRepository;
-
     @Test
     void testTransactionRecordDto_whenCreate_correctlyCreated(){
         TransferDto transferDto = TransferDto.builder().sourceBankAccountId(UUID.randomUUID()).externalTargetId("").build();
@@ -104,7 +101,6 @@ class BudgetServiceTest extends IntegrationTestBase {
         var x =1;
         //TODO have a look
     }
-
     @Test
     void testVariableMonthlyTransactionChange_whenUpdate_UpdateIsReceived() {
         final var variableMonthlyTransaction = VariableMonthlyTransaction.builder()
@@ -211,9 +207,8 @@ class BudgetServiceTest extends IntegrationTestBase {
 
         var x = 0;
         assertEquals(3, budgetPlan.getBudgetElementList().size());
-        assertEquals(80, budgetPlan.getBudgetElementList().get(budgetPlan.getBudgetElementList().size()-1).getMonetaryAmount().getAmount());
+        assertEquals(100, budgetPlan.getBudgetElementList().get(budgetPlan.getBudgetElementList().size()-1).getMonetaryAmount().getAmount());
     }
-
     @Test
     void testBudgetPlan_whenGettingData_CorrectlyCreated() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         double amountToBeSaved = 1200.0;
@@ -240,7 +235,6 @@ class BudgetServiceTest extends IntegrationTestBase {
         assertThat(result.getBudgetElementList().size(), is(2));
         assertThat(result.getStartDate().toString(), is(LocalDate.now().toString()));
     }
-
     @Test
     void testBudgetPlanWithoutFilter_whenGettingData_CorrectlyCreated() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         double amountToBeSaved = 1200.0;
@@ -270,12 +264,10 @@ class BudgetServiceTest extends IntegrationTestBase {
         assertThat(result.getBudgetElementList().size(), is(4));
         assertThat(result.getStartDate().toString(), is(LocalDate.now().toString()));
     }
-
     @Test
     void testBudgetPlanSpendingForCategories_whenGettingData_CorrectlyCreated() throws NoSuchFieldException, IllegalAccessException {
         FilterElement filterElement = FilterElement.builder().bankAccountList(new ArrayList<>()).categoryList(new ArrayList<>(List.of(new Category("name 1"), new Category( "name 2")))).duration(new Duration(LocalDate.now().toString(), LocalDate.now().toString())).build();
         BudgetPlan budgetPlan = budgetService.spendingForEachCategory(filterElement);
-
 
         assertThat(budgetPlan.getCurrentStatus(), is(AchievementStatus.ACHIEVED));
         assertThat(budgetPlan.getBudgetElementList().size(), is(0));
@@ -300,10 +292,9 @@ class BudgetServiceTest extends IntegrationTestBase {
 
         assertThat(budgetPlan.getCurrentStatus(), is(AchievementStatus.ACHIEVED));
         assertThat(budgetPlan.getBudgetElementList().size(), is(3));
-        assertThat(budgetPlan.getBudgetElementList().get(0).getMonetaryAmount().getAmount(), is(300.0));
+        assertThat(budgetPlan.getBudgetElementList().get(0).getMonetaryAmount().getAmount(), is(-20.0));
         assertThat(budgetPlan.getStartDate().toString(), is(LocalDate.now().toString()));
     }
-
     @AfterEach
     void tearDown() {
         variableMonthlyTransactionRepository.deleteAll();

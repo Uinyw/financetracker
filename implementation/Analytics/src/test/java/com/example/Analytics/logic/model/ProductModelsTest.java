@@ -82,7 +82,6 @@ public class ProductModelsTest  extends IntegrationTestBase {
         assertThat(product.getConsumption(), is(newConsumption));
         assertThat(product.getNutrition(), is(newNutrition));
     }
-
     @Test
     void givenNutritionBuilder_whenToString_thenStringRepresentationContainsValidId() {
         final var baseValue = 2.0;
@@ -111,7 +110,6 @@ public class ProductModelsTest  extends IntegrationTestBase {
                 .toString();
         //assertTrue(product.contains("id=" + id));
     }
-
     @Test
     void givenConsumptionBuilder_whenToString_thenStringRepresentationContainsValidId() {
         final var date = LocalDate.now();

@@ -58,7 +58,6 @@ public class AnalyticsTransactionMapperTest extends IntegrationTestBase {
         assertThat(oneTimeTransactionDto.getDate() == null, is(referenceTransaction.getDate() == null));
     }
 
-
     @Test
     void givenOneTimeTransactionDto_whenMapWithShiftNull_thenVariableMonthlyTransactionsExists(){
         final UUID id = UUID.randomUUID();
@@ -211,7 +210,6 @@ public class AnalyticsTransactionMapperTest extends IntegrationTestBase {
                 .date(date)
                 .build();
     }
-
     private RecurringTransactionDto createRecurringTransactionDto(UUID id, TypeDto type, List<String> labels, TransferDto transfer, PeriodicityDto periodicity, String startDate, MonetaryAmountDto amountDto, List<TransactionRecordDto> transactionRecords){
         return RecurringTransactionDto.builder()
                 .id(id)
@@ -239,7 +237,6 @@ public class AnalyticsTransactionMapperTest extends IntegrationTestBase {
                 .date(date)
                 .build();
     }
-
     private TransferDto createTransferDto(UUID externalSourceId, UUID targetBankAccountId, UUID sourceBankAccountId, UUID externalTargetId){
         return TransferDto.builder()
                 .externalSourceId(externalSourceId.toString())

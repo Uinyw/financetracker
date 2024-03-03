@@ -69,7 +69,7 @@ public class AnalyticsBudgetMapperMapperTest extends IntegrationTestBase {
         assertThat(null, is(filterElement));
     }
 
-private BudgetElement createBudgetElement(MonetaryAmount monetaryAmount, Category category){
+    private BudgetElement createBudgetElement(MonetaryAmount monetaryAmount, Category category){
         return BudgetElement.builder()
                 .monetaryAmount(monetaryAmount)
                 .category(category)

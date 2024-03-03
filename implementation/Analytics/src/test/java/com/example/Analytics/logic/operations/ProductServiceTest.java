@@ -31,9 +31,8 @@ public class ProductServiceTest extends IntegrationTestBase {
     @Autowired
     private ProductRepository productRepository;
 
-
     @Test
-    void testProductChange() {
+    void testProductChange_whenChanged_correctlyChanged() {
         final Product product= createProduct();
 
         productService.createProduct(product);
@@ -41,9 +40,8 @@ public class ProductServiceTest extends IntegrationTestBase {
         final var x = productRepository.findAll();
         assertEquals(1, x.size());
         }
-
     @Test
-    void testProductUpdate(){
+    void testProductUpdate_whenChanged_correctlyUpdated(){
         final UUID id = UUID.randomUUID();
         final LocalDate consumptionDate = LocalDate.now();
         final var product = createProduct(id, getNutrition(1.0), getConsumption(consumptionDate));
@@ -55,9 +53,8 @@ public class ProductServiceTest extends IntegrationTestBase {
         final var x = productRepository.findAll();
         assertEquals(1, x.size());
     }
-
     @Test
-    void testProductReceiveDtoCreate() {
+    void testProductReceiveDtoCreate_whenCreated_thenExists() {
         final ProductDto productDto = ProductDto.builder()
                 .id(UUID.randomUUID())
                 .price(new MonetaryAmountDto(1.0))
@@ -94,7 +91,7 @@ public class ProductServiceTest extends IntegrationTestBase {
         assertTrue(x.isPresent());
     }
     @Test
-    void testProductReceivePoductDto(){
+    void testProductReceivePoductDto_whenCreated_thenExists(){
         final ProductDto productDto = ProductDto.builder()
                 .id(UUID.randomUUID())
                 .price(new MonetaryAmountDto(1.0))
@@ -111,9 +108,8 @@ public class ProductServiceTest extends IntegrationTestBase {
         final var x = productService.getProducts();
         assertEquals(1, x.size());
     }
-
     @Test
-    void testProductGetPoducts(){
+    void testProductGetPoducts_whenCreated_thenReceive(){
         final Product product = createProduct();
 
         productService.createProduct(product);

@@ -26,7 +26,6 @@ import static org.mockito.Mockito.when;
 public class DietServiceTest extends IntegrationTestBase {
         @InjectMocks
         private DietService dietService;
-
         @Mock
         private ProductService productService;
         @Mock
@@ -38,7 +37,6 @@ public class DietServiceTest extends IntegrationTestBase {
             ReflectionTestUtils.setField(productService, "productRepository", productRepository);
             ReflectionTestUtils.setField(dietService, "productService", productService);
         }
-
 
         @Test
         public void givenDuration_whenCalled_thenNoValueFound() {
@@ -104,30 +102,29 @@ public class DietServiceTest extends IntegrationTestBase {
             assertThat(nutrition.getFat(), is(x));
         }
 
-    private Product createProduct(UUID id, Nutrition nutrition, Consumption consumption){
-        return Product.builder()
-                .id(id)
-                .consumption(consumption)
-                .name("product Name")
-                .size(100.0)
-                .nutrition(nutrition)
-                .build();
-    }
-
-    private Consumption getConsumption(LocalDate date){
-        return Consumption.builder()
-                .date(date)
-                .amount(1.0)
-                .build();
-    }
-    private Nutrition createNutrition(double basevalue){
-        return Nutrition.builder()
-                .fat(basevalue)
-                .servingSize(basevalue)
-                .calories(basevalue)
-                .carbohydrates(basevalue)
-                .protein(basevalue)
-                .sugar(basevalue)
-                .build();
-    }
+        private Product createProduct(UUID id, Nutrition nutrition, Consumption consumption){
+            return Product.builder()
+                    .id(id)
+                    .consumption(consumption)
+                    .name("product Name")
+                    .size(100.0)
+                    .nutrition(nutrition)
+                    .build();
+        }
+        private Consumption getConsumption(LocalDate date){
+            return Consumption.builder()
+                    .date(date)
+                    .amount(1.0)
+                    .build();
+        }
+        private Nutrition createNutrition(double basevalue){
+            return Nutrition.builder()
+                    .fat(basevalue)
+                    .servingSize(basevalue)
+                    .calories(basevalue)
+                    .carbohydrates(basevalue)
+                    .protein(basevalue)
+                    .sugar(basevalue)
+                    .build();
+        }
 }
