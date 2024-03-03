@@ -208,39 +208,39 @@ class SavingsGoalResourceTest extends IntegrationTestBase {
                 .statusCode(HttpStatus.OK.value())
                 .and().body("size()", is(0));
     }
-@Test
-void givenRuleBasedSavingsGoalDto_whenPatchedSavingsGoal_thenSavingsGoalUpdate(){
-    final var ruleBasedSavingsGoal = RuleBasedSavingsGoalDto.builder()
-            .id(UUID.randomUUID())
-            .name("Savings")
-            .description("Monthly Savings")
-            .achievementStatus(AchievementStatusDto.ACHIEVED)
-            .matchingType(MatchingTypeDto.ALL)
-            .rules(Collections.emptyList())
-            .build();
 
-    given().port(port)
-            .contentType(ContentType.JSON)
-            .body(ruleBasedSavingsGoal)
-            .patch(LOCAL_BASE_URL_WITHOUT_PORT + "/savings-goals/rule-based/" + ruleBasedSavingsGoal.getId().toString())
-            .then()
-            .statusCode(HttpStatus.NOT_FOUND.value());
+    @Test
+    void givenRuleBasedSavingsGoalDto_whenPatchedSavingsGoal_thenSavingsGoalUpdate(){
+        final var ruleBasedSavingsGoal = RuleBasedSavingsGoalDto.builder()
+                .id(UUID.randomUUID())
+                .name("Savings")
+                .description("Monthly Savings")
+                .achievementStatus(AchievementStatusDto.ACHIEVED)
+                .matchingType(MatchingTypeDto.ALL)
+                .rules(Collections.emptyList())
+                .build();
 
-    given().port(port)
-            .contentType(ContentType.JSON)
-            .body(ruleBasedSavingsGoal)
-            .post(LOCAL_BASE_URL_WITHOUT_PORT + "/savings-goals/rule-based")
-            .then()
-            .statusCode(HttpStatus.CREATED.value());
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(ruleBasedSavingsGoal)
+                .patch(LOCAL_BASE_URL_WITHOUT_PORT + "/savings-goals/rule-based/" + ruleBasedSavingsGoal.getId().toString())
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
 
-    given().port(port)
-            .contentType(ContentType.JSON)
-            .body(ruleBasedSavingsGoal)
-            .patch(LOCAL_BASE_URL_WITHOUT_PORT + "/savings-goals/rule-based/" + ruleBasedSavingsGoal.getId().toString())
-            .then()
-            .statusCode(HttpStatus.OK.value());
-}
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(ruleBasedSavingsGoal)
+                .post(LOCAL_BASE_URL_WITHOUT_PORT + "/savings-goals/rule-based")
+                .then()
+                .statusCode(HttpStatus.CREATED.value());
 
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .body(ruleBasedSavingsGoal)
+                .patch(LOCAL_BASE_URL_WITHOUT_PORT + "/savings-goals/rule-based/" + ruleBasedSavingsGoal.getId().toString())
+                .then()
+                .statusCode(HttpStatus.OK.value());
+    }
 
     @Test
     void givenRuleBasedSavingsGoalDto_whenCreateSavingsGoal_thenSavingsGoalExists(){
