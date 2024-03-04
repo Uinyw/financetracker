@@ -2,6 +2,7 @@ package com.example.Analytics;
 
 import com.example.Analytics.logic.model.budgetModel.BudgetElement;
 import com.example.Analytics.logic.model.budgetModel.BudgetPlan;
+import com.example.Analytics.logic.model.forecast.Forecast;
 import com.example.Analytics.logic.model.productModel.Nutrition;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -13,11 +14,11 @@ import java.io.IOException;
 @Component
 public class ExcelWriter {
     
-    public void createNutritionExcel(Nutrition nutritionData, BudgetPlan budgetData, BudgetPlan forecastData){
+    public void createNutritionExcel(Nutrition nutritionData, BudgetPlan budgetData, Forecast forecastData){
         try (Workbook workbook = new XSSFWorkbook()) {
             createNutritionSheet(workbook, nutritionData);
             createBudgetSheet(workbook, budgetData, "budget");
-            createBudgetSheet(workbook, forecastData, "forecast");
+            createForecastSheet(workbook, forecastData, "forecast");
 
             try (FileOutputStream fileOut = new FileOutputStream("Report.xlsx")) {
                 workbook.write(fileOut);
@@ -29,6 +30,20 @@ public class ExcelWriter {
             e.printStackTrace();
         }
     }
+
+    private static void createForecastSheet(Workbook workbook, Forecast forecast, String name) {
+        Sheet sheet = workbook.createSheet(name);
+
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Date");
+        headerRow.createCell(1).setCellValue("Amount in €");
+
+        int rowNum = 1;
+        for(var entry : forecast.getForecastEntriesList().entrySet()){
+            sheet.createRow(rowNum++).createCell(1).setCellValue(entry.getValue().toString());
+        }
+    }
+
 
     private static void createBudgetSheet(Workbook workbook, BudgetPlan budgetData, String name) {
         Sheet sheet = workbook.createSheet(name);

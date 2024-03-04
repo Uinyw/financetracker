@@ -1,15 +1,11 @@
 package com.example.Analytics.api.mapping;
 
 import com.example.Analytics.logic.model.forecast.Forecast;
-import com.example.Analytics.logic.model.forecast.ForecastEntities;
-import com.example.Analytics.logic.model.forecast.ForecastEntry;
 import org.openapitools.model.ForecastDto;
 import org.openapitools.model.ForecastElementDto;
 import org.openapitools.model.MonetaryAmountDto;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 
 @Component

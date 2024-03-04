@@ -41,7 +41,6 @@ public class AnalyticsForecastMapperTest extends IntegrationTestBase {
         Forecast forecast = createForecast(localDate, forecastEntryList);
         ForecastDto forecastDto = forecastMapper.forecastToDto(forecast);
 
-        var x = 0;
         assertThat(localDate.toString(), is(forecastDto.getDate()));
         assertThat(1, is(forecastDto.getPlan().size()));
         assertThat(uuid, is(forecastDto.getPlan().get(0).getBankAccount()));

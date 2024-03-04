@@ -3,7 +3,6 @@ package com.example.Analytics.logic.operations;
 import com.example.Analytics.infrastructure.db.FixedTransactionRepository;
 import com.example.Analytics.logic.model.budgetModel.FixedTransaction;
 import com.example.Analytics.logic.model.budgetModel.Transaction;
-import com.example.Analytics.logic.model.budgetModel.VariableMonthlyTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
