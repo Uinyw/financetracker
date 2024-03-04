@@ -7,20 +7,19 @@ import com.example.Analytics.logic.model.budgetModel.AchievementStatus;
 import com.example.Analytics.logic.model.budgetModel.BudgetElement;
 import com.example.Analytics.logic.model.budgetModel.BudgetPlan;
 import com.example.Analytics.logic.model.budgetModel.Category;
+import com.example.Analytics.logic.model.generalModel.BankAccount;
 import com.example.Analytics.logic.model.generalModel.FilterElement;
 import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
 import com.example.Analytics.logic.model.productModel.Nutrition;
 import com.example.Analytics.logic.model.productModel.Product;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.*;
-import org.openapitools.model.BudgetAchievementStatusDto;
-import org.openapitools.model.BudgetElementDto;
-import org.openapitools.model.BudgetPlanDto;
-import org.openapitools.model.ReportFilterDto;
+import org.openapitools.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,7 +65,32 @@ public class AnalyticsBudgetMapperMapperTest extends IntegrationTestBase {
         ReportFilterDto reportFilterDto = ReportFilterDto.builder().build();
         FilterElement filterElement = budgetMapper.filterDtoToElement(reportFilterDto);
 
-        assertThat(null, is(filterElement));
+        assertThat(null, is(filterElement.getDuration()));
+        assertThat(0, is(filterElement.getCategoryList().size()));
+        assertThat(0, is(filterElement.getBankAccountList().size()));
+    }
+
+    @Test
+    void testRealfIlter() {
+        UUID bankAccountID = UUID.randomUUID();
+        List<UUID> bankAccounts = List.of(bankAccountID);
+        LocalDate date = LocalDate.now();
+        List<String> categoryList = List.of("food", "uni");
+        DurationDto durationDto = new DurationDto(date.toString(), date.plusDays(1).toString());
+
+        ReportFilterDto reportFilterDto = ReportFilterDto.builder()
+                .bankAccounts(bankAccounts)
+                .durationDto(durationDto)
+                .categories(categoryList)
+                .build();
+        FilterElement filterElement = budgetMapper.filterDtoToElement(reportFilterDto);
+
+        assertThat(1, is(filterElement.getBankAccountList().size()));
+        assertThat(2, is(filterElement.getCategoryList().size()));
+        assertThat(bankAccountID, is(filterElement.getBankAccountList().get(0).getId()));
+        assertThat("food", is(filterElement.getCategoryList().get(0).getName()));
+        assertThat(date.plusDays(1), is(filterElement.getDuration().getEndTime()));
+        assertThat(date, is(filterElement.getDuration().getStartTime()));
     }
 
     private BudgetElement createBudgetElement(MonetaryAmount monetaryAmount, Category category){
