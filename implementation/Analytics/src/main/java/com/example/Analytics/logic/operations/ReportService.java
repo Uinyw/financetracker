@@ -34,7 +34,8 @@ public class ReportService {
         //TODO generate report, delete code above, use the bank account
         Nutrition nutritionData = generateDietReport(filter.getDuration());
         BudgetPlan budgetData = budgetService.spendingForEachCategory(filter);
-        excelWriter.createNutritionExcel(nutritionData, budgetData);
+        BudgetPlan forecastData = budgetService.spendingForEachCategory(filter);
+        excelWriter.createNutritionExcel(nutritionData, budgetData, forecastData);
     }
     private Nutrition generateDietReport(Duration duration) {
         return dietService.getNutritionForDuration(duration);

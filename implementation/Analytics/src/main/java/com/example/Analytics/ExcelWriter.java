@@ -2,7 +2,6 @@ package com.example.Analytics;
 
 import com.example.Analytics.logic.model.budgetModel.BudgetElement;
 import com.example.Analytics.logic.model.budgetModel.BudgetPlan;
-import com.example.Analytics.logic.model.generalModel.MoneyPerCategory;
 import com.example.Analytics.logic.model.productModel.Nutrition;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -10,15 +9,15 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 @Component
 public class ExcelWriter {
     
-    public void createNutritionExcel(Nutrition nutritionData, BudgetPlan budgetData){
+    public void createNutritionExcel(Nutrition nutritionData, BudgetPlan budgetData, BudgetPlan forecastData){
         try (Workbook workbook = new XSSFWorkbook()) {
             createNutritionSheet(workbook, nutritionData);
-            createBudgetSheet(workbook, budgetData);
+            createBudgetSheet(workbook, budgetData, "budget");
+            createBudgetSheet(workbook, forecastData, "forecast");
 
             try (FileOutputStream fileOut = new FileOutputStream("Report.xlsx")) {
                 workbook.write(fileOut);
@@ -31,8 +30,8 @@ public class ExcelWriter {
         }
     }
 
-    private static void createBudgetSheet(Workbook workbook, BudgetPlan budgetData) {
-        Sheet sheet = workbook.createSheet("budget");
+    private static void createBudgetSheet(Workbook workbook, BudgetPlan budgetData, String name) {
+        Sheet sheet = workbook.createSheet(name);
 
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(0).setCellValue("Category");
