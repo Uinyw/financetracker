@@ -1,6 +1,7 @@
 package com.financetracker.savingsgoal.BuilderClasses;
 
 import com.financetracker.savingsgoal.IntegrationTestBase;
+import com.financetracker.savingsgoal.api.mapping.RuleBasedSavingsGoalMapper;
 import com.financetracker.savingsgoal.infrastructure.db.RuleBasedSavingsGoalRepository;
 import com.financetracker.savingsgoal.logic.model.*;
 import com.financetracker.savingsgoal.logic.operations.PeriodicalSavingsGoalLogic;
@@ -9,18 +10,17 @@ import com.financetracker.savingsgoal.logic.operations.RuleBasedSavingsGoalMatch
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.BankAccountDto;
 import org.openapitools.client.model.MonetaryAmountDto;
+import org.openapitools.model.RuleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RuleBasedSavingsGoalLogicTest extends IntegrationTestBase {
     @Autowired
@@ -78,6 +78,42 @@ public class RuleBasedSavingsGoalLogicTest extends IntegrationTestBase {
         ruleBasedSavingsGoalMatchingLogic.checkForChanges(ruleBasedSavingsGoal);
         achieved = ruleBasedSavingsGoalMatchingLogic.isSavingsGoalAchieved(ruleBasedSavingsGoal, bankAccountDto);
         assertThat(false, is(achieved));
+    }
+    @Test
+    void tmp() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Rule rule = createRule(RuleType.EQUALS, 100.0);
+        double amount = 100.0;
+
+        Method matchRuleType = RuleBasedSavingsGoalMatchingLogic.class.getDeclaredMethod("matchRuleType", Rule.class, double.class);
+        matchRuleType.setAccessible(true);
+
+        Boolean result = (Boolean) matchRuleType.invoke(ruleBasedSavingsGoalMatchingLogic, rule, amount);
+        assertTrue(result);
+
+        rule = createRule(RuleType.EQUALS, 100.0);
+        amount = 99.0;
+        result = (Boolean) matchRuleType.invoke(ruleBasedSavingsGoalMatchingLogic, rule, amount);
+        assertTrue(!result);
+
+        rule = createRule(RuleType.LESS_THAN, 100.0);
+        amount = 99.0;
+        result = (Boolean) matchRuleType.invoke(ruleBasedSavingsGoalMatchingLogic, rule, amount);
+        assertTrue(result);
+
+        rule = createRule(RuleType.LESS_THAN, 99.0);
+        amount = 99.0;
+        result = (Boolean) matchRuleType.invoke(ruleBasedSavingsGoalMatchingLogic, rule, amount);
+        assertTrue(!result);
+
+        rule = createRule(RuleType.GREATER_THAN, 99.0);
+        amount = 99.0;
+        result = (Boolean) matchRuleType.invoke(ruleBasedSavingsGoalMatchingLogic, rule, amount);
+        assertTrue(!result);
+
+        rule = createRule(RuleType.GREATER_THAN, 99.0);
+        amount = 100.0;
+        result = (Boolean) matchRuleType.invoke(ruleBasedSavingsGoalMatchingLogic, rule, amount);
+        assertTrue(result);
     }
     @Test
     void ruleBasedSavingsGoal_whenRepositoryAction_thenExists(){
@@ -161,5 +197,8 @@ public class RuleBasedSavingsGoalLogicTest extends IntegrationTestBase {
         MonetaryAmountDto monetaryAmountDto = new MonetaryAmountDto();
         monetaryAmountDto.setAmount(number);
         return monetaryAmountDto;
+    }
+    private Rule createRule(RuleType ruleType, double amount){
+        return createRule(UUID.randomUUID(), amount,UUID.randomUUID(), ruleType);
     }
 }
