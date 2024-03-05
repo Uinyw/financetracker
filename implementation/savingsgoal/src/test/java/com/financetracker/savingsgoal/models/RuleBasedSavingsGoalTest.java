@@ -4,7 +4,6 @@ import com.financetracker.savingsgoal.IntegrationTestBase;
 import com.financetracker.savingsgoal.logic.model.*;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
