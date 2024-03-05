@@ -53,7 +53,6 @@ public class BudgetService {
         if(budgetElementList.isEmpty() && fixedBudgetElementList.isEmpty())
             return new BudgetPlan();
 
-        //TODO adjust calculation
         List<BudgetElement> newBudgetElements = new ArrayList<>();
         double averageMonthlyOneTimeTransactions = budgetElementList.stream().mapToDouble(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).sum();
         double totalAverageMonthlyAmount = averageMonthlyOneTimeTransactions;
