@@ -22,18 +22,16 @@ public class PeriodicalSavingsGoalTransferLogicTest extends IntegrationTestBase 
     private PeriodicalSavingsGoalTransferLogic periodicalSavingsGoalTransferLogic;
 
     @Test
-    void givenTransferObject_testTransferFunctions(){
-        //TODO this test should definitively be better
+    void givenTransferObject_testTransferFunctions() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         UUID uuid = UUID.randomUUID();
         double number = 1.0;
         Set<SavingsRecord> savingsRecordSet = new HashSet<>();
         SavingsRecord savingsRecord = createSavingsRecords(uuid, number);
 
         PeriodicalSavingsGoal periodicalSavingsGoal = createPeriodicalSavingsGoal(uuid, number, savingsRecordSet, Periodicity.MONTHLY);
-        LocalDate date = LocalDate.now(); // Example date
+        LocalDate date = LocalDate.now();
 
         Class<?> clazz = PeriodicalSavingsGoalTransferLogic.class;
-        try {
         Method isFinishedMethod  = clazz.getDeclaredMethod("isFinished", PeriodicalSavingsGoal.class, LocalDate.class);
         Method setSavingGoalStatusMethod = clazz.getDeclaredMethod("setSavingGoalStatus", PeriodicalSavingsGoal.class);
         Method isDueMethod = clazz.getDeclaredMethod("isDue", PeriodicalSavingsGoal.class, LocalDate.class);
@@ -45,25 +43,51 @@ public class PeriodicalSavingsGoalTransferLogicTest extends IntegrationTestBase 
         transferSavingsGoalMethod.setAccessible(true);
 
         boolean isFinishedResult = (boolean) isFinishedMethod.invoke(periodicalSavingsGoalTransferLogic, periodicalSavingsGoal, date);
-
         setSavingGoalStatusMethod.invoke(periodicalSavingsGoalTransferLogic, periodicalSavingsGoal);
-
         boolean isDueResult = (boolean) isDueMethod.invoke(periodicalSavingsGoalTransferLogic, periodicalSavingsGoal, date);
-
         transferSavingsGoalMethod.invoke(periodicalSavingsGoalTransferLogic, periodicalSavingsGoal);
 
-        var x = true;
         assertThat(isFinishedResult, is(false));
-            assertThat(isDueResult, is(false));
+        assertThat(isDueResult, is(false));
 
+        periodicalSavingsGoal = createPeriodicalSavingsGoal(uuid, number, savingsRecordSet, Periodicity.MONTHLY, createDuration(date, date.plusMonths(1)));
+        isFinishedResult = (boolean) isFinishedMethod.invoke(periodicalSavingsGoalTransferLogic, periodicalSavingsGoal, date.plusDays(1));
+        isDueResult = (boolean) isDueMethod.invoke(periodicalSavingsGoalTransferLogic, periodicalSavingsGoal, date.plusDays(1));
 
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(isFinishedResult, is(false));
+        assertThat(isDueResult, is(false));
+
+        periodicalSavingsGoal = createPeriodicalSavingsGoal(uuid, number, savingsRecordSet, Periodicity.MONTHLY, createDuration(date.minusMonths(1), date));
+        isFinishedResult = (boolean) isFinishedMethod.invoke(periodicalSavingsGoalTransferLogic, periodicalSavingsGoal, date.plusYears(1));
+        isDueResult = (boolean) isDueMethod.invoke(periodicalSavingsGoalTransferLogic, periodicalSavingsGoal, date);
+
+        assertThat(isFinishedResult, is(false));
+        assertThat(isDueResult, is(false));
+
+    }
+    @Test
+    void sss() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        Class<?> clazz = PeriodicalSavingsGoalTransferLogic.class;
+        Method isFinishedMethod  = clazz.getDeclaredMethod("isFinished", PeriodicalSavingsGoal.class, LocalDate.class);
+        Method isDueMethod = clazz.getDeclaredMethod("isDue", PeriodicalSavingsGoal.class, LocalDate.class);
+
+        isFinishedMethod.setAccessible(true);
+        isDueMethod.setAccessible(true);
+        LocalDate monthAgo = LocalDate.now().minusMonths(1);
+        boolean isFinishedResult = (boolean) isFinishedMethod.invoke(periodicalSavingsGoalTransferLogic, PeriodicalSavingsGoal.with().duration(createDuration(monthAgo,monthAgo)).build(), LocalDate.now());
+        boolean isDueResult = (boolean) isDueMethod.invoke(periodicalSavingsGoalTransferLogic, PeriodicalSavingsGoal.with().duration(createDuration(monthAgo,monthAgo)).build(), monthAgo);
+
+        assertThat(isFinishedResult, is(true));
+        assertThat(isDueResult, is(true));
+
     }
 
-
     private PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID uuid, double number, Set<SavingsRecord> savingsRecordSet, Periodicity periodicity){
+        return createPeriodicalSavingsGoal(uuid, number, savingsRecordSet, periodicity, createDuration(number));
+    }
+
+    private PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID uuid, double number, Set<SavingsRecord> savingsRecordSet, Periodicity periodicity, Duration duration){
         return PeriodicalSavingsGoal.with()
                 .id(uuid)
                 .goal(createMonetaryAmount(number))
@@ -101,4 +125,11 @@ public class PeriodicalSavingsGoalTransferLogicTest extends IntegrationTestBase 
         duration.setStart(LocalDate.now().plusMonths((int)number));
         return duration;
     }
+    private Duration createDuration(LocalDate start, LocalDate end){
+        Duration duration = new Duration();
+        duration.setEnd(end);
+        duration.setStart(start);
+        return duration;
+    }
+
 }
