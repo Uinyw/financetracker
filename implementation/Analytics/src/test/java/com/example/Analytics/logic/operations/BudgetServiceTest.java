@@ -100,6 +100,10 @@ class BudgetServiceTest extends IntegrationTestBase {
         BudgetPlan budgetPlan = budgetService.spendingForEachCategory(FilterElement.builder().bankAccountList(new ArrayList<>()).categoryList(new ArrayList<>(List.of(new Category("uni"), new Category("shoes")))).duration(new Duration(LocalDate.now().toString(), LocalDate.now().toString())).build());
         var x =1;
         //TODO have a look
+        assertEquals(LocalDate.now(), budgetPlan.getStartDate());
+        assertThat(AchievementStatus.ACHIEVED, is(budgetPlan.getCurrentStatus()));
+        assertThat(2, is(budgetPlan.getBudgetElementList().size()));
+
     }
     @Test
     void testVariableMonthlyTransactionChange_whenUpdate_UpdateIsReceived() {
