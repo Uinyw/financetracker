@@ -18,45 +18,43 @@
 
 [Capability Overview](./pages/capabilities/capabilities.md)
 
-[Capability Management of Bank Accounts](./pages/capabilities/capability_management_of_bank_accounts.md)
+[Capability Management of Bank Accounts [Lachenicht]](./pages/capabilities/capability_management_of_bank_accounts.md)
 
-[Capability Management of Transactions](./pages/capabilities/capability_management_of_transactions.md)
+[Capability Management of Transactions [Lachenicht]](./pages/capabilities/capability_management_of_transactions.md)
 
-[Capability Management of Purchases](./pages/capabilities/capability_management_of_purchases.md)
+[Capability Management of Purchases [Lachenicht]](./pages/capabilities/capability_management_of_purchases.md)
 
-[Capability Management of Savings Goals](./pages/capabilities/capability_management_of_savings_goals.md)
+[Capability Management of Savings Goals [Kässmann]](./pages/capabilities/capability_management_of_savings_goals.md)
 
-[Capability Analytics](./pages/capabilities/capability_analytics.md)
-
-[Capability Purchase Connector](./pages/capabilities/capability_purchase_connector.md)
+[Capability Analytics [Kässmann]](./pages/capabilities/capability_analytics.md)
 
 ### Functional Requirements
 
-#### Management of Bank Accounts
+#### Management of Bank Accounts [Lachenicht]
 
 [Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_bank_accounts.md)
 
 [Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_bank_accounts.md)
 
-#### Management of Transactions
+#### Management of Transactions [Lachenicht]
 
 [Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_transactions.md)
 
 [Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_transactions.md)
 
-#### Management of Purchases
+#### Management of Purchases [Lachenicht]
 
 [Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_purchases.md)
 
 [Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_purchases.md)
 
-#### Management of Savings Goals
+#### Management of Savings Goals [Kässmann]
 
 [Use Case Diagram](./pages/use_cases/use_case_diagram_management_of_savings_goals.md)
 
 [Use Case Descriptions](./pages/use_cases/use_case_descriptions_management_of_savings_goals.md)
 
-#### Analytics
+#### Analytics [Kässmann]
 
 [Use Case Diagram](./pages/use_cases/use_case_diagram_analytics.md)
 
