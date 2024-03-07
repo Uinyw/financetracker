@@ -17,9 +17,9 @@
 We developed the software according to the following steps
 
 1. Create a [user story](./story.md)
-2. Create Capabilities using the User Stories
-3. Use the Capabilities to create Use Case Descriptinons and Use Case Diagrams
-4. Design the Domain Model for each domain
+2. Create [Capabilities](./pages/capabilities/) using the User Stories
+3. Use the Capabilities to create [Use Case Descriptinons and Use Case Diagrams](./pages/use_cases/)
+4. Design the [Domain Model](./pages/design/) for each domain
 
 ### Functional Requirements
 
@@ -67,9 +67,7 @@ We developed the software according to the following steps
 
 [Deployment Steps](./pages/deployment/deployment.md)
 
-## Folder Structure
-
-# General Package Structure
+## General Package Structure
 
 - 📁 **Financetracker**
   - 📁 **figures**
