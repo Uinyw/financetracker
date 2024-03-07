@@ -2,13 +2,12 @@
 
 ## Code Coverage
 
-| Component | Coverage |
-| :--- | :--- |
+| Component      | Coverage                                    |
+| :------------- | :------------------------------------------ |
 | MS-BankAccount | ![coverage](../badges/jacoco-bankaccount.svg) |
 | MS-Transaction | ![coverage](../badges/jacoco-transaction.svg) |
-| MS-Product | ![coverage](../badges/jacoco-product.svg) |
+| MS-Product     | ![coverage](../badges/jacoco-product.svg)     |
 | MS-SavingsGoal | ![coverage](../badges/jacoco-savingsgoal.svg) |
-
 
 ## Analysis
 
@@ -81,6 +80,18 @@
 [Domain Shopping](./pages/design/domain_shopping.md)
 
 [Domain Analytics](./pages/design/domain_analytics.md)
+
+### API Specifications
+
+[Bank Account API](./implementation/BankAccount/src/main/resources/api/bankAccount.yaml)
+
+[Transaction API](./implementation/transaction/src/main/resources/api/transaction.yaml)
+
+[Savings Goal API](./implementation/savingsgoal/src/main/resources/api/savingsGoal.yaml)
+
+[Shopping API](./implementation/product//src/main/resources/api/product.yaml)
+
+[Analytics API](./implementation/Analytics/src/main/resources/api/Analytics.yaml)
 
 ## Local Deployment
 
