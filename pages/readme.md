@@ -20,14 +20,14 @@ We developed the software according to the following steps
 
 ## Use Case Diagrams and Descriptions
 ### Use Case Diagrams
-[Use Case Diagram Analytics](./use_cases/use_case_diagram_analytics.md)
+[Use Case Diagram Analytics](./use_cases/use_case_diagram_management_of_analytics.md)
 [Use Case Diagram Bank Account](./use_cases/use_case_diagram_management_of_bank_accounts.md)
 [Use Case Diagram Savings Goal](./use_cases/use_case_diagram_management_of_savings_goals.md)
 [Use Case Diagram Transaction](./use_cases/use_case_diagram_management_of_transactions.md)
-[TODO: UCD Product]
+[Use Case Diagram Product](./use_cases/use_case_diagram_management_of_products.md.md)
 
 ### Use Case Descriptions
-[Use Case Description Analytics](./use_cases/use_case_descriptions_analytics.md)
+[Use Case Description Analytics](./use_cases/use_case_diagram_management_of_analytics.md)
 [Use Case Description Bank Account](./use_cases/use_case_descriptions_management_of_bank_accounts.md)
 [Use Case Description Savings Goal](./use_cases/use_case_descriptions_management_of_savings_goals.md)
 [Use Case Description Transaction](./use_cases/use_case_descriptions_management_of_transactions.md)

@@ -1,3 +1,3 @@
 # Use Case Diagram Management of Bank Accounts
 
-![Use Case Diagram](../../figures/use_case_diagram_management_of_bank_accounts.png)
+![Use Case Diagram](../../figures/updated_use_case_diagrams/use_case_diagram_bankAccount.PNG)
