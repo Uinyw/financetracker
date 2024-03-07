@@ -12,23 +12,10 @@
 
 ## Analysis
 
-### General
+### Development Steps
 
-[Story](./pages/story.md)
+[Development Steps](./pages/readme.md)
 
-[Capability Overview](./pages/capabilities/capabilities.md)
-
-[Capability Management of Bank Accounts](./pages/capabilities/capability_management_of_bank_accounts.md)
-
-[Capability Management of Transactions](./pages/capabilities/capability_management_of_transactions.md)
-
-[Capability Management of Purchases](./pages/capabilities/capability_management_of_purchases.md)
-
-[Capability Management of Savings Goals](./pages/capabilities/capability_management_of_savings_goals.md)
-
-[Capability Analytics](./pages/capabilities/capability_analytics.md)
-
-[Capability Purchase Connector](./pages/capabilities/capability_purchase_connector.md)
 
 ### Functional Requirements
 

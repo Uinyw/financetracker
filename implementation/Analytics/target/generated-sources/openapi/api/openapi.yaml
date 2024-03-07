@@ -1,0 +1,487 @@
+openapi: 3.0.0
+info:
+  description: "Manage products, supplies and shopping carts."
+  title: Product API
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: Product
+- name: Shopping Cart
+- name: Supplies
+paths:
+  /products:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+                type: array
+          description: Successfully retrieved a list of all existing products.
+      summary: Get all products
+      tags:
+      - Product
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+        required: true
+      responses:
+        "200":
+          description: Successfully created a new product.
+      summary: Create new product
+      tags:
+      - Product
+      x-content-type: application/json
+      x-accepts: application/json
+  /products/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Successfully deleted product.
+        "404":
+          description: Product with given ID not found.
+      summary: Delete Product by ID
+      tags:
+      - Product
+      x-accepts: application/json
+    get:
+      parameters:
+      - description: Product ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+          description: Successfully retrieved product.
+        "404":
+          description: Product with given ID not found.
+      summary: Get Product by ID
+      tags:
+      - Product
+      x-accepts: application/json
+    patch:
+      parameters:
+      - description: Product ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+        required: true
+      responses:
+        "200":
+          description: Successfully updated product.
+        "404":
+          description: Product with given ID not found.
+      summary: Update product by ID
+      tags:
+      - Product
+      x-content-type: application/json
+      x-accepts: application/json
+  /shopping-cart:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductEntryCollectionDto'
+          description: Successfully retrieved shopping cart.
+      summary: Get Shopping Cart
+      tags:
+      - Shopping Cart
+      x-accepts: application/json
+  /shopping-cart/purchase:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseDto'
+        required: true
+      responses:
+        "200":
+          description: Successfully purchased shopping cart.
+      summary: Purchase Marked Products Entries of Shopping Cart
+      tags:
+      - Shopping Cart
+      x-content-type: application/json
+      x-accepts: application/json
+  /shopping-cart/entries:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+        required: true
+      responses:
+        "200":
+          description: Successfully created shopping cart entry.
+      summary: Create new Shopping Cart Entry
+      tags:
+      - Shopping Cart
+      x-content-type: application/json
+      x-accepts: application/json
+  /shopping-cart/entries/{id}:
+    delete:
+      parameters:
+      - description: Entry ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Successfully delete entry.
+      summary: Delete Shopping Cart Entry by ID
+      tags:
+      - Shopping Cart
+      x-accepts: application/json
+    patch:
+      parameters:
+      - description: Entry ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+        required: true
+      responses:
+        "200":
+          description: Successfully updated shopping cart entry.
+      summary: Update Shopping Cart Entry by ID
+      tags:
+      - Shopping Cart
+      x-content-type: application/json
+      x-accepts: application/json
+  /shopping-cart/entries/{id}/mark:
+    post:
+      parameters:
+      - description: Entry ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Successfully checked off entry.
+      summary: Mark Shopping Cart Entry as Purchased
+      tags:
+      - Shopping Cart
+      x-accepts: application/json
+  /supplies:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductEntryCollectionDto'
+          description: Successfully retrieved supplies.
+      summary: Get Supplies
+      tags:
+      - Supplies
+      x-accepts: application/json
+  /supplies/shop:
+    post:
+      responses:
+        "200":
+          description: Successfully updated shopping cart.
+      summary: Add Required Product Entries to Shopping Cart
+      tags:
+      - Supplies
+      x-accepts: application/json
+  /supplies/entries:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+        required: true
+      responses:
+        "200":
+          description: Successfully created supply entry.
+      summary: Create new Supply Entry
+      tags:
+      - Supplies
+      x-content-type: application/json
+      x-accepts: application/json
+  /supplies/entries/{id}:
+    delete:
+      parameters:
+      - description: Entry ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Successfully delete entry.
+      summary: Delete Supply Entry by ID
+      tags:
+      - Supplies
+      x-accepts: application/json
+    patch:
+      parameters:
+      - description: Entry ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductEntryDto'
+        required: true
+      responses:
+        "200":
+          description: Successfully updated supply entry.
+      summary: Update Supply Entry by ID
+      tags:
+      - Supplies
+      x-content-type: application/json
+      x-accepts: application/json
+components:
+  schemas:
+    ProductEntryCollectionDto:
+      example:
+        productEntries:
+        - product:
+            nutrition:
+              carbohydrates: 5.962133916683182
+              protein: 5.637376656633329
+              fat: 2.3021358869347655
+              calories: 1.4658129805029452
+              servingSize: 6.027456183070403
+              sugar: 7.061401241503109
+            size: 0.8008281904610115
+            price:
+              amount: 9.301444243932576
+            name: name
+            description: description
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            category: null
+            labels:
+            - labels
+            - labels
+          quantity: 0.8008281904610115
+          purchased: true
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          desiredQuantity: 6.027456183070403
+        - product:
+            nutrition:
+              carbohydrates: 5.962133916683182
+              protein: 5.637376656633329
+              fat: 2.3021358869347655
+              calories: 1.4658129805029452
+              servingSize: 6.027456183070403
+              sugar: 7.061401241503109
+            size: 0.8008281904610115
+            price:
+              amount: 9.301444243932576
+            name: name
+            description: description
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            category: null
+            labels:
+            - labels
+            - labels
+          quantity: 0.8008281904610115
+          purchased: true
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          desiredQuantity: 6.027456183070403
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: null
+      properties:
+        id:
+          format: uuid
+          type: string
+        type:
+          $ref: '#/components/schemas/ProductEntryCollectionTypeDto'
+        productEntries:
+          items:
+            $ref: '#/components/schemas/ProductEntryDto'
+          type: array
+      type: object
+    ProductEntryDto:
+      example:
+        product:
+          nutrition:
+            carbohydrates: 5.962133916683182
+            protein: 5.637376656633329
+            fat: 2.3021358869347655
+            calories: 1.4658129805029452
+            servingSize: 6.027456183070403
+            sugar: 7.061401241503109
+          size: 0.8008281904610115
+          price:
+            amount: 9.301444243932576
+          name: name
+          description: description
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          category: null
+          labels:
+          - labels
+          - labels
+        quantity: 0.8008281904610115
+        purchased: true
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        desiredQuantity: 6.027456183070403
+      properties:
+        id:
+          format: uuid
+          type: string
+        quantity:
+          type: number
+        desiredQuantity:
+          type: number
+        purchased:
+          type: boolean
+        product:
+          $ref: '#/components/schemas/ProductDto'
+      type: object
+    ProductDto:
+      example:
+        nutrition:
+          carbohydrates: 5.962133916683182
+          protein: 5.637376656633329
+          fat: 2.3021358869347655
+          calories: 1.4658129805029452
+          servingSize: 6.027456183070403
+          sugar: 7.061401241503109
+        size: 0.8008281904610115
+        price:
+          amount: 9.301444243932576
+        name: name
+        description: description
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        category: null
+        labels:
+        - labels
+        - labels
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          $ref: '#/components/schemas/CategoryDto'
+        size:
+          type: number
+        nutrition:
+          $ref: '#/components/schemas/NutritionDto'
+        price:
+          $ref: '#/components/schemas/MonetaryAmountDto'
+        labels:
+          items:
+            type: string
+          type: array
+      type: object
+    NutritionDto:
+      example:
+        carbohydrates: 5.962133916683182
+        protein: 5.637376656633329
+        fat: 2.3021358869347655
+        calories: 1.4658129805029452
+        servingSize: 6.027456183070403
+        sugar: 7.061401241503109
+      properties:
+        servingSize:
+          type: number
+        calories:
+          type: number
+        carbohydrates:
+          type: number
+        protein:
+          type: number
+        fat:
+          type: number
+        sugar:
+          type: number
+      type: object
+    CategoryDto:
+      enum:
+      - FOOD
+      - DRINKS
+      - HOUSEHOLD
+      - ESSENTIALS
+      - PET_SUPPLIES
+      type: string
+    ProductEntryCollectionTypeDto:
+      enum:
+      - SHOPPING_CART
+      - SUPPLIES
+      type: string
+    MonetaryAmountDto:
+      example:
+        amount: 9.301444243932576
+      properties:
+        amount:
+          format: double
+          type: number
+      type: object
+    PurchaseDto:
+      example:
+        sourceBankAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        sourceBankAccountId:
+          format: uuid
+          type: string
+      type: object
+

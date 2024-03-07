@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Analytics</a> &gt; <a href="index.source.html" class="el_package">com.example.Analytics.logic.operations</a> &gt; <span class="el_source">BudgetService.java</span></div><h1>BudgetService.java</h1><pre class="source lang-java linenums">package com.example.Analytics.logic.operations;
+
+import com.example.Analytics.infrastructure.kafka.config.UpdateType;
+import com.example.Analytics.logic.model.budgetModel.*;
+import com.example.Analytics.logic.model.budgetModel.BudgetElement;
+import com.example.Analytics.logic.model.generalModel.FilterElement;
+import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+<span class="fc" id="L14">@RequiredArgsConstructor</span>
+@Service
+public class BudgetService {
+<span class="fc" id="L17">    private List&lt;VariableMonthlyTransaction&gt; variableTransactionHistory = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L18">    private List&lt;FixedTransaction&gt; fixedTransactionHistory = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L19">    private List&lt;VariableMonthlyTransaction&gt; currentMonth = new ArrayList&lt;&gt;();</span>
+
+    @Autowired
+    private VariableMonthlyTransactionService variableMonthlyTransactionService;
+    @Autowired
+    private FixedTransactionService fixedTransactionService;
+
+
+    public void variableMonthlyTransactionChange(List&lt;VariableMonthlyTransaction&gt; variableMonthlyTransactionList, UpdateType updateType){
+<span class="fc bfc" id="L28" title="All 3 branches covered.">        this.variableTransactionHistory = switch(updateType){</span>
+<span class="fc" id="L29">            case DELETE -&gt; variableMonthlyTransactionService.variableMonthlyTransactionDelete(variableMonthlyTransactionList);</span>
+<span class="fc" id="L30">            case CREATE -&gt; variableMonthlyTransactionService.variableMonthlyTransactionCreate(variableMonthlyTransactionList);</span>
+<span class="fc" id="L31">            case UPDATE -&gt; variableMonthlyTransactionService.variableMonthlyTransactionUpdate(variableMonthlyTransactionList);</span>
+        };
+
+<span class="fc" id="L34">        this.currentMonth = variableMonthlyTransactionService.updateMonthlyTransactions(this.variableTransactionHistory);</span>
+<span class="fc" id="L35">    }</span>
+
+    public void fixedTransactionChange(List&lt;FixedTransaction&gt; fixedTransactionList, UpdateType updateType){
+<span class="fc bfc" id="L38" title="All 3 branches covered.">        this.fixedTransactionHistory = switch(updateType){</span>
+<span class="fc" id="L39">            case DELETE -&gt; fixedTransactionService.fixedTransactionDelete(fixedTransactionList);</span>
+<span class="fc" id="L40">            case CREATE -&gt; fixedTransactionService.fixedTransactionCreate(fixedTransactionList);</span>
+<span class="fc" id="L41">            case UPDATE -&gt; fixedTransactionService.fixedTransactionUpdate(fixedTransactionList);</span>
+        };
+<span class="fc" id="L43">    }</span>
+
+    public BudgetPlan createSavingsPlan(double amountToBeSaved, FilterElement filterElement){
+<span class="fc" id="L46">        return createSavingsPlan(amountToBeSaved, oneTimeSpendingPerCategory(), fixedSpendingForCategories(), filterElement);</span>
+    }
+
+    private BudgetPlan createSavingsPlan(double amountToBeSaved, BudgetPlan oneTimeBudgetPlan, BudgetPlan recurringBudgetPlan, FilterElement filterElement){
+<span class="fc" id="L50">        List&lt;BudgetElement&gt; budgetElementList = getBudgetElementsAndFilterIfExists(oneTimeBudgetPlan, filterElement);</span>
+<span class="fc" id="L51">        List&lt;BudgetElement&gt; fixedBudgetElementList = getBudgetElementsAndFilterIfExists(recurringBudgetPlan, filterElement);</span>
+
+<span class="pc bpc" id="L53" title="3 of 4 branches missed.">        if(budgetElementList.isEmpty() &amp;&amp; fixedBudgetElementList.isEmpty())</span>
+<span class="nc" id="L54">            return new BudgetPlan();</span>
+
+<span class="fc" id="L56">        List&lt;BudgetElement&gt; newBudgetElements = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L57">        double averageMonthlyOneTimeTransactions = budgetElementList.stream().mapToDouble(budgetElement -&gt; budgetElement.getMonetaryAmount().getAmount()).sum();</span>
+<span class="fc" id="L58">        double totalAverageMonthlyAmount = averageMonthlyOneTimeTransactions;</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if(!fixedBudgetElementList.isEmpty())</span>
+<span class="fc" id="L61">            totalAverageMonthlyAmount += fixedBudgetElementList.stream().mapToDouble(element -&gt; element.getMonetaryAmount().getAmount()).sum();</span>
+
+<span class="fc" id="L63">        double totalAverageMoneyToBeSaved = amountToBeSaved - totalAverageMonthlyAmount;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        double howMuchSpentOnAverage = Math.abs(budgetElementList.stream().map(budgetElement -&gt; budgetElement.getMonetaryAmount().getAmount()).filter(money-&gt;money&lt;0).mapToDouble(Double::doubleValue).sum());</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        double missingAmount = (howMuchSpentOnAverage-totalAverageMoneyToBeSaved&gt;0)?totalAverageMoneyToBeSaved:howMuchSpentOnAverage;</span>
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if(totalAverageMoneyToBeSaved &lt; 0){</span>
+<span class="fc" id="L68">            newBudgetElements.addAll(budgetElementList);</span>
+<span class="fc" id="L69">            newBudgetElements.addAll(fixedBudgetElementList);</span>
+<span class="fc" id="L70">            return new BudgetPlan(newBudgetElements, AchievementStatus.ACHIEVED);</span>
+        }
+
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(BudgetElement budgetCatagory : budgetElementList){</span>
+<span class="fc" id="L74">            double amountToBeSavedInCategory = 0.0;</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            if(budgetCatagory.getMonetaryAmount().getAmount() &lt; 0){</span>
+<span class="fc" id="L76">                double weightOfCategory = Math.abs(budgetCatagory.getMonetaryAmount().getAmount())/howMuchSpentOnAverage;</span>
+<span class="fc" id="L77">                amountToBeSavedInCategory = roundToTwoDecimalPlaces(weightOfCategory*missingAmount);</span>
+            }
+<span class="fc" id="L79">            newBudgetElements.add(BudgetElement.builder().category(budgetCatagory.getCategory()).monetaryAmount(new MonetaryAmount(amountToBeSavedInCategory)).build());</span>
+<span class="fc" id="L80">        }</span>
+
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if(howMuchSpentOnAverage-totalAverageMoneyToBeSaved&lt;0){</span>
+<span class="fc" id="L83">            double insufficientAmount = Math.abs(howMuchSpentOnAverage-totalAverageMoneyToBeSaved);</span>
+<span class="fc" id="L84">            BudgetElement newIncome = BudgetElement.builder()</span>
+<span class="fc" id="L85">                    .category(new Category(&quot;newIncome&quot;))</span>
+<span class="fc" id="L86">                    .monetaryAmount(new MonetaryAmount(insufficientAmount))</span>
+<span class="fc" id="L87">                    .build();</span>
+<span class="fc" id="L88">            newBudgetElements.add(newIncome);</span>
+<span class="fc" id="L89">            return new BudgetPlan(newBudgetElements, AchievementStatus.FAILED);</span>
+        }
+
+<span class="fc" id="L92">        return new BudgetPlan(newBudgetElements, AchievementStatus.ACHIEVED);</span>
+    }
+
+    public BudgetPlan spendingForEachCategory(FilterElement filter){
+<span class="fc" id="L96">        List&lt;BudgetElement&gt; mergedList = new ArrayList&lt;&gt;(oneTimeSpendingPerCategory().getBudgetElementList());</span>
+
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (BudgetElement budgetElement : fixedSpendingForCategories().getBudgetElementList()){</span>
+<span class="fc" id="L99">            boolean mergergedValue = false;</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">            for(BudgetElement existingElement : mergedList){</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                if(budgetElement.getCategory().getName().equals(existingElement.getCategory().getName())){</span>
+<span class="fc" id="L102">                    double money = existingElement.getMonetaryAmount().getAmount() + budgetElement.getMonetaryAmount().getAmount();</span>
+<span class="fc" id="L103">                    existingElement.setMonetaryAmount(new MonetaryAmount(money));</span>
+<span class="fc" id="L104">                    mergergedValue = true;</span>
+<span class="fc" id="L105">                    break;</span>
+                }
+<span class="fc" id="L107">            }</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">            if(!mergergedValue){</span>
+<span class="nc" id="L109">                mergedList.add(budgetElement);</span>
+            }
+<span class="fc" id="L111">        }</span>
+<span class="fc" id="L112">        BudgetPlan completeBudgetPlan = new BudgetPlan(mergedList);</span>
+<span class="fc" id="L113">        return new BudgetPlan(getBudgetElementsAndFilterIfExists(completeBudgetPlan, filter));</span>
+    }
+
+    private BudgetPlan oneTimeSpendingPerCategory(){
+        //TODO add fixedTransactions
+        //todo ggf handle duplicates
+<span class="fc" id="L119">        List&lt;BudgetElement&gt; budgetElementList = new ArrayList&lt;&gt;(variableTransactionHistory.stream().map(transaction -&gt;</span>
+<span class="fc" id="L120">                BudgetElement.builder()</span>
+<span class="fc" id="L121">                        .category(transaction.getCategory())</span>
+<span class="fc" id="L122">                        .monetaryAmount(new MonetaryAmount(roundToTwoDecimalPlaces(transaction.calculateAmountAsAverage()))).build()</span>
+<span class="fc" id="L123">        ).toList());</span>
+
+<span class="fc" id="L125">        return new BudgetPlan(budgetElementList);</span>
+    }
+
+    private BudgetPlan fixedSpendingForCategories(){
+        //todo ggf handle Category duplicates
+<span class="fc" id="L130">        List&lt;BudgetElement&gt; fixedBudgetElementList =new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L131">                fixedTransactionHistory.stream().map(transaction -&gt;</span>
+<span class="fc" id="L132">                BudgetElement.builder()</span>
+<span class="fc" id="L133">                        .category(transaction.getCategory())</span>
+<span class="fc" id="L134">                        .monetaryAmount(transaction.calculateAverageAmount()).build()</span>
+<span class="fc" id="L135">        ).toList());</span>
+
+<span class="fc" id="L137">        return new BudgetPlan(fixedBudgetElementList);</span>
+    }
+
+
+
+    private boolean containsCategory(Category category, List&lt;Category&gt; categoryList){
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if(categoryList.isEmpty())</span>
+<span class="fc" id="L144">            return true;</span>
+
+<span class="fc" id="L146">        boolean containsCategory = false;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        for(Category cat : categoryList){</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            if(cat.getName().equals(category.getName()))</span>
+<span class="fc" id="L149">                containsCategory = true;</span>
+<span class="fc" id="L150">        }</span>
+<span class="fc" id="L151">        return containsCategory;</span>
+    }
+
+
+
+    private List&lt;BudgetElement&gt; getBudgetElementsAndFilterIfExists(BudgetPlan budgetPlan, FilterElement filterElement){
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (budgetPlan == null)</span>
+<span class="nc" id="L158">            return new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L159">        return budgetPlan.getBudgetElementList().stream().filter(x-&gt;containsCategory(x.getCategory(), filterElement.getCategoryList())).toList();</span>
+    }
+
+    private double roundToTwoDecimalPlaces(double value){
+<span class="fc" id="L163">        return Math.round(value*100.0)/100.0;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

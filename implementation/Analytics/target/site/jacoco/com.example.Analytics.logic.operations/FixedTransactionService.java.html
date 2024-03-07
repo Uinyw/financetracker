@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FixedTransactionService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Analytics</a> &gt; <a href="index.source.html" class="el_package">com.example.Analytics.logic.operations</a> &gt; <span class="el_source">FixedTransactionService.java</span></div><h1>FixedTransactionService.java</h1><pre class="source lang-java linenums">package com.example.Analytics.logic.operations;
+
+import com.example.Analytics.infrastructure.db.FixedTransactionRepository;
+import com.example.Analytics.logic.model.budgetModel.FixedTransaction;
+import com.example.Analytics.logic.model.budgetModel.Transaction;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+<span class="fc" id="L14">@RequiredArgsConstructor</span>
+@Component
+public class FixedTransactionService {
+
+    @Autowired
+    private final FixedTransactionRepository fixedTransactionRepository;
+
+    public List&lt;FixedTransaction&gt; fixedTransactionUpdate(List&lt;FixedTransaction&gt; fixedTransactionList) {
+<span class="fc" id="L22">        fixedTransactionDelete(fixedTransactionList);</span>
+<span class="fc" id="L23">        return fixedTransactionCreate(fixedTransactionList);</span>
+    }
+
+    private void deleteFixedTransaction(final String fixedTransactionId) {
+<span class="fc" id="L27">        fixedTransactionRepository.deleteById(UUID.fromString(fixedTransactionId));</span>
+<span class="fc" id="L28">    }</span>
+
+    private void saveFixedTransaction(FixedTransaction fixedTransaction){
+<span class="fc" id="L31">        fixedTransactionRepository.save(fixedTransaction);</span>
+<span class="fc" id="L32">    }</span>
+
+    public List&lt;FixedTransaction&gt; getFixedTransaction() {
+<span class="fc" id="L35">        return fixedTransactionRepository.findAll();</span>
+    }
+
+    public List&lt;FixedTransaction&gt; fixedTransactionDelete(List&lt;FixedTransaction&gt; fixedTransactionList){
+<span class="fc" id="L39">        List&lt;UUID&gt; uuidsToBeDeleted = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        for(FixedTransaction newTransaction : fixedTransactionList){</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            for(Transaction transactionToBeDeleted : newTransaction.getReferenceTransactions()){</span>
+<span class="fc" id="L42">                uuidsToBeDeleted.add(transactionToBeDeleted.getReferenceId());</span>
+<span class="fc" id="L43">            }</span>
+<span class="fc" id="L44">        }</span>
+<span class="fc" id="L45">        List&lt;FixedTransaction&gt; saveDelete=new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for(UUID uuidToBeDeleted : uuidsToBeDeleted){</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            for(FixedTransaction existingTransaction: getFixedTransaction()){</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">                for(Transaction transaction : existingTransaction.getReferenceTransactions()){</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                    if(uuidToBeDeleted.equals(transaction.getReferenceId())){</span>
+<span class="fc" id="L50">                        saveDelete.add(existingTransaction);</span>
+                    }
+<span class="fc" id="L52">                }</span>
+<span class="fc" id="L53">            }</span>
+<span class="fc" id="L54">        }</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for(UUID uuidToBeDeleted : uuidsToBeDeleted) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            for (FixedTransaction hasChildToBeDeleted : saveDelete) {</span>
+<span class="fc" id="L57">                deleteFixedTransaction(hasChildToBeDeleted.getId().toString());</span>
+<span class="fc" id="L58">                hasChildToBeDeleted.getReferenceTransactions().removeIf(transaction -&gt; transaction.getReferenceId().equals(uuidToBeDeleted));</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if(!hasChildToBeDeleted.getReferenceTransactions().isEmpty())</span>
+<span class="fc" id="L60">                    saveFixedTransaction(hasChildToBeDeleted);</span>
+<span class="fc" id="L61">            }</span>
+<span class="fc" id="L62">        }</span>
+
+<span class="fc" id="L64">        return getFixedTransaction();</span>
+    }
+
+    public List&lt;FixedTransaction&gt; fixedTransactionCreate(List&lt;FixedTransaction&gt; fixedTransactions){
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for(FixedTransaction newTransaction : fixedTransactions){</span>
+<span class="fc" id="L69">            boolean categoryAlreadyExists = false;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            for(FixedTransaction existingTransaction: getFixedTransaction()){</span>
+<span class="pc bpc" id="L71" title="2 of 6 branches missed.">                if(sameCategory(newTransaction,existingTransaction) &amp;&amp; !newTransaction.getReferenceTransactions().isEmpty() &amp;&amp; existingTransaction.getPeriodicity().name().equals(newTransaction.getPeriodicity().name())){</span>
+<span class="fc" id="L72">                    newTransaction.getReferenceTransactions().forEach(transaction -&gt; {</span>
+<span class="fc" id="L73">                        deleteFixedTransaction(existingTransaction.getId().toString());</span>
+<span class="fc" id="L74">                        appendTransaction(existingTransaction, transaction);</span>
+<span class="fc" id="L75">                        saveFixedTransaction(existingTransaction);</span>
+<span class="fc" id="L76">                    });</span>
+<span class="fc" id="L77">                    categoryAlreadyExists = true;</span>
+                }
+<span class="fc" id="L79">            }</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if(!categoryAlreadyExists){</span>
+<span class="fc" id="L81">                saveFixedTransaction(createMonthEntry(newTransaction, newTransaction.getReferenceTransactions()));</span>
+
+            }
+<span class="fc" id="L84">        }</span>
+<span class="fc" id="L85">        return getFixedTransaction();</span>
+    }
+
+
+    private FixedTransaction appendTransaction(FixedTransaction fixedTransaction,Transaction transaction){
+<span class="fc" id="L90">        Transaction newTransaction = createNewTransactionEntry(transaction);</span>
+<span class="fc" id="L91">        fixedTransaction.appendTransaction(newTransaction);</span>
+<span class="fc" id="L92">        newTransaction.setFixedTransaction(fixedTransaction);</span>
+<span class="fc" id="L93">        return fixedTransaction;</span>
+    }
+
+    private Transaction createNewTransactionEntry(Transaction transaction){
+<span class="fc" id="L97">        return Transaction.builder()</span>
+<span class="fc" id="L98">                .date(transaction.getDate())</span>
+<span class="fc" id="L99">                .referenceId(transaction.getReferenceId())</span>
+<span class="fc" id="L100">                .id(UUID.randomUUID())</span>
+<span class="fc" id="L101">                .amount(transaction.getAmount())</span>
+<span class="fc" id="L102">                .bankAccountSource(transaction.getBankAccountSource())</span>
+<span class="fc" id="L103">                .bankAccountTarget(transaction.getBankAccountTarget())</span>
+<span class="fc" id="L104">                .type(transaction.getType())</span>
+<span class="fc" id="L105">                .build();</span>
+    }
+
+    public boolean sameCategory(FixedTransaction fixedTransaction1, FixedTransaction fixedTransaction2){
+<span class="fc" id="L109">        return fixedTransaction1.getCategory().getName().equals(fixedTransaction2.getCategory().getName());</span>
+    }
+
+    private FixedTransaction createMonthEntry(FixedTransaction fixedTransaction, List&lt;Transaction&gt; matchedTransactions) {
+<span class="fc" id="L113">        List&lt;Transaction&gt; newEntries = matchedTransactions.stream()</span>
+<span class="fc" id="L114">                .map(this::createNewTransactionEntry).toList();</span>
+
+<span class="fc" id="L116">        FixedTransaction var = FixedTransaction.builder()</span>
+<span class="fc" id="L117">                .id(UUID.randomUUID())</span>
+<span class="fc" id="L118">                .name(fixedTransaction.getName())</span>
+<span class="fc" id="L119">                .referenceTransactions(newEntries)</span>
+<span class="fc" id="L120">                .category(fixedTransaction.getCategory())</span>
+<span class="fc" id="L121">                .periodicity(fixedTransaction.getPeriodicity())</span>
+<span class="fc" id="L122">                .build();</span>
+
+<span class="fc" id="L124">        var.getReferenceTransactions().forEach(entry -&gt; entry.setFixedTransaction(var));</span>
+<span class="fc" id="L125">        return var;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

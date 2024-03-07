@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Transaction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Analytics</a> &gt; <a href="index.source.html" class="el_package">com.example.Analytics.logic.model.budgetModel</a> &gt; <span class="el_source">Transaction.java</span></div><h1>Transaction.java</h1><pre class="source lang-java linenums">package com.example.Analytics.logic.model.budgetModel;
+
+import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.util.UUID;
+<span class="pc" id="L9">@Builder</span>
+<span class="fc" id="L10">@Setter</span>
+@Getter
+<span class="fc" id="L12">@NoArgsConstructor</span>
+<span class="fc" id="L13">@AllArgsConstructor</span>
+@Entity
+public class Transaction {
+    @Id
+<span class="fc" id="L17">    private UUID id;</span>
+<span class="fc" id="L18">    private UUID referenceId;</span>
+<span class="fc" id="L19">    private LocalDate date;</span>
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = &quot;variable_monthly_transaction_id&quot;)
+<span class="nc" id="L23">    private VariableMonthlyTransaction variableMonthlyTransaction;</span>
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = &quot;fixed_transaction_id&quot;)
+<span class="nc" id="L27">    private FixedTransaction fixedTransaction;</span>
+
+<span class="fc" id="L29">    private UUID bankAccountSource;</span>
+<span class="fc" id="L30">    private UUID bankAccountTarget;</span>
+
+    @Embedded
+<span class="fc" id="L33">    private MonetaryAmount amount;</span>
+
+<span class="fc" id="L35">    private TransactionType type;</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

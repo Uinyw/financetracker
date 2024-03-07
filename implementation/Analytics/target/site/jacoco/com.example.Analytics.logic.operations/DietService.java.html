@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DietService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Analytics</a> &gt; <a href="index.source.html" class="el_package">com.example.Analytics.logic.operations</a> &gt; <span class="el_source">DietService.java</span></div><h1>DietService.java</h1><pre class="source lang-java linenums">package com.example.Analytics.logic.operations;
+
+import com.example.Analytics.logic.model.productModel.Consumption;
+import com.example.Analytics.logic.model.productModel.Duration;
+import com.example.Analytics.logic.model.productModel.Nutrition;
+import com.example.Analytics.logic.model.productModel.Product;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+<span class="fc" id="L13">@RequiredArgsConstructor</span>
+@Service
+public class DietService {
+
+    private final ProductService productService;
+
+    public Nutrition getNutritionForDuration(Duration duration) {
+<span class="fc" id="L20">        List&lt;Product&gt; productList = productService.getProducts();</span>
+<span class="fc" id="L21">        Nutrition nutrition = Nutrition.builder()</span>
+<span class="fc" id="L22">                .fat(0.0)</span>
+<span class="fc" id="L23">                .calories(0.0)</span>
+<span class="fc" id="L24">                .carbohydrates(0.0)</span>
+<span class="fc" id="L25">                .sugar(0.0)</span>
+<span class="fc" id="L26">                .protein(0.0)</span>
+<span class="fc" id="L27">                .servingSize(0.0)</span>
+<span class="fc" id="L28">                .build();</span>
+
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        for(Product product: productList){</span>
+<span class="fc" id="L31">            Consumption consumption = product.getConsumption();</span>
+<span class="pc bpc" id="L32" title="1 of 4 branches missed.">            if(withinDuration(duration, consumption.getDate()) &amp;&amp; product.getNutrition() != null){</span>
+<span class="fc" id="L33">                nutrition = addNutritionValues(nutrition, product.getNutrition(), consumption.getAmount(), product.getSize());</span>
+            }
+
+<span class="fc" id="L36">        }</span>
+<span class="fc" id="L37">        return nutrition;</span>
+    }
+
+    private boolean withinDuration(Duration duration, LocalDate date){
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        return date.isBefore(duration.getEndTime())</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">                &amp;&amp; date.isAfter(duration.getStartTime());</span>
+    }
+
+    private Nutrition addNutritionValues(Nutrition nutrition1, Nutrition nutrition2, double amount, double size){
+<span class="fc" id="L46">        nutrition1.setServingSize(nutrition1.getServingSize()+nutrition2.getServingSize()*amount*size/100.0);</span>
+<span class="fc" id="L47">        nutrition1.setProtein(nutrition1.getProtein()+nutrition2.getProtein()*amount*size/100.0);</span>
+<span class="fc" id="L48">        nutrition1.setCarbohydrates(nutrition1.getCarbohydrates()+nutrition2.getCarbohydrates()*amount*size/100.0);</span>
+<span class="fc" id="L49">        nutrition1.setFat(nutrition1.getFat()+nutrition2.getFat()*amount*size/100.0);</span>
+<span class="fc" id="L50">        nutrition1.setSugar(nutrition1.getSugar()+nutrition2.getSugar()*amount*size/100.0);</span>
+<span class="fc" id="L51">        nutrition1.setCalories(nutrition1.getCalories()+nutrition2.getCalories()*amount*size/100.0);</span>
+<span class="fc" id="L52">        return nutrition1;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

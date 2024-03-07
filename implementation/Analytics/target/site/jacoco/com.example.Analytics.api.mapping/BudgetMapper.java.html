@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Analytics</a> &gt; <a href="index.source.html" class="el_package">com.example.Analytics.api.mapping</a> &gt; <span class="el_source">BudgetMapper.java</span></div><h1>BudgetMapper.java</h1><pre class="source lang-java linenums">package com.example.Analytics.api.mapping;
+
+import com.example.Analytics.logic.model.budgetModel.AchievementStatus;
+import com.example.Analytics.logic.model.budgetModel.BudgetElement;
+import com.example.Analytics.logic.model.budgetModel.BudgetPlan;
+import com.example.Analytics.logic.model.budgetModel.Category;
+import com.example.Analytics.logic.model.generalModel.BankAccount;
+import com.example.Analytics.logic.model.generalModel.FilterElement;
+import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
+import com.example.Analytics.logic.model.productModel.Duration;
+import org.openapitools.model.*;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Component
+<span class="fc" id="L19">public class BudgetMapper {</span>
+
+    public FilterElement filterDtoToElement(ReportFilterDto reportFilterDto) {
+<span class="fc" id="L22">        DurationDto durationDto = reportFilterDto.getDurationDto();</span>
+<span class="fc" id="L23">        List&lt;String&gt; categories = reportFilterDto.getCategories();</span>
+<span class="fc" id="L24">        List&lt;UUID&gt; bankAccountUUIDs = reportFilterDto.getBankAccounts();</span>
+<span class="fc" id="L25">        return FilterElement.builder()</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">                .duration(durationDto == null? null:durationDtoToDuration(durationDto))</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">                .categoryList(categories == null? new ArrayList&lt;&gt;(): stringListToCategories(categories))</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">                .bankAccountList(bankAccountUUIDs == null? new ArrayList&lt;&gt;(): uuidToBankAccount(bankAccountUUIDs))</span>
+<span class="fc" id="L29">                .build();</span>
+    }
+
+    private List&lt;BankAccount&gt; uuidToBankAccount(List&lt;UUID&gt; uuidList){
+<span class="fc" id="L33">        return uuidList.stream().map(uuid -&gt; BankAccount.builder().id(uuid).build()).toList();</span>
+    }
+
+    private List&lt;Category&gt; stringListToCategories(List&lt;String&gt; stringList){
+<span class="fc" id="L37">        return stringList.stream().map(Category::new).toList();</span>
+    }
+    private Duration durationDtoToDuration(DurationDto durationDto){
+<span class="fc" id="L40">        return new Duration(durationDto.getStartTime(), durationDto.getEndTime());</span>
+    }
+
+    public BudgetPlanDto budgetPlanToDto(BudgetPlan budgetPlan){
+<span class="fc" id="L44">        return BudgetPlanDto.builder()</span>
+<span class="fc" id="L45">                .id(budgetPlan.getId())</span>
+<span class="fc" id="L46">                .achievementStatus(achievementStatusToDto(budgetPlan.getCurrentStatus()))</span>
+<span class="fc" id="L47">                .date(budgetPlan.getStartDate().toString())</span>
+<span class="fc" id="L48">                .plan(budgetPlan.getBudgetElementList().stream().map(this::budgetElementToDto).toList())</span>
+<span class="fc" id="L49">                .build();</span>
+    }
+    private BudgetAchievementStatusDto achievementStatusToDto(AchievementStatus achievementStatus){
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        return switch (achievementStatus){</span>
+<span class="fc" id="L53">            case FAILED -&gt; BudgetAchievementStatusDto.FAILED;</span>
+<span class="fc" id="L54">            case ACHIEVED -&gt; BudgetAchievementStatusDto.ACHIEVED;</span>
+        };
+    }
+    private BudgetElementDto budgetElementToDto(BudgetElement budgetElement){
+<span class="fc" id="L58">        return BudgetElementDto.builder()</span>
+<span class="fc" id="L59">                .category(budgetElement.getCategory().getName())</span>
+<span class="fc" id="L60">                .monetaryAmount(monetaryAmountToDto(budgetElement.getMonetaryAmount()))</span>
+<span class="fc" id="L61">                .build();</span>
+    }
+
+    private MonetaryAmountDto monetaryAmountToDto(MonetaryAmount monetaryAmount){
+<span class="fc" id="L65">        return MonetaryAmountDto.builder().amount(monetaryAmount.getAmount()).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

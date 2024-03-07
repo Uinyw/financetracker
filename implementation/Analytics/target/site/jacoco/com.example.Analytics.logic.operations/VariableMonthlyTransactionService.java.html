@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VariableMonthlyTransactionService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Analytics</a> &gt; <a href="index.source.html" class="el_package">com.example.Analytics.logic.operations</a> &gt; <span class="el_source">VariableMonthlyTransactionService.java</span></div><h1>VariableMonthlyTransactionService.java</h1><pre class="source lang-java linenums">package com.example.Analytics.logic.operations;
+
+import com.example.Analytics.infrastructure.db.VariableMonthlyTransactionRepository;
+import com.example.Analytics.logic.model.budgetModel.Transaction;
+import com.example.Analytics.logic.model.budgetModel.VariableMonthlyTransaction;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+<span class="fc" id="L17">@RequiredArgsConstructor</span>
+@Component
+public class VariableMonthlyTransactionService {
+    @Autowired
+    private final VariableMonthlyTransactionRepository variableMonthlyTransactionRepository;
+
+    public List&lt;VariableMonthlyTransaction&gt; variableMonthlyTransactionUpdate(List&lt;VariableMonthlyTransaction&gt; variableMonthlyTransactionList){
+<span class="fc" id="L24">        variableMonthlyTransactionDelete(variableMonthlyTransactionList);</span>
+<span class="fc" id="L25">        return variableMonthlyTransactionCreate(variableMonthlyTransactionList);</span>
+    }
+
+    private void deleteVariableMonthlyTransaction(final String variableMonthlyTransactionId) {
+<span class="fc" id="L29">        variableMonthlyTransactionRepository.deleteById(UUID.fromString(variableMonthlyTransactionId));</span>
+<span class="fc" id="L30">    }</span>
+
+    private void saveVariableMonthlyTransaction(VariableMonthlyTransaction variableMonthlyTransaction){
+<span class="fc" id="L33">        variableMonthlyTransactionRepository.save(variableMonthlyTransaction);</span>
+<span class="fc" id="L34">    }</span>
+
+    public List&lt;VariableMonthlyTransaction&gt; getVariableMonthlyTransaction() {
+<span class="fc" id="L37">        return variableMonthlyTransactionRepository.findAll();</span>
+    }
+
+    public List&lt;VariableMonthlyTransaction&gt; variableMonthlyTransactionDelete(List&lt;VariableMonthlyTransaction&gt; variableMonthlyTransactionList){
+<span class="fc" id="L41">        List&lt;UUID&gt; uuidsToBeDeleted = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        for(VariableMonthlyTransaction newTransaction : variableMonthlyTransactionList){</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            for(Transaction transactionToBeDeleted : newTransaction.getReferenceTransactions()){</span>
+<span class="fc" id="L44">                uuidsToBeDeleted.add(transactionToBeDeleted.getReferenceId());</span>
+<span class="fc" id="L45">            }</span>
+<span class="fc" id="L46">        }</span>
+<span class="fc" id="L47">        List&lt;VariableMonthlyTransaction&gt; saveDelete=new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for(UUID uuidToBeDeleted : uuidsToBeDeleted){</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            for(VariableMonthlyTransaction existingTransaction: getVariableMonthlyTransaction()){</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">                for(Transaction transaction : existingTransaction.getReferenceTransactions()){</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">                    if(uuidToBeDeleted.equals(transaction.getReferenceId())){</span>
+<span class="fc" id="L52">                        saveDelete.add(existingTransaction);</span>
+                    }
+<span class="fc" id="L54">                }</span>
+<span class="fc" id="L55">            }</span>
+<span class="fc" id="L56">        }</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for(UUID uuidToBeDeleted : uuidsToBeDeleted) {</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            for (VariableMonthlyTransaction hasChildToBeDeleted : saveDelete) {</span>
+<span class="fc" id="L59">                deleteVariableMonthlyTransaction(hasChildToBeDeleted.getId().toString());</span>
+<span class="fc" id="L60">                hasChildToBeDeleted.getReferenceTransactions().removeIf(transaction -&gt; transaction.getReferenceId().equals(uuidToBeDeleted));</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">                if(!hasChildToBeDeleted.getReferenceTransactions().isEmpty())</span>
+<span class="nc" id="L62">                    saveVariableMonthlyTransaction(hasChildToBeDeleted);</span>
+<span class="fc" id="L63">            }</span>
+<span class="fc" id="L64">        }</span>
+
+<span class="fc" id="L66">        return getVariableMonthlyTransaction();</span>
+    }
+
+    public List&lt;VariableMonthlyTransaction&gt; variableMonthlyTransactionCreate(List&lt;VariableMonthlyTransaction&gt; variableMonthlyTransactionList){
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for(VariableMonthlyTransaction newTransaction : variableMonthlyTransactionList){</span>
+<span class="fc" id="L71">            boolean categoryAlreadyExists = false;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            for(VariableMonthlyTransaction existingTransaction: getVariableMonthlyTransaction()){</span>
+<span class="pc bpc" id="L73" title="1 of 4 branches missed.">                if(sameCategory(newTransaction,existingTransaction) &amp;&amp; !newTransaction.getReferenceTransactions().isEmpty()){</span>
+<span class="fc" id="L74">                    newTransaction.getReferenceTransactions().forEach(transaction -&gt; {</span>
+<span class="fc" id="L75">                        deleteVariableMonthlyTransaction(existingTransaction.getId().toString());</span>
+<span class="fc" id="L76">                        appendTransaction(existingTransaction, transaction);</span>
+<span class="fc" id="L77">                        saveVariableMonthlyTransaction(existingTransaction);</span>
+<span class="fc" id="L78">                    });</span>
+<span class="fc" id="L79">                    categoryAlreadyExists = true;</span>
+                }
+<span class="fc" id="L81">            }</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            if(!categoryAlreadyExists){</span>
+<span class="fc" id="L83">                saveVariableMonthlyTransaction(createMonthEntry(newTransaction, newTransaction.getReferenceTransactions()));</span>
+
+            }
+<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">        return getVariableMonthlyTransaction();</span>
+    }
+
+
+    private VariableMonthlyTransaction appendTransaction(VariableMonthlyTransaction variableMonthlyTransaction,Transaction transaction){
+<span class="fc" id="L92">        Transaction newTransaction = createNewTransactionEntry(transaction);</span>
+<span class="fc" id="L93">        variableMonthlyTransaction.appendTransaction(newTransaction);</span>
+<span class="fc" id="L94">        newTransaction.setVariableMonthlyTransaction(variableMonthlyTransaction);</span>
+<span class="fc" id="L95">        return variableMonthlyTransaction;</span>
+    }
+
+    private Transaction createNewTransactionEntry(Transaction transaction){
+<span class="fc" id="L99">        return Transaction.builder()</span>
+<span class="fc" id="L100">                .date(transaction.getDate())</span>
+<span class="fc" id="L101">                .referenceId(transaction.getReferenceId())</span>
+<span class="fc" id="L102">                .id(UUID.randomUUID())</span>
+<span class="fc" id="L103">                .amount(transaction.getAmount())</span>
+<span class="fc" id="L104">                .bankAccountSource(transaction.getBankAccountSource())</span>
+<span class="fc" id="L105">                .bankAccountTarget(transaction.getBankAccountTarget())</span>
+<span class="fc" id="L106">                .type(transaction.getType())</span>
+<span class="fc" id="L107">                .build();</span>
+    }
+
+
+    private boolean sameCategory(VariableMonthlyTransaction variableMonthlyTransaction1, VariableMonthlyTransaction variableMonthlyTransaction2){
+<span class="fc" id="L112">        return variableMonthlyTransaction1.getCategory().getName().equals(variableMonthlyTransaction2.getCategory().getName());</span>
+    }
+    public List&lt;VariableMonthlyTransaction&gt; updateMonthlyTransactions(List&lt;VariableMonthlyTransaction&gt; variableMonthlyTransactionList) {
+<span class="pc bpc" id="L115" title="1 of 4 branches missed.">        if(variableMonthlyTransactionList == null || variableMonthlyTransactionList.isEmpty())</span>
+<span class="fc" id="L116">            return new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L118">        return variableMonthlyTransactionList.stream()</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">                .filter(list -&gt; !list.getReferenceTransactions().isEmpty())</span>
+<span class="fc" id="L120">                .map(this::filterMonth)</span>
+<span class="fc" id="L121">                .filter(Objects::nonNull)</span>
+<span class="fc" id="L122">                .toList();</span>
+    }
+
+    private VariableMonthlyTransaction filterMonth(VariableMonthlyTransaction variableMonthlyTransaction) {
+<span class="fc" id="L126">        List&lt;Transaction&gt; matchedTransactions = variableMonthlyTransaction.getReferenceTransactions().stream()</span>
+<span class="fc" id="L127">                .filter(t -&gt; isWithinCurrentMonth(t.getDate()))</span>
+<span class="fc" id="L128">                .collect(Collectors.toList());</span>
+
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        return matchedTransactions.isEmpty() ? null : createMonthEntry(variableMonthlyTransaction, matchedTransactions);</span>
+    }
+
+    private VariableMonthlyTransaction createMonthEntry(VariableMonthlyTransaction variableMonthlyTransaction, List&lt;Transaction&gt; matchedTransactions) {
+<span class="fc" id="L134">        List&lt;Transaction&gt; newEntries = matchedTransactions.stream()</span>
+<span class="fc" id="L135">                .map(this::createNewTransactionEntry)</span>
+<span class="fc" id="L136">                .toList();</span>
+
+<span class="fc" id="L138">        VariableMonthlyTransaction var = VariableMonthlyTransaction.builder()</span>
+<span class="fc" id="L139">                .id(UUID.randomUUID())</span>
+<span class="fc" id="L140">                .name(variableMonthlyTransaction.getName())</span>
+<span class="fc" id="L141">                .referenceTransactions(newEntries)</span>
+<span class="fc" id="L142">                .category(variableMonthlyTransaction.getCategory())</span>
+<span class="fc" id="L143">                .build();</span>
+
+<span class="fc" id="L145">        var.getReferenceTransactions().forEach(entry -&gt; entry.setVariableMonthlyTransaction(var));</span>
+<span class="fc" id="L146">        return var;</span>
+    }
+
+    public static boolean isWithinCurrentMonth(LocalDate date) {
+<span class="fc" id="L150">        LocalDate currentDate = LocalDate.now();</span>
+<span class="pc bpc" id="L151" title="2 of 4 branches missed.">        return date.getYear() == currentDate.getYear() &amp;&amp; date.getMonth() == currentDate.getMonth();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
