@@ -8,6 +8,7 @@
 | MS-Transaction | ![coverage](../badges/jacoco-transaction.svg) |
 | MS-Product | ![coverage](../badges/jacoco-product.svg) |
 | MS-SavingsGoal | ![coverage](../badges/jacoco-savingsgoal.svg) |
+| MS-Analytics | ![coverage](../badges/jacoco-analytics.svg) |
 
 
 ## Analysis
