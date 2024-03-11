@@ -9,7 +9,8 @@ mvn clean package --file implementation/bankaccount/pom.xml
 mvn clean package --file implementation/transaction/pom.xml
 mvn clean package --file implementation/product/pom.xml
 mvn clean package --file implementation/savingsgoal/pom.xml
-docker-compose up -d
+mvn clean package --file implementation/analytics/pom.xml
+docker-compose up -d --build
 ```
 5. Open your browser
 6. Open `localhost:4200` to access the UI
