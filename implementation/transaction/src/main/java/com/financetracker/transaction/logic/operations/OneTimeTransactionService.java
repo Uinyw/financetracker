@@ -4,7 +4,7 @@ import com.financetracker.transaction.api.exceptions.NotParseableException;
 import com.financetracker.transaction.api.exceptions.TransferFailedException;
 import com.financetracker.transaction.infrastructure.db.OneTimeTransactionRepository;
 import com.financetracker.transaction.infrastructure.kafka.MessagePublisher;
-import com.financetracker.transaction.infrastructure.kafka.config.UpdateType;
+import com.financetracker.transaction.infrastructure.kafka.model.UpdateType;
 import com.financetracker.transaction.logic.model.OneTimeTransaction;
 import com.financetracker.transaction.logic.model.TransferStatus;
 import jakarta.ws.rs.NotFoundException;

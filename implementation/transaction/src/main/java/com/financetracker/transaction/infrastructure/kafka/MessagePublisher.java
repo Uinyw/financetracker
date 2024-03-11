@@ -1,6 +1,6 @@
 package com.financetracker.transaction.infrastructure.kafka;
 
-import com.financetracker.transaction.infrastructure.kafka.config.UpdateType;
+import com.financetracker.transaction.infrastructure.kafka.model.UpdateType;
 import com.financetracker.transaction.logic.model.OneTimeTransaction;
 import com.financetracker.transaction.logic.model.RecurringTransaction;
 

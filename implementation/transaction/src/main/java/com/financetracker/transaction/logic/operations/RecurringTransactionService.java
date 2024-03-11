@@ -4,7 +4,7 @@ import com.financetracker.transaction.api.exceptions.NotParseableException;
 import com.financetracker.transaction.api.exceptions.TransferFailedException;
 import com.financetracker.transaction.infrastructure.db.RecurringTransactionRepository;
 import com.financetracker.transaction.infrastructure.kafka.MessagePublisher;
-import com.financetracker.transaction.infrastructure.kafka.config.UpdateType;
+import com.financetracker.transaction.infrastructure.kafka.model.UpdateType;
 import com.financetracker.transaction.logic.model.RecurringTransaction;
 import com.financetracker.transaction.logic.model.TransactionRecord;
 import com.financetracker.transaction.logic.model.TransferStatus;
