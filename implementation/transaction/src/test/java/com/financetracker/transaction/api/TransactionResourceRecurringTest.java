@@ -1,27 +1,75 @@
 package com.financetracker.transaction.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.financetracker.transaction.IntegrationTestBase;
 import io.restassured.http.ContentType;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.BankAccountDto;
 import org.openapitools.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.listener.KafkaMessageListenerContainer;
+import org.springframework.kafka.listener.MessageListener;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.utils.ContainerTestUtils;
+import org.springframework.kafka.test.utils.KafkaTestUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
 class TransactionResourceRecurringTest extends IntegrationTestBase {
 
+    @Value("${tpd.topic-recurringTransaction-update}")
+    private String recurringTransactionUpdate;
+
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafkaBroker;
+
+    private KafkaMessageListenerContainer<String, Object> container;
+    private BlockingQueue<ConsumerRecord<String, Object>> consumerRecords;
+
+    @BeforeEach
+    void setup() {
+        consumerRecords = new LinkedBlockingQueue<>();
+
+        Map<String, Object> consumerProperties = KafkaTestUtils.consumerProps("test-group-id", "false", embeddedKafkaBroker);
+        DefaultKafkaConsumerFactory<String, Object> consumer = new DefaultKafkaConsumerFactory<>(consumerProperties);
+
+        ContainerProperties containerProperties = new ContainerProperties(recurringTransactionUpdate);
+        container = new KafkaMessageListenerContainer<>(consumer, containerProperties);
+        container.setupMessageListener((MessageListener<String, Object>) record -> consumerRecords.add(record));
+        container.start();
+        ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
+    }
+
+    @AfterEach
+    void after() {
+        container.stop();
+    }
+
     @Test
-    void givenRecurringTransactionAndBankAccountExists_whenCreateRecurringTransaction_thenTransactionExistsInSystem() {
+    void givenRecurringTransactionAndBankAccountExists_whenCreateRecurringTransaction_thenTransactionExistsInSystem() throws InterruptedException, JsonProcessingException {
         doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
 
         final var recurringTransaction = RecurringTransactionDto.builder()
@@ -61,6 +109,14 @@ class TransactionResourceRecurringTest extends IntegrationTestBase {
                 .and().body("[0].transfer.externalTargetId", is(nullValue()))
                 .and().body("[0].labels.size()", is(1))
                 .and().body("[0].labels[0]", is("KIT"));
+
+        final var consumedRecord = consumerRecords.poll(1, TimeUnit.SECONDS);
+        assertNotNull(consumedRecord);
+
+        final var objectMapper = new ObjectMapper();
+        final var record = objectMapper.readTree(consumedRecord.value().toString());
+        assertThat(record.get("updateType").asText(), is("CREATE"));
+        assertThat(record.get("recurringTransaction").get("id").asText(), is(recurringTransaction.getId().toString()));
     }
 
     @Test
@@ -213,7 +269,9 @@ class TransactionResourceRecurringTest extends IntegrationTestBase {
     }
 
     @Test
-    void givenExistingRecurringTransaction_whenPatchTransaction_thenTransactionIsUpdated() {
+    void givenExistingRecurringTransaction_whenPatchTransaction_thenTransactionIsUpdated() throws InterruptedException, JsonProcessingException {
+        final var objectMapper = new ObjectMapper();
+
         doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
 
         final var recurringTransaction = RecurringTransactionDto.builder()
@@ -235,6 +293,11 @@ class TransactionResourceRecurringTest extends IntegrationTestBase {
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
+        final var consumerRecordAfterCreate = consumerRecords.poll(1, TimeUnit.SECONDS);
+        assertNotNull(consumerRecordAfterCreate);
+        final var recordAfterCreate = objectMapper.readTree(consumerRecordAfterCreate.value().toString());
+        assertThat(recordAfterCreate.get("updateType").asText(), is("CREATE"));
+
         given().port(port)
                 .get(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/recurring/" + recurringTransaction.getId().toString())
                 .then()
@@ -255,6 +318,14 @@ class TransactionResourceRecurringTest extends IntegrationTestBase {
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and().body("name", is("New Employment Income"));
+
+        final var consumedRecordAfterPatch = consumerRecords.poll(1, TimeUnit.SECONDS);
+        assertNotNull(consumedRecordAfterPatch);
+
+        final var recordAfterPatch = objectMapper.readTree(consumedRecordAfterPatch.value().toString());
+        assertThat(recordAfterPatch.get("updateType").asText(), is("UPDATE"));
+        assertThat(recordAfterPatch.get("recurringTransaction").get("id").asText(), is(recurringTransaction.getId().toString()));
+        assertThat(recordAfterPatch.get("recurringTransaction").get("name").asText(), is("New Employment Income"));
     }
 
     @Test
@@ -338,7 +409,9 @@ class TransactionResourceRecurringTest extends IntegrationTestBase {
     }
 
     @Test
-    void givenExistingRecurringTransaction_whenDeleteTransaction_thenTransactionDoesNotExistAnymore() {
+    void givenExistingRecurringTransaction_whenDeleteTransaction_thenTransactionDoesNotExistAnymore() throws InterruptedException, JsonProcessingException {
+        final var objectMapper = new ObjectMapper();
+
         doReturn(Optional.of(BankAccountDto.builder().build())).when(bankAccountProvider).getBankAccount(anyString());
 
         final var recurringTransaction = RecurringTransactionDto.builder()
@@ -358,6 +431,11 @@ class TransactionResourceRecurringTest extends IntegrationTestBase {
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
+        final var consumerRecordAfterCreate = consumerRecords.poll(1, TimeUnit.SECONDS);
+        assertNotNull(consumerRecordAfterCreate);
+        final var recordAfterCreate = objectMapper.readTree(consumerRecordAfterCreate.value().toString());
+        assertThat(recordAfterCreate.get("updateType").asText(), is("CREATE"));
+
         given().port(port)
                 .contentType(ContentType.JSON)
                 .delete(LOCAL_BASE_URL_WITHOUT_PORT + "/transactions/recurring/" + recurringTransaction.getId().toString())
@@ -369,6 +447,13 @@ class TransactionResourceRecurringTest extends IntegrationTestBase {
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and().body("size()", is(0));
+
+        final var consumedRecordAfterDelete = consumerRecords.poll(1, TimeUnit.SECONDS);
+        assertNotNull(consumedRecordAfterDelete);
+
+        final var recordAfterPatch = objectMapper.readTree(consumedRecordAfterDelete.value().toString());
+        assertThat(recordAfterPatch.get("updateType").asText(), is("DELETE"));
+        assertThat(recordAfterPatch.get("recurringTransaction").get("id").asText(), is(recurringTransaction.getId().toString()));
     }
 
     @Test
