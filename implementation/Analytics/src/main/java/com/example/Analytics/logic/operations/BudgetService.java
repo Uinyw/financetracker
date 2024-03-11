@@ -53,7 +53,6 @@ public class BudgetService {
         if(budgetElementList.isEmpty() && fixedBudgetElementList.isEmpty())
             return new BudgetPlan();
 
-        //TODO adjust calculation
         List<BudgetElement> newBudgetElements = new ArrayList<>();
         double averageMonthlyOneTimeTransactions = budgetElementList.stream().mapToDouble(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).sum();
         double totalAverageMonthlyAmount = averageMonthlyOneTimeTransactions;
@@ -65,10 +64,10 @@ public class BudgetService {
         double howMuchSpentOnAverage = Math.abs(budgetElementList.stream().map(budgetElement -> budgetElement.getMonetaryAmount().getAmount()).filter(money->money<0).mapToDouble(Double::doubleValue).sum());
         double missingAmount = (howMuchSpentOnAverage-totalAverageMoneyToBeSaved>0)?totalAverageMoneyToBeSaved:howMuchSpentOnAverage;
 
-        if(totalAverageMoneyToBeSaved < 0){//todo removeable?
+        if(totalAverageMoneyToBeSaved < 0){
             newBudgetElements.addAll(budgetElementList);
             newBudgetElements.addAll(fixedBudgetElementList);
-            return new BudgetPlan(newBudgetElements);
+            return new BudgetPlan(newBudgetElements, AchievementStatus.ACHIEVED);
         }
 
         for(BudgetElement budgetCatagory : budgetElementList){
@@ -87,9 +86,10 @@ public class BudgetService {
                     .monetaryAmount(new MonetaryAmount(insufficientAmount))
                     .build();
             newBudgetElements.add(newIncome);
+            return new BudgetPlan(newBudgetElements, AchievementStatus.FAILED);
         }
 
-        return new BudgetPlan(newBudgetElements);
+        return new BudgetPlan(newBudgetElements, AchievementStatus.ACHIEVED);
     }
 
     public BudgetPlan spendingForEachCategory(FilterElement filter){

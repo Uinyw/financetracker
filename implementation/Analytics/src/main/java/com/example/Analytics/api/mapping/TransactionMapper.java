@@ -44,7 +44,7 @@ public class TransactionMapper {
         return Transaction.builder()
                 .type(getType(reoccuringTransactionDto))
                 .date(getLocalDateFromTransactionDto(reoccuringTransactionDto))
-                .bankAccountSource(transfer.getTargetBankAccountId())
+                .bankAccountSource(transfer.getSourceBankAccountId())
                 .bankAccountTarget(transfer.getTargetBankAccountId())
                 .amount(getMonetaryAmountFromDto(reoccuringTransactionDto))
                 .referenceId(reoccuringTransactionDto.getId())
@@ -57,7 +57,7 @@ public class TransactionMapper {
         return Transaction.builder()
                 .type(getType(oneTimeTransactionDto))
                 .date(getLocalDateFromTransactionDto(oneTimeTransactionDto))
-                .bankAccountSource(transfer.getTargetBankAccountId())
+                .bankAccountSource(transfer.getSourceBankAccountId())
                 .bankAccountTarget(transfer.getTargetBankAccountId())
                 .amount(getMonetaryAmountFromDto(oneTimeTransactionDto))
                 .referenceId(oneTimeTransactionDto.getId())
@@ -155,7 +155,7 @@ public class TransactionMapper {
         return switch (typeDto){
             case INCOME -> TransactionType.INCOME;
             case EXPENSE -> TransactionType.EXPENSE;
-            case SHIFT -> null; //TODO how to deal with those?
+            case SHIFT -> null;
         };
     }
     private TransactionType getType(RecurringTransactionDto recurringTransactionDto){

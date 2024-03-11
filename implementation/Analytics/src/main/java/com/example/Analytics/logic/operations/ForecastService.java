@@ -1,44 +1,42 @@
 package com.example.Analytics.logic.operations;
 
+import com.example.Analytics.logic.model.budgetModel.BudgetElement;
 import com.example.Analytics.logic.model.forecast.Forecast;
-import com.example.Analytics.logic.model.forecast.ForecastEntities;
 import com.example.Analytics.logic.model.forecast.RecurringSavingsGoal;
-import org.springframework.cglib.core.Local;
+import com.example.Analytics.logic.model.generalModel.FilterElement;
+import com.example.Analytics.logic.model.generalModel.MonetaryAmount;
+import com.example.Analytics.logic.model.productModel.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ForecastService {
 
     private List<RecurringSavingsGoal> recurringSavingsGoalList;
+    @Autowired
+    private BudgetService budgetService;
 
     public Forecast createForecast(LocalDate date){
-        List<ForecastEntities> forecastEntitiesList = new ArrayList<>();
+        HashMap<UUID, MonetaryAmount> forecastEntriesList = new HashMap<>();
+        LocalDate localDate = LocalDate.now();
+        List<BudgetElement> budgetElementList = budgetService.spendingForEachCategory(FilterElement.builder()
+                .bankAccountList(new ArrayList<>())
+                .categoryList(new ArrayList<>())
+                .duration(new Duration(localDate.minusMonths(2).toString(),localDate.toString())).build()).getBudgetElementList();
 
-        int months = getMonthDifference(date);
-        for (int i = 1; i < months; i++) {
-            ForecastEntities entity = createForecastForTimeFrame(LocalDate.now().plusMonths(i), date);
-            forecastEntitiesList.add(entity);
+        for(BudgetElement budgetElement : budgetElementList){
+            forecastEntriesList.put(UUID.randomUUID(), budgetElement.getMonetaryAmount());
         }
-        ForecastEntities entity = createForecastForTimeFrame(LocalDate.now().plusMonths(months), date);
-        forecastEntitiesList.add(entity);
 
-        return new Forecast(forecastEntitiesList);
-    }
-
-    private int getMonthDifference(LocalDate date){
-        LocalDate today = LocalDate.now();
-        int yearsAgo = date.getYear()-today.getYear();
-        int monthsAgo = date.getMonth().getValue()-today.getMonth().getValue();
-
-        return yearsAgo*12 + monthsAgo;
-    }
-
-    private ForecastEntities createForecastForTimeFrame(LocalDate oldDate, LocalDate newDate){
-
-        return null;
+        return Forecast.builder()
+                .date(date)
+                .forecastEntriesList(forecastEntriesList)
+                .build();
     }
 }

@@ -1,8 +1,6 @@
 package com.example.Analytics.logic.model.productModel;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.*;
 
 @Builder

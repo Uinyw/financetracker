@@ -21,7 +21,7 @@ import java.util.UUID;
 public class VariableMonthlyTransaction {
     @Id
     private UUID id;
-    private String name; //TODO is the name even needed?
+    private String name;
     @Embedded
     @AttributeOverride(name = "name", column = @Column(name = "category_name"))
     private Category category;
@@ -62,7 +62,6 @@ public class VariableMonthlyTransaction {
                 .mapToInt(AmountMonthsAgo::getMonthsAgo)
                 .min()
                 .orElse(0);
-        //TODO ignore new month; first month is important -> lowest value = one month ago if several months
         double baseline = getLastMonthAmount(amountMonthsAgoList, lowestTimeAmount);
         for(AmountMonthsAgo amountMonthsAgo : amountMonthsAgoList){
             double weighting = getMonthWeighting(amountMonthsAgo.getMonthsAgo(), maxTimeAmount);

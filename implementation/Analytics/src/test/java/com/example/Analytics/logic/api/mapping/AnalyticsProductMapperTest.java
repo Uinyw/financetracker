@@ -4,7 +4,6 @@ import com.example.Analytics.IntegrationTestBase;
 import com.example.Analytics.api.mapping.ProductMapper;
 import com.example.Analytics.logic.model.productModel.Nutrition;
 import com.example.Analytics.logic.model.productModel.Product;
-import com.example.Analytics.logic.operations.ProductService;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.CategoryDto;
 import org.openapitools.client.model.MonetaryAmountDto;
@@ -19,10 +18,8 @@ import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AnalyticsMapperTest extends IntegrationTestBase {
+public class AnalyticsProductMapperTest extends IntegrationTestBase {
     @Autowired
     private ProductMapper productMapper;
 
@@ -38,8 +35,35 @@ public class AnalyticsMapperTest extends IntegrationTestBase {
         assertThat(nutrition.getCarbohydrates(), is(baseValue));
         assertThat(nutrition.getProtein(), is(baseValue));
         assertThat(nutrition.getSugar(), is(baseValue));
+
+        org.openapitools.model.NutritionDto newNutritionDto = productMapper.nutritionDtoFromNutrition(nutrition);
+        assertThat(nutrition.getFat(), is(newNutritionDto.getFat()));
+        assertThat(nutrition.getServingSize(), is(newNutritionDto.getServingSize()));
+        assertThat(nutrition.getCalories(), is(newNutritionDto.getCalories()));
+        assertThat(nutrition.getCarbohydrates(), is(newNutritionDto.getCarbohydrates()));
+        assertThat(nutrition.getProtein(), is(newNutritionDto.getProtein()));
+        assertThat(nutrition.getSugar(), is(newNutritionDto.getSugar()));
     }
 
+
+    @Test
+    void givenNutritionDto_whenMissingValue_thenProductisNull(){
+        NutritionDto invalidNutritionDto = null;
+
+        for (int i = 0; i < 6; i++) {
+            System.out.println(i%7);
+            invalidNutritionDto = NutritionDto.builder()
+                    .fat((i%7 == 0)?null:BigDecimal.ONE)
+                    .servingSize((i%7 == 1)?null:BigDecimal.ONE)
+                    .calories((i%7 == 2)?null:BigDecimal.ONE)
+                    .carbohydrates((i%7 == 3)?null:BigDecimal.ONE)
+                    .protein((i%7 == 4)?null:BigDecimal.ONE)
+                    .sugar((i%7 == 5)?null:BigDecimal.ONE)
+                    .build();
+            Nutrition invalidNutrition = productMapper.nutritionFromDTO(invalidNutritionDto);
+            assertThat(null, is(invalidNutrition));
+        }
+    }
 
     @Test
     void givenProductDto_whenMap_thenProductExists(){
@@ -68,6 +92,7 @@ public class AnalyticsMapperTest extends IntegrationTestBase {
         assertThat(prod.getNutrition().getCarbohydrates(), is(getNutrition(2.0).getCarbohydrates()));
         assertThat(prod.getNutrition().getServingSize(), is(getNutrition(2.0).getServingSize()));
         assertThat(prod.getId(), is(uuid));
+
     }
 
 

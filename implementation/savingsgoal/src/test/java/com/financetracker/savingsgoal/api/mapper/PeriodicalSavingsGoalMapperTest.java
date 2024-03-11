@@ -99,22 +99,26 @@ public class PeriodicalSavingsGoalMapperTest extends IntegrationTestBase {
         duration.setEnd(null);
 
         Class<?> clazz = PeriodicalSavingsGoalMapper.class;
-
         Method durationToStringMethod = clazz.getDeclaredMethod("durationToString", Duration.class);
         durationToStringMethod.setAccessible(true);
-
-        String resultString = (String) durationToStringMethod.invoke(periodicalSavingsGoalMapper, duration);
-
         Method stringToDurationMethod = clazz.getDeclaredMethod("stringToDuration", String.class);
         stringToDurationMethod.setAccessible(true);
 
+        String resultString = (String) durationToStringMethod.invoke(periodicalSavingsGoalMapper, duration);
         Duration newDuration = (Duration) stringToDurationMethod.invoke(periodicalSavingsGoalMapper, resultString);
 
 
         assertThat(newDuration.getEnd(),is(duration.getEnd()));
         assertThat(newDuration.getStart(),is(duration.getStart()));
 
+        duration.setEnd(null);
+        resultString = (String) durationToStringMethod.invoke(periodicalSavingsGoalMapper, duration);
+        newDuration = (Duration) stringToDurationMethod.invoke(periodicalSavingsGoalMapper, resultString);
+
+        assertThat(newDuration.getEnd(),is(duration.getEnd()));
+        assertThat(newDuration.getStart(),is(duration.getStart()));
     }
+
 
     private PeriodicalSavingsGoal createPeriodicalSavingsGoal(UUID uuid, double number, Set<SavingsRecord> savingsRecordSet, Periodicity periodicity){
         return PeriodicalSavingsGoal.with()

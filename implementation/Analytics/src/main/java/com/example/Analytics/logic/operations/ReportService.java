@@ -2,6 +2,7 @@ package com.example.Analytics.logic.operations;
 
 import com.example.Analytics.ExcelWriter;
 import com.example.Analytics.logic.model.budgetModel.BudgetPlan;
+import com.example.Analytics.logic.model.forecast.Forecast;
 import com.example.Analytics.logic.model.generalModel.FilterElement;
 import com.example.Analytics.logic.model.productModel.Duration;
 import com.example.Analytics.logic.model.productModel.Nutrition;
@@ -23,6 +24,8 @@ public class ReportService {
     private DietService dietService;
     @Autowired
     private BudgetService budgetService;
+    @Autowired
+    private ForecastService forecastService;
 
     public void generateReport(){
         this.filter = FilterElement.builder().bankAccountList(new ArrayList<>())
@@ -31,10 +34,10 @@ public class ReportService {
                         LocalDate.now().toString()))
                 .build();
 
-        //TODO generate report, delete code above, use the bank account
         Nutrition nutritionData = generateDietReport(filter.getDuration());
         BudgetPlan budgetData = budgetService.spendingForEachCategory(filter);
-        excelWriter.createNutritionExcel(nutritionData, budgetData);
+        Forecast forecast = forecastService.createForecast(LocalDate.now().plusMonths(1));
+        excelWriter.createNutritionExcel(nutritionData, budgetData, forecast);
     }
     private Nutrition generateDietReport(Duration duration) {
         return dietService.getNutritionForDuration(duration);
