@@ -14,6 +14,8 @@
         <option value="$PROJECT_DIR$/implementation/Spring-Boot-Kafka-Producer-Docker-main/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/kafka-spring-boot-example-master/pom.xml" />
         <option value="$PROJECT_DIR$/implementation/savingsgoal/target/generated-sources/openapi/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/Analytics/pom.xml" />
+        <option value="$PROJECT_DIR$/implementation/product/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

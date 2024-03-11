@@ -3,6 +3,8 @@ package com.financetracker.transaction.logic.operations;
 import com.financetracker.transaction.api.exceptions.NotParseableException;
 import com.financetracker.transaction.api.exceptions.TransferFailedException;
 import com.financetracker.transaction.infrastructure.db.RecurringTransactionRepository;
+import com.financetracker.transaction.infrastructure.kafka.MessagePublisher;
+import com.financetracker.transaction.infrastructure.kafka.config.UpdateType;
 import com.financetracker.transaction.logic.model.RecurringTransaction;
 import com.financetracker.transaction.logic.model.TransactionRecord;
 import com.financetracker.transaction.logic.model.TransferStatus;
@@ -19,6 +21,7 @@ public class RecurringTransactionService {
 
     private final TransferService transferService;
     private final RecurringTransactionRepository recurringTransactionRepository;
+    private final MessagePublisher messagePublisher;
 
     public List<RecurringTransaction> getRecurringTransactions() {
         return recurringTransactionRepository.findAll();
@@ -34,12 +37,14 @@ public class RecurringTransactionService {
         }
 
         recurringTransactionRepository.save(recurringTransaction);
+        messagePublisher.publishMessageRecurringTransactionUpdate(recurringTransaction, UpdateType.CREATE);
     }
 
     public void createTransactionRecordForRecurringTransaction(final TransactionRecord transactionRecord) {
         final RecurringTransaction transaction = getRecurringTransaction(transactionRecord.getTransactionId()).orElseThrow(NotFoundException::new);
         transaction.getTransactionRecords().add(transactionRecord);
         recurringTransactionRepository.save(transaction);
+        messagePublisher.publishMessageRecurringTransactionUpdate(transaction, UpdateType.UPDATE);
     }
 
     public void deleteTransactionRecord(final String transactionId, final String transactionRecordId) {
@@ -50,6 +55,7 @@ public class RecurringTransactionService {
 
         transaction.getTransactionRecords().removeIf(record -> record.getId().equals(transactionRecordId));
         recurringTransactionRepository.save(transaction);
+        messagePublisher.publishMessageRecurringTransactionUpdate(transaction, UpdateType.UPDATE);
     }
 
     public void updateRecurringTransaction(final String transactionId, final RecurringTransaction recurringTransaction) {
@@ -60,6 +66,7 @@ public class RecurringTransactionService {
         final RecurringTransaction originalTransaction = getRecurringTransaction(transactionId).orElseThrow(NotFoundException::new);
         recurringTransaction.setTransactionRecords(originalTransaction.getTransactionRecords());
         recurringTransactionRepository.save(recurringTransaction);
+        messagePublisher.publishMessageRecurringTransactionUpdate(recurringTransaction, UpdateType.UPDATE);
     }
 
 
@@ -68,6 +75,7 @@ public class RecurringTransactionService {
 
         transaction.getTransactionRecords().forEach(record -> transferService.rollbackTransfer(transaction.getTransfer(), record));
         recurringTransactionRepository.deleteById(transactionId);
+        messagePublisher.publishMessageRecurringTransactionUpdate(transaction, UpdateType.DELETE);
     }
 
     public void transferTransactionRecordAndSetStatus(final String transactionId, final String recordId) {

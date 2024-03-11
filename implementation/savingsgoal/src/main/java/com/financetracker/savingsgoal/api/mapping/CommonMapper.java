@@ -40,4 +40,5 @@ public class CommonMapper {
             case ACHIEVED -> AchievementStatus.ACHIEVED;
         };
     }
+
 }

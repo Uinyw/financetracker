@@ -2,6 +2,7 @@ package com.financetracker.product.logic.operations;
 
 import com.financetracker.product.infrastructure.db.ProductEntryCollectionRepository;
 import com.financetracker.product.infrastructure.db.ProductEntryRepository;
+import com.financetracker.product.infrastructure.kafka.MessagePublisher;
 import com.financetracker.product.logic.model.ProductEntry;
 import com.financetracker.product.logic.model.ProductEntryCollection;
 import com.financetracker.product.logic.model.ProductEntryCollectionType;
@@ -18,6 +19,7 @@ public class ProductEntryCollectionService {
 
     private final ProductEntryRepository productEntryRepository;
     private final ProductEntryCollectionRepository productEntryCollectionRepository;
+    private final MessagePublisher messagePublisher;
 
     public ProductEntryCollection getProductEntryCollection(final ProductEntryCollectionType type) {
         return productEntryCollectionRepository.findTopByType(type).orElseThrow(NotFoundException::new);
@@ -44,9 +46,14 @@ public class ProductEntryCollectionService {
     public void updateProductEntryInCollection(final ProductEntryCollectionType type, final String productEntryId, final ProductEntry productEntry) {
         final var collection = getProductEntryCollection(type);
 
-        final var productEntryExistsInCollection = collection.getProductEntries().stream().anyMatch(productEntryWithIdPredicate(productEntryId));
-        if (!productEntryExistsInCollection) {
-            throw new NotFoundException();
+        final var originalProductEntry = collection.getProductEntries().stream().filter(productEntryWithIdPredicate(productEntryId)).findFirst().orElseThrow(NotFoundException::new);
+
+        if (type.equals(ProductEntryCollectionType.SUPPLIES)) {
+            final var amount = originalProductEntry.getQuantity().subtract(productEntry.getQuantity());
+
+            if (amount.doubleValue() > 0.0) {
+                messagePublisher.publishMessageProductUpdate(productEntry.getProduct(), amount);
+            }
         }
 
         productEntry.setCollectionId(collection.getId());
