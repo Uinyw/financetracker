@@ -49,10 +49,10 @@ public class ProductEntryCollectionService {
         final var originalProductEntry = collection.getProductEntries().stream().filter(productEntryWithIdPredicate(productEntryId)).findFirst().orElseThrow(NotFoundException::new);
 
         if (type.equals(ProductEntryCollectionType.SUPPLIES)) {
-            final var amount = originalProductEntry.getQuantity().subtract(productEntry.getQuantity());
+            final var delta = originalProductEntry.getQuantity().subtract(productEntry.getQuantity());
 
-            if (amount.doubleValue() > 0.0) {
-                messagePublisher.publishMessageProductUpdate(productEntry.getProduct(), amount);
+            if (delta.doubleValue() > 0.0) {
+                messagePublisher.publishMessageSuppliesUpdate(productEntry.getProduct(), delta);
             }
         }
 

@@ -1,20 +1,68 @@
 package com.financetracker.product.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.financetracker.product.IntegrationTestBase;
 import com.financetracker.product.logic.model.ProductEntryCollectionType;
 import io.restassured.http.ContentType;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.listener.KafkaMessageListenerContainer;
+import org.springframework.kafka.listener.MessageListener;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.utils.ContainerTestUtils;
+import org.springframework.kafka.test.utils.KafkaTestUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SuppliesResourceTest extends IntegrationTestBase {
+
+    @Value("${tpd.topic-product-update}")
+    private String productUpdate;
+
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafkaBroker;
+
+    private KafkaMessageListenerContainer<String, Object> container;
+    private BlockingQueue<ConsumerRecord<String, Object>> consumerRecords;
+
+    @BeforeEach
+    void setup() {
+        consumerRecords = new LinkedBlockingQueue<>();
+
+        Map<String, Object> consumerProperties = KafkaTestUtils.consumerProps("test-group-id", "false", embeddedKafkaBroker);
+        DefaultKafkaConsumerFactory<String, Object> consumer = new DefaultKafkaConsumerFactory<>(consumerProperties);
+
+        ContainerProperties containerProperties = new ContainerProperties(productUpdate);
+        container = new KafkaMessageListenerContainer<>(consumer, containerProperties);
+        container.setupMessageListener((MessageListener<String, Object>) record -> consumerRecords.add(record));
+        container.start();
+        ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
+    }
+
+    @AfterEach
+    void after() {
+        container.stop();
+    }
 
     @Test
     void givenProductEntry_whenAddToSupplies_thenProductEntryExistsInSupplies() {
@@ -196,7 +244,7 @@ class SuppliesResourceTest extends IntegrationTestBase {
     }
 
     @Test
-    void givenProductEntryInSupplies_whenPatchEntryInSupplies_thenProductEntryInSuppliesIsUpdated() {
+    void givenProductEntryInSupplies_whenPatchEntryInSupplies_thenProductEntryInSuppliesIsUpdated() throws InterruptedException, JsonProcessingException {
         final var productDto = ProductDto.builder()
                 .id(UUID.randomUUID())
                 .name("Milk")
@@ -208,7 +256,7 @@ class SuppliesResourceTest extends IntegrationTestBase {
 
         final var productEntryDto = ProductEntryDto.builder()
                 .id(UUID.randomUUID())
-                .quantity(BigDecimal.ONE)
+                .quantity(BigDecimal.TEN)
                 .purchased(false)
                 .product(productDto)
                 .build();
@@ -226,9 +274,9 @@ class SuppliesResourceTest extends IntegrationTestBase {
                 .statusCode(HttpStatus.OK.value())
                 .and().body("productEntries.size()", is(1))
                 .and().body("productEntries[0].id", is(productEntryDto.getId().toString()))
-                .and().body("productEntries[0].quantity", is(1F));
+                .and().body("productEntries[0].quantity", is(10F));
 
-        productEntryDto.setQuantity(BigDecimal.TEN);
+        productEntryDto.setQuantity(BigDecimal.ONE);
 
         given().port(port)
                 .contentType(ContentType.JSON)
@@ -237,13 +285,21 @@ class SuppliesResourceTest extends IntegrationTestBase {
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
+        final var consumedRecord = consumerRecords.poll(1, TimeUnit.SECONDS);
+        assertNotNull(consumedRecord);
+
+        final var objectMapper = new ObjectMapper();
+        final var record = objectMapper.readTree(consumedRecord.value().toString());
+        assertThat(record.get("amount").asDouble(), is(9.0));
+        assertThat(record.get("product").get("id").asText(), is(productDto.getId().toString()));
+
         given().port(port)
                 .get(LOCAL_BASE_URL_WITHOUT_PORT + "/supplies")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .and().body("productEntries.size()", is(1))
                 .and().body("productEntries[0].id", is(productEntryDto.getId().toString()))
-                .and().body("productEntries[0].quantity", is(10F));
+                .and().body("productEntries[0].quantity", is(1F));
     }
 
     @Test

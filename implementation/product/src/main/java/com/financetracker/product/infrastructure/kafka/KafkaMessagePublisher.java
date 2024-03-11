@@ -20,13 +20,13 @@ public class KafkaMessagePublisher implements MessagePublisher {
     @Value("${tpd.topic-product-update}")
     private String productUpdate;
 
-    public void publishMessageProductUpdate(final Product product, final BigDecimal amount) {
+    public void publishMessageSuppliesUpdate(final Product product, final BigDecimal delta) {
         final var objectMapper = new ObjectMapper();
         final var node = objectMapper.createObjectNode();
         final var productDto = productMapper.mapProductModelToDto(product);
 
         node.set("product", objectMapper.valueToTree(productDto));
-        node.put("amount", amount.doubleValue());
+        node.put("amount", delta.doubleValue());
 
         this.template.send(productUpdate, node);
     }

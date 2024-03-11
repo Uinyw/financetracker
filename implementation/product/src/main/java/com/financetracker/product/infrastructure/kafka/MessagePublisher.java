@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 
 public interface MessagePublisher {
 
-    void publishMessageProductUpdate(final Product product, final BigDecimal amount);
+    void publishMessageSuppliesUpdate(final Product product, final BigDecimal delta);
 }
