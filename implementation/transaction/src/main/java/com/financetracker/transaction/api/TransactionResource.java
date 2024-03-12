@@ -1,12 +1,8 @@
 package com.financetracker.transaction.api;
-import com.financetracker.transaction.api.exceptions.TransferFailedException;
 import com.financetracker.transaction.api.mapping.OneTimeTransactionMapper;
 import com.financetracker.transaction.api.mapping.RecurringTransactionMapper;
-import com.financetracker.transaction.logic.model.OneTimeTransaction;
-import com.financetracker.transaction.logic.model.TransferStatus;
 import com.financetracker.transaction.logic.operations.OneTimeTransactionService;
 import com.financetracker.transaction.logic.operations.RecurringTransactionService;
-import com.financetracker.transaction.logic.operations.TransferService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.TransactionsApi;
 import org.openapitools.model.OneTimeTransactionDto;
@@ -16,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import jakarta.ws.rs.NotFoundException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor

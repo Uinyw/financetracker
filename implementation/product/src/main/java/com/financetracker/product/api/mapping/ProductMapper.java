@@ -26,6 +26,7 @@ public class ProductMapper {
                 .size(product.getSize())
                 .category(mapCategoryDtoToModel(product.getCategory()))
                 .labels(mapLabelDtoToModel(product.getLabels()))
+                .nutrition(mapNutritionDtoToModel(product.getNutrition()))
                 .build();
     }
 
@@ -55,6 +56,19 @@ public class ProductMapper {
                 .protein(nutrition.protein())
                 .sugar(nutrition.sugar())
                 .build();
+    }
+
+    private Nutrition mapNutritionDtoToModel(final NutritionDto nutrition) {
+        if (nutrition == null) {
+            return null;
+        }
+
+        return new Nutrition(nutrition.getServingSize(),
+                nutrition.getCalories(),
+                nutrition.getFat(),
+                nutrition.getCarbohydrates(),
+                nutrition.getProtein(),
+                nutrition.getSugar());
     }
 
     private CategoryDto mapCategoryModelToDto(final Category category) {

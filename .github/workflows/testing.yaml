@@ -40,6 +40,9 @@ jobs:
     - name: Build SavingsGoal
       run: mvn -B package -Pcoverage --file implementation/savingsgoal/pom.xml
 
+    - name: Build Analytics
+      run: mvn -B package -Pcoverage --file implementation/Analytics/pom.xml
+
     - name: Generate JaCoCo badge BankAccount
       id: jacoco-bankaccount
       uses: cicirello/jacoco-badge-generator@v2
@@ -88,6 +91,18 @@ jobs:
         jacoco-csv-file: >
           implementation/savingsgoal/target/site/jacoco/jacoco.csv
 
+    - name: Generate JaCoCo badge Analytics
+      id: jacoco-analytics
+      uses: cicirello/jacoco-badge-generator@v2
+      with:
+        badges-directory: badges
+        generate-branches-badge: true
+        coverage-badge-filename: jacoco-analytics.svg
+        branches-badge-filename: branches-analytics.svg
+        generate-summary: true
+        jacoco-csv-file: >
+          implementation/Analytics/target/site/jacoco/jacoco.csv
+
     - name: Upload JaCoCo BankAccount coverage report as a workflow artifact
       uses: actions/upload-artifact@v3
       with:
@@ -111,6 +126,12 @@ jobs:
       with:
         name: jacoco-report-savingsgoal
         path: implementation/savingsgoal/target/site/jacoco/
+
+    - name: Upload JaCoCo Analytics coverage report as a workflow artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: jacoco-report-analytics
+        path: implementation/Analytics/target/site/jacoco/
 
     - name: Commit and push the coverage badges and summary file
       if: ${{ github.event_name != 'pull_request' }}

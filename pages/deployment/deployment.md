@@ -13,7 +13,7 @@ mvn clean package --file implementation/transaction/pom.xml
 mvn clean package --file implementation/product/pom.xml
 mvn clean package --file implementation/savingsgoal/pom.xml
 mvn clean package --file implementation/analytics/pom.xml
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 5. Open your browser
