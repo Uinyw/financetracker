@@ -1,57 +1,64 @@
+```mermaid
+
 sequenceDiagram
+
+    actor USER
 
     #createbankaccount, savingsgoalandproduct
 
-    USER->>+BankAccount: POST "/bankAccounts {name:savings_account}"
+    USER->>+BankAccount: POST /bankAccounts {name:savings_account, amount: 100}
 
-    BankAccount-->>-USER: created bank account "savings_account"
+    BankAccount-->>-USER: savings_account
 
-    USER->>+SavingsGoal: POST "/savings-goals/rule-based, {"nodepth", ANY_MATCH, savings_accountrules:[{type:GREATER_THAN, amount:0,00€},{type:EQUALS, amount:0,00€}]}"
+    USER->>+SavingsGoal: POST /savings-goals/rule-based, {match: ANY_MATCH, type: GREATER_THAN, amount: 50}
 
-    SavingsGoal->>+USER: new rule based savings goal created
+    SavingsGoal-->>-USER: savings_goal
 
-    USER->>+Product: POST "/products, {name:mango, category:food, price:2€}"
+    USER->>+Product: POST /products, {name: mango, category: food, price: 5}
 
-    Product-->>-USER: created new product entry "mango"
+    Product-->>-USER: mango
 
     #createshoppingcartentryfortheproduct
 
-    USER->>+Product: POST "/supplies/entries, {name:mango}"
+    USER->>+Product: POST /shopping-cart, 10 * mango
 
-    Product-->>-USER: item "mango" was placed in supplies
-
-    USER->>+Product: POST "/supplies/shop, {name:mango}"
-
-    Product-->>-USER: item "mango" was placed into the shopping cart
+    Product-->>-USER: shopping-cart with mango
 
     #showtheshoppingcartscontentsandpurchasethem
 
-    USER->>+Product: GET "/shopping-cart"
+    USER->>+Product: POST /shopping-cart/purchase, savings_account
 
-    Product-->>-USER: shoppingcarthasthefollowingitems: ["mango"]
+    Product->>+Transaction: POST /transactions/one-time, {type: EXPENSE, amount: 50}
 
-    USER->>+Product: POST "/shopping-cart/purchase, {name:savings_account}"
+    Transaction->>+BankAccount: PATCH /bankAccounts {name: savings_account, delta: -50}
 
-    Product-->>-USER: the items in the shopping cart have been purchased by "savings_account"
+    BankAccount->>+SavingsGoal: KAFKA bank-account-update, savings_account
 
-    #checkthesavingsgoal
+    SavingsGoal->>+SavingsGoal: setAccountRulesFailed, savings_account
+    SavingsGoal-->>-SavingsGoal: 
 
-    USER->>+SavingsGoal: GET "/savings-goals/rule-based, {name:no depth}"
+    SavingsGoal-->>-BankAccount: 
 
-    SavingsGoal-->>-USER: rule "no depth" "FAILED"
+    BankAccount-->>-Transaction: success
 
-    #createincome
+    Transaction-->>-Product: success
 
-    USER->>+Transaction: POST "/transactions/recurring, {bank_account:savings_account,money:1200€,frequency:MONTHLY}"
+    Product-->>-USER: mango has been purchased on savings_account
 
-    Transaction-->>-USER: new "monthly" "income" for "savings_account" created
+    #updateNutrition
+
+    USER->>+Product: PATCH /supplies/mango, {quantity: 5}
+
+    Product->>+Analytics: KAFKA product-update, nutrition of mango
+
+    Analytics-->>-Product:  
+
+    Product-->>-USER: success
 
     #checkAnalytics
 
-    USER->>+Analytics: GET "/report"
+    USER->>+Analytics: GET /nutrition, {2024-01-01, 2024-12-31}
 
-    Analytics-->>-USER: excel file has been created
+    Analytics-->>-USER: nutrition
 
-    USER->>+Analytics: GET "/nutrition"
-
-    Analytics-->>-USER: "nutrition Values"
+```
