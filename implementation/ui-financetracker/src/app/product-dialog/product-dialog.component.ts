@@ -32,6 +32,7 @@ export class ProductDialogComponent {
         },
         nutrition: null,
         category: Category.FOOD,
+        size: 0,
         labels: []
       }
     }

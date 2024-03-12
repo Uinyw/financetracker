@@ -62,12 +62,17 @@ paths:
       summary: Get the Nutrition in a given timeframe
       tags:
         - Analytics
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DurationDto'
+      parameters:
+        - name: startTime
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: endTime
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Successful response

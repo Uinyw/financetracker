@@ -14,7 +14,7 @@ import { ProductDialogComponent } from '../product-dialog/product-dialog.compone
 })
 export class ProductComponent {
 
-  displayedColumns: string[] = ['name', 'description', 'price', 'category', 'carbs', 'protein', 'fat', 'sugar', 'labels', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'price', 'category', 'size', 'carbs', 'protein', 'fat', 'sugar', 'labels', 'actions'];
   products = new MatTableDataSource<Product>();
 
   @ViewChild(MatPaginator, { static: true })

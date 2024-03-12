@@ -12,6 +12,7 @@ import { SavingsGoalRuleBasedComponent } from './savings-goal-rule-based/savings
 import { SavingsGoalRuleBasedDetailComponent } from './savings-goal-rule-based-detail/savings-goal-rule-based-detail.component';
 import { SavingsGoalPeriodicalComponent } from './savings-goal-periodical/savings-goal-periodical.component';
 import { SavingsGoalPeriodicalDetailComponent } from './savings-goal-periodical-detail/savings-goal-periodical-detail.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 const routes: Routes = [
   { path: 'bank-accounts', component: BankAccountComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'savings-goals/rule-based/:id', component: SavingsGoalRuleBasedDetailComponent },
   { path: 'savings-goals/periodical', component: SavingsGoalPeriodicalComponent },
   { path: 'savings-goals/periodical/:id', component: SavingsGoalPeriodicalDetailComponent },
+  { path: 'analytics', component: AnalyticsComponent },
 ];
 
 @NgModule({

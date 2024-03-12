@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon'
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatTableModule } from '@angular/material/table';
+import { NgApexchartsModule } from 'ng-apexcharts'
 import { MatSortModule } from '@angular/material/sort'
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -43,6 +44,8 @@ import { SavingsGoalRuleBasedDetailDialogComponent } from './savings-goal-rule-b
 import { SavingsGoalPeriodicalComponent } from './savings-goal-periodical/savings-goal-periodical.component';
 import { SavingsGoalPeriodicalDetailComponent } from './savings-goal-periodical-detail/savings-goal-periodical-detail.component';
 import { SavingsGoalPeriodicalDialogComponent } from './savings-goal-periodical-dialog/savings-goal-periodical-dialog.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
+
 
 
 @NgModule({
@@ -71,6 +74,7 @@ import { SavingsGoalPeriodicalDialogComponent } from './savings-goal-periodical-
     SavingsGoalPeriodicalComponent,
     SavingsGoalPeriodicalDetailComponent,
     SavingsGoalPeriodicalDialogComponent,
+    AnalyticsComponent,
   ],
   imports: [
     BrowserModule,
@@ -92,7 +96,8 @@ import { SavingsGoalPeriodicalDialogComponent } from './savings-goal-periodical-
     FormsModule,
     HttpClientModule,
     MatDialogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgApexchartsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

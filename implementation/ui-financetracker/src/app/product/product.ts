@@ -5,15 +5,17 @@ export class Product {
     description: string;
     price: MonetaryAmount;
     category: Category;
+    size: number;
     nutrition: Nutrition | null;
     labels: string[];
 
-    constructor(id: string, name: string, description: string, price: MonetaryAmount, category: Category, nutrition: Nutrition, labels: string[]) {
+    constructor(id: string, name: string, description: string, price: MonetaryAmount, category: Category, size: number, nutrition: Nutrition, labels: string[]) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
+        this.size = size;
         this.nutrition = nutrition;
         this.labels = labels;
     }

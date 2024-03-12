@@ -21,8 +21,8 @@ public class DietResource implements NutritionApi {
 
     @CrossOrigin(origins = "*")
     @Override
-    public ResponseEntity<NutritionDto> nutritionGet(final DurationDto durationDto) {
-        final var nutrition = dietService.getNutritionForDuration(new Duration(durationDto.getStartTime(), durationDto.getEndTime()));
+    public ResponseEntity<NutritionDto> nutritionGet(final String startTime, final String endTime) {
+        final var nutrition = dietService.getNutritionForDuration(new Duration(startTime, endTime));
         NutritionDto nutritionDto = productMapper.nutritionDtoFromNutrition(nutrition);
         return new ResponseEntity<>(nutritionDto, HttpStatus.OK);
     }
