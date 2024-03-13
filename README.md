@@ -4,11 +4,11 @@
 
 | Component | Coverage |
 | :--- | :--- |
-| MS-BankAccount | ![coverage](../badges/jacoco-bankaccount.svg) |
-| MS-Transaction | ![coverage](../badges/jacoco-transaction.svg) |
-| MS-Product | ![coverage](../badges/jacoco-product.svg) |
-| MS-SavingsGoal | ![coverage](../badges/jacoco-savingsgoal.svg) |
-| MS-Analytics | ![coverage](../badges/jacoco-analytics.svg) |
+| BankAccount | ![coverage](../badges/jacoco-bankaccount.svg) |
+| Transaction | ![coverage](../badges/jacoco-transaction.svg) |
+| Product | ![coverage](../badges/jacoco-product.svg) |
+| SavingsGoal | ![coverage](../badges/jacoco-savingsgoal.svg) |
+| Analytics | ![coverage](../badges/jacoco-analytics.svg) |
 
 
 ## Analysis
