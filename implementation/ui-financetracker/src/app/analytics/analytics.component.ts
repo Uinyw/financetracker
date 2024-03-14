@@ -15,12 +15,30 @@ import { Chart } from 'chart.js/auto';
 export class AnalyticsComponent {
 
   public chart: any;
+  public nutritionData = {
+    fat: 0,
+    carbohydrates: 0,
+    sugar: 0,
+    protein: 0
+  };
+
+  startDate: Date = new Date();
+  endDate: Date = new Date();
 
   constructor(private analyticsService: AnalyticsService) {
     
   }
 
-  ngOnInit() {
+  calculateIndividualNutrition() {
+    this.analyticsService.getNutrition(this.startDate.toLocaleDateString('en-CA'), this.endDate.toLocaleDateString('en-CA')).subscribe(nutrition => {
+      this.nutritionData.carbohydrates = nutrition.carbohydrates / 100.0;
+      this.nutritionData.protein = nutrition.protein / 100.0;
+      this.nutritionData.sugar = nutrition.sugar / 100.0;
+      this.nutritionData.fat = nutrition.fat / 100.0;
+    })
+  }
+
+  ngAfterViewChecked() {
     this.createChart();
 
     var months = this.getAllMonths();
@@ -85,11 +103,6 @@ export class AnalyticsComponent {
       
     });
   }
-
-  
-
-
-
 
 
   private getAllMonths() {

@@ -1,5 +1,44 @@
 <h1>Analytics</h1>
 
-<div class="chart-container" style="position: relative; height:40vh; width:80vw">
-    <canvas id="MyChart" >{{ chart }}</canvas>
-</div>
+<h2>Nutrition</h2>
+
+<mat-tab-group animationDuration="0ms">
+    <mat-tab label="Overall Nutrition">
+        <ng-template matTabContent>
+            <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+                <canvas id="MyChart" >{{ chart }}</canvas>
+            </div>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="Individual Nutrition">
+        <ng-template matTabContent>
+            <h3>Enter Start and End Date for Nutrition</h3>
+            <mat-form-field class="half-width">
+                <mat-label> Start Date</mat-label>
+                <input matInput [matDatepicker]="picker1" [(ngModel)]="startDate">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="half-width">
+                <mat-label> End Date</mat-label>
+                <input matInput [matDatepicker]="picker2" [(ngModel)]="endDate">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+            <button mat-button (click)="calculateIndividualNutrition()" style="margin-top: 20px;">Calculate</button>
+
+            <h4 style="margin-top: 20px;">Nutrition for Period</h4>
+            <ul>
+                <li>Carbohydrates: {{nutritionData.carbohydrates}}g</li>
+                <li>Protein: {{nutritionData.protein}}g</li>
+                <li>Sugar: {{nutritionData.sugar}}g</li>
+                <li>Fat: {{nutritionData.fat}}g</li>
+            </ul>
+
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

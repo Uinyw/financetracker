@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon'
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { NgApexchartsModule } from 'ng-apexcharts'
 import { MatSortModule } from '@angular/material/sort'
 import { MatInputModule } from '@angular/material/input';
@@ -82,6 +83,7 @@ import { AnalyticsComponent } from './analytics/analytics.component';
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+    MatTabsModule,
     MatToolbarModule,
     MatTableModule,
     MatFormFieldModule,
