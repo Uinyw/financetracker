@@ -8,10 +8,10 @@
 
 
 <div  class="mat-elevation-z8">
-    <button mat-button (click)="openAddDialog()">
+    <button id="add-bank-account" mat-button (click)="openAddDialog()">
         <mat-icon>add</mat-icon>
     </button>
-    <table mat-table [dataSource]="bankAccounts" matSort>
+    <table id="bank-account-table" mat-table [dataSource]="bankAccounts" matSort>
   
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef> ID </th>

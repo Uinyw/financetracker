@@ -2,19 +2,19 @@
 <div mat-dialog-content>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="bankAccount.name">
+    <input id="name-input" matInput [(ngModel)]="bankAccount.name">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Description</mat-label>
-    <input matInput [(ngModel)]="bankAccount.description">
+    <input id="description-input" matInput [(ngModel)]="bankAccount.description">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Balance</mat-label>
-    <input type="number" matInput [(ngModel)]="bankAccount.balance.amount">
+    <input id="balance-input" type="number" matInput [(ngModel)]="bankAccount.balance.amount">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Disposition Limit</mat-label>
-    <input type="number" matInput [(ngModel)]="bankAccount.dispositionLimit.amount">
+    <input id="dispo-input" type="number" matInput [(ngModel)]="bankAccount.dispositionLimit.amount">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Labels (Comma Separated)</mat-label>
@@ -24,5 +24,5 @@
 
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Back</button>
-  <button mat-button [mat-dialog-close]="getResultingBankAccount()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
+  <button id="create-bank-account" mat-button [mat-dialog-close]="getResultingBankAccount()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
 </div>
