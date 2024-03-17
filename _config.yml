@@ -3,4 +3,4 @@ remote_theme: zendesk/jekyll-theme-zendesk-garden@main
 sidebar:
 - label: Use Cases
   children:
-    - ./pages/use_cases/use_case_descriptions_management_of_analytics.md
+    - uc-transaction
