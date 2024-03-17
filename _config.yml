@@ -1,10 +1,4 @@
-plugins:
-  - jekyll-relative-links
-relative_links:
-  enabled: true
-  collections: true
-include:
-  - README.md
+remote_theme: zendesk/jekyll-theme-zendesk-garden@main
 
 sidebar:
 - label: Use Cases
