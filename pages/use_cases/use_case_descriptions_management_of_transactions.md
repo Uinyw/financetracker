@@ -1,3 +1,7 @@
+---
+id: uc-transaction
+---
+
 # Use Case Descriptions Management of Transactions
 
 ## Add Transaction
