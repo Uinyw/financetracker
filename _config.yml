@@ -4,3 +4,8 @@ sidebar:
 - label: Use Cases
   children:
     - uc-transaction
+
+- label: Domain Models
+  children:
+    - domain-bankaccount
+    - domain-product
