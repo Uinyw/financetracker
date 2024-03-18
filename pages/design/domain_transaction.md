@@ -26,6 +26,23 @@ classDiagram
     OneTimeTransaction  --> TransferStatus : transferStatus
     OneTimeTransaction  ..> Transferable : implements
 
+    OneTimeTransactionRepository ..> OneTimeTransaction : persists
+    RecurringTransactionRepository ..> RecurringTransaction : persists
+
+    class OneTimeTransactionRepository {
+        <<Repository>>
+        + save(transaction: OneTimeTransaction)
+        + findById(id: String) OneTimeTransaction
+        + findAll() Set of OneTimeTransaction
+    }
+
+    class RecurringTransactionRepository {
+        <<Repository>>
+        + save(transaction: RecurringTransaction)
+        + findById(id: String) RecurringTransaction
+        + findAll() Set of RecurringTransaction
+    }
+
     class Transferable {
         <<interface>>
         + getDate() Date
@@ -41,12 +58,6 @@ classDiagram
         + description: String
     }
 
-    class TransactionRecord {
-        <<Entity>>
-        - id: String
-        + date: Date
-    }
-
     class RecurringTransaction {
         <<Entity>>
         + startDate: Date
@@ -54,6 +65,12 @@ classDiagram
 
     class OneTimeTransaction {
         <<Entity>>
+        + date: Date
+    }
+
+    class TransactionRecord {
+        <<Entity>>
+        - id: String
         + date: Date
     }
 
