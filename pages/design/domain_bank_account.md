@@ -48,6 +48,5 @@ classDiagram
         + findById(id: String) BankAccount
         + findAll() Set of BankAccount
     }
-
-
+    
 ```

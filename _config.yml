@@ -8,4 +8,5 @@ sidebar:
 - label: Domain Models
   children:
     - domain-bankaccount
+    - domain-transaction
     - domain-product
