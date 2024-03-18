@@ -39,22 +39,36 @@ services:
     hostname: transaction
     ports:
       - 8080:8080
+    links:
+      - kafka
+    depends_on:
+      - kafka
     environment:
       BANK-ACCOUNT: bankaccount
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
 
   product:
     container_name: product
     build: ./implementation/product
     ports:
       - 8083:8083
+    links:
+      - kafka
+    depends_on:
+      - kafka
     environment:
       TRANSACTION: transaction
+      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
 
   savingsgoal:
     container_name: savingsgoal
     build: ./implementation/savingsgoal
     ports:
       - 8084:8084
+    links:
+      - kafka
+    depends_on:
+      - kafka
     environment:
       BANK-ACCOUNT: bankaccount
       TRANSACTION: transaction
@@ -65,6 +79,10 @@ services:
     build: ./implementation/analytics
     ports:
       - 8085:8085
+    links:
+      - kafka
+    depends_on:
+      - kafka
     environment:
       BANK-ACCOUNT: bankaccount
       TRANSACTION: transaction

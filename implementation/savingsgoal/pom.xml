@@ -173,6 +173,8 @@
 							</configOptions>
 						</configuration>
 					</execution>
+
+
 					<execution>
 						<id>bank-account-client</id>
 						<goals>
@@ -192,6 +194,8 @@
 							</configOptions>
 						</configuration>
 					</execution>
+
+
 					<execution>
 						<id>transaction-client</id>
 						<goals>
