@@ -4,136 +4,26 @@ id: domain-product
 
 # Domain Product [Lachenicht]
 
-```mermaid
+![Domain Product](../../figures/design/domain_product.svg)
 
-classDiagram
+## Domain Description
 
-    SuppliesService --> ProductEntryCollection : supplies
-    SuppliesService --> ShoppingCartService
-    ShoppingCartService --> ProductEntryCollection : shoppingCart
-    ProductService ..> Product : creates
+The central entity of this domain is the **Product**.
+A product has a unique **identifier**, as well as a **name** for natural language identification and a **description** to add explanatory information.
+A product consists of a **size**, indicating how much of the product constitutes one unit. For example, for a carton of milk, the size could be 1000g (1L).
+A product belongs to a **category**. Possible categories include **food**, **drinks**, **household**, **essentials**, and **pet supplies**.
+These are the central product categories of [Rewe Delivery](https://shop.rewe.de/?serviceTypes=delivery).
+Products in the food and drinks categories additionally contain information about **nutritional values** such as **calories**, **carbohydrates**, **protein**, **sugar** and **fats**.
+These nutritional values are provided in relation to the **serving size** (default 100g).
+Products also have a **price** and can be grouped by **labels**.
 
-    ProductEntryCollection "1" --> "1" ProductEntryCollectionType : type
-    ProductEntryCollection *-- "*" ProductEntry : productEntries
+The lifecycle of a product is managed by the **ProductService**, which executes **CRUD** operations on products.
+Furthermore, the service includes functionalities for **determining nutritional values** for products using an external system.
+The **persistence** of products is handled by the **ProductRepository**.
 
-    ProductEntry "1..2" --> "1" Product : product  
+Products can be part of a **ProductEntryCollection**. Such a collection can be the collection of products currently in stock at home (**supplies**) or the collection of products that should be shopped (**shopping cart**).
+Supplies and shopping carts comprise **product entries** that **reference a product**. Additionally, these entries define the **quantity** of the referenced product that is currently in stock or should be shopped.
 
-    Product  *-- "1" MonetaryAmount : price
-    Product  *-- "*" Label : labels
-    Product  --> "1" Category : category
-    Product  *-- "1" Nutrition : nutrition
+The services **ShoppingCartService** and **SuppliesService** manage the two product entry collections. Both services involve **CRUD** operations. In addition to CRUD operations, **ShoppingCartService** includes functionality to **mark product entries as purchased** and to **debit the sumed price** of all marked products from a selected bank account. **SuppliesService** includes functionality to **add products that are needed to the shopping cart**.
 
-    ProductRepository ..> Product : persists
-    ProductEntryRepository ..> ProductEntry : persists
-    ProductEntryCollectionRepository ..> ProductEntryCollection : persists
-
-    class SuppliesService {
-        <<Service>>
-        + getSupplies() ProductEntryCollection
-        + addProductEntryToSupplies(entry: ProductEntry)
-        + updateProductEntryInSupplies(entry: ProductEntry)
-        + removeProductEntryFromSupplies(id: String)
-        + addProductsToBuyToShoppingCart()
-    }
-
-    class ShoppingCartService {
-        <<Service>>
-        + getShoppingCart() ProductEntryCollection
-        + addProductEntryToShoppingCart(entry: ProductEntry)
-        + updateProductEntryInShoppingCart(entry: ProductEntry)
-        + removeProductEntryFromShoppingCart(id: String)
-        + markProductEntryAsPurchased(id: String)
-        + purchase()
-    }
-
-    class ProductService {
-        <<Service>>
-        + createProduct(product: Product)
-        + getProducts() Set of Product
-        + getProduct(id: String) Product
-        + updateProduct(product: Product)
-        + deleteProduct(id: String)
-        - retrieveNutritionForProduct(name: String)
-    }
-
-    class ProductRepository {
-        <<Repository>>
-        + save(product: Product)
-        + findById(id: String) Product
-        + findAll() Set of Product
-    }
-
-    class ProductEntryRepository {
-        <<Repository>>
-        + save(productEntry: ProductEntry)
-        + findById(id: String) ProductEntry
-        + findAll() Set of ProductEntry
-    }
-
-    class ProductEntryCollection {
-        <<Entity>>
-        - id: String
-    }
-
-    class ProductEntryCollectionRepository {
-        <<Repository>>
-        + save(productEntryCollection: ProductEntryCollection)
-        + findByType(type: ProductEntryCollectionType) ProductEntryCollection
-    }
-
-    class ProductEntry {
-        <<Entity>>
-        + id: String
-        + quantity: Number
-        + desiredQuantity: Number
-        + purchased: Boolean
-        + equals() Boolean
-        + shouldBeStockedUp() Boolean
-        + entryToStockUp() ProductEntry
-    }
-
-    class Product {
-        <<Entity>>
-        + id: String
-        + name: String
-        + description: String
-        + size: Number
-        + nutritionRequested() Boolean
-    }
-
-    class MonetaryAmount {
-        <<ValueObject>>
-        + amount: Number
-    }
-
-    class Label {
-        <<ValueObject>>
-        + name: String
-    }
-
-    class Category {
-        <<Enumeration>>
-        FOOD
-        DRINKS
-        HOUSEHOLD
-        ESSENTIALS
-        PET_SUPPLIES
-    }
-
-    class ProductEntryCollectionType {
-        <<Enumeration>>
-        SHOPPING_CART
-        SUPPLIES
-    }
-
-    class Nutrition {
-        <<ValueObject>>
-        + servingSize: Number
-        + calories: Number
-        + carbohydrates: Number
-        + protein: Number
-        + fat: Number
-        + sugar: Number
-    }
-
-```
+The **persistence** of product entries, shopping cart and supples is handled by the **ProductEntryRepository** and the **ProductEntryCollectionRepository**.
