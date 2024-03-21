@@ -2,7 +2,7 @@
 id: capability-savingsgoal
 ---
 
-# Capability SavingsGoal
+# Capability SavingsGoal [Kässmann]
 
 A user can manage their saving goals in FinanceTracker.
 They can add, edit and delete saving goals and display an saving goals overview.

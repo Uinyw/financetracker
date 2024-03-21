@@ -4,6 +4,8 @@ id: usecases-product
 
 # Use Cases Product [Lachenicht]
 
+![Use Cases Product](../../figures/analysis/usecases_product.svg)
+
 ## Create Product Entry
 
 ```

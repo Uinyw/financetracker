@@ -4,6 +4,8 @@ id: usecases-bankaccount
 
 # Use Cases BankAccount [Lachenicht]
 
+![Use Cases BankAccount](../../figures/analysis/usecases_bankaccount.svg)
+
 ## Add Bank Account
 
 ```

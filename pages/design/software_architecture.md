@@ -1,4 +1,8 @@
-# Software Architecture
+---
+id: software-architecture
+---
+
+# Software Architecture [Lachenicht]
 
 ![Software Architecture](../../figures/software_architecture.svg)
 

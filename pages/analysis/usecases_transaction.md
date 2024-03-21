@@ -4,6 +4,8 @@ id: usecases-transaction
 
 # Use Cases Transaction [Lachenicht]
 
+![Use Cases Transaction](../../figures/analysis/usecases_transaction.svg)
+
 ## Add Transaction
 
 ```
