@@ -5,7 +5,11 @@ sidebar:
 
 - label: Use Cases
   children:
-    - uc-transaction
+    - usecases-bankaccount
+    - usecases-transaction
+    - usecases-product
+    - usecases-savingsgoal
+    - usecases-analytics
 
 - label: Domain Models
   children:
