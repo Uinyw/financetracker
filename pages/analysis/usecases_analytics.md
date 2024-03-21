@@ -1,4 +1,8 @@
-# Use Case Descriptions Analytics
+---
+id: usecases-analytics
+---
+
+# Use Cases Analytics [Kässmann]
 
 ## Generate Report
 

@@ -1,4 +1,4 @@
-# Case Descriptions Management of Saving Goals
+# Use Cases SavingsGoal [Kässmann]
 
 ## Create Savings Goal
 

@@ -1,4 +1,8 @@
-# Story FinanceTracker
+---
+id: story
+---
+
+# Story [Lachenicht, Kässmann]
 
 ![Story Sketch](../figures/story_sketch.svg)
 

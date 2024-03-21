@@ -1,4 +1,8 @@
-# Use Case Descriptions Management of Purchases
+---
+id: usecases-product
+---
+
+# Use Cases Product [Lachenicht]
 
 ## Create Product Entry
 

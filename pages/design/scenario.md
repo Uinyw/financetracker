@@ -1,10 +1,14 @@
+---
+id: scenario
+---
+
+# Mainline Scenario [Lachenicht, Kässmann]
+
 ```mermaid
 
 sequenceDiagram
 
     actor USER
-
-    #createbankaccount, savingsgoalandproduct
 
     USER->>+BankAccount: POST /bankAccounts {name:savings_account, amount: 100}
 
@@ -18,13 +22,9 @@ sequenceDiagram
 
     Product-->>-USER: mango
 
-    #createshoppingcartentryfortheproduct
-
     USER->>+Product: POST /shopping-cart, 10 * mango
 
     Product-->>-USER: shopping-cart with mango
-
-    #showtheshoppingcartscontentsandpurchasethem
 
     USER->>+Product: POST /shopping-cart/purchase, savings_account
 
@@ -45,8 +45,6 @@ sequenceDiagram
 
     Product-->>-USER: mango has been purchased on savings_account
 
-    #updateNutrition
-
     USER->>+Product: PATCH /supplies/mango, {quantity: 5}
 
     Product->>+Analytics: KAFKA product-update, nutrition of mango
@@ -55,10 +53,7 @@ sequenceDiagram
 
     Product-->>-USER: success
 
-    #checkAnalytics
-
     USER->>+Analytics: GET /nutrition, {2024-01-01, 2024-12-31}
 
     Analytics-->>-USER: nutrition
-
 ```

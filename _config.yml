@@ -1,6 +1,8 @@
 remote_theme: zendesk/jekyll-theme-zendesk-garden@main
 
 sidebar:
+- story
+
 - label: Use Cases
   children:
     - uc-transaction
@@ -20,3 +22,5 @@ sidebar:
     - api-product
     - api-savingsgoal
     - api-analytics
+
+- scenario

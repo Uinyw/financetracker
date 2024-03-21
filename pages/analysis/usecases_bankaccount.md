@@ -1,4 +1,8 @@
-# Use Case Descriptions Management of Bank Accounts
+---
+id: usecases-bankaccount
+---
+
+# Use Cases BankAccount [Lachenicht]
 
 ## Add Bank Account
 

@@ -1,8 +1,8 @@
 ---
-id: uc-transaction
+id: usecases-transaction
 ---
 
-# Use Case Descriptions Management of Transactions
+# Use Cases Transaction [Lachenicht]
 
 ## Add Transaction
 
