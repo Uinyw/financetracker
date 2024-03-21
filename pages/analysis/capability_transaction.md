@@ -1,4 +1,8 @@
-# Capability Management of Transactions
+---
+id: capability-transaction
+---
+
+# Capability Transaction [Lachenicht]
 
 A user can manage their transactions in FinanceTracker.
 A transaction can be an income source or an expense.

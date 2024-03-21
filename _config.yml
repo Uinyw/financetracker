@@ -3,6 +3,14 @@ remote_theme: zendesk/jekyll-theme-zendesk-garden@main
 sidebar:
 - story
 
+- label: Capabilities
+  children:
+    - capability-bankaccount
+    - capability-transaction
+    - capability-product
+    - capability-savingsgoal
+    - capability-analytics
+
 - label: Use Cases
   children:
     - usecases-bankaccount

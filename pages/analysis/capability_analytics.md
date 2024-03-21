@@ -1,4 +1,8 @@
-# Capability Analytics
+---
+id: capability-analytics
+---
+
+# Capability Analytics [Kässmann]
 
 `Analytics` provides a user with the ability to generate data reports that show how much they have earned and spent in a given time period for a specific account.
 

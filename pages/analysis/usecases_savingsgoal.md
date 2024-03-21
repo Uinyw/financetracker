@@ -1,3 +1,7 @@
+---
+id: usecases-savingsgoal
+---
+
 # Use Cases SavingsGoal [Kässmann]
 
 ## Create Savings Goal

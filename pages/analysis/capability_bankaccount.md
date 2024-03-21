@@ -1,4 +1,8 @@
-# Capability Management of Bank Accounts
+---
+id: capability-bankaccount
+---
+
+# Capability BankAccount [Lachenicht]
 
 `BankAccountManager` allows users to keep track of their bank accounts.
 Users can add, name and remove new bank accounts.
