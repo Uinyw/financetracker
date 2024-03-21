@@ -1,5 +1,5 @@
 ---
-id: domain-savinggoal
+id: domain-savingsgoal
 ---
 
 # Domain SavingsGoal [Kässmann]
