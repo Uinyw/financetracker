@@ -4,6 +4,8 @@ id: usecases-analytics
 
 # Use Cases Analytics [Kässmann]
 
+![Use Cases Analytics](../../figures/analysis/usecases_analytics.svg)
+
 ## Generate Report
 
 ```

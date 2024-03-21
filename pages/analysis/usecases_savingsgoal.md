@@ -4,6 +4,8 @@ id: usecases-savingsgoal
 
 # Use Cases SavingsGoal [Kässmann]
 
+![Use Cases SavingsGoal](../../figures/analysis/usecases_savingsgoal.svg)
+
 ## Create Savings Goal
 
 ```
