@@ -16,3 +16,7 @@ sidebar:
 - label: API Specifications
   children:
     - api-bankaccount
+    - api-transaction
+    - api-product
+    - api-savingsgoal
+    - api-analytics
