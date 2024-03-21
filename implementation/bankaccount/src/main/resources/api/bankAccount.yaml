@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Bank Account API
+  title: API BankAccount
   version: 1.0.0
   description: Manage the lifecycle of bank accounts.
 

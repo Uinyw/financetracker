@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Transaction API
+  title: API Transaction
   version: 1.0.0
   description: Manage the lifecycle of one-time and recurring transactions.
 
