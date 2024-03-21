@@ -12,3 +12,7 @@ sidebar:
     - domain-product
     - domain-savingsgoal
     - domain-analytics
+
+- label: API Specifications
+  children:
+    - api-bankaccount
