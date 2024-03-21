@@ -10,3 +10,5 @@ sidebar:
     - domain-bankaccount
     - domain-transaction
     - domain-product
+    - domain-savingsgoal
+    - domain-analytics

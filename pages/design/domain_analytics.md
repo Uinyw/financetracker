@@ -1,3 +1,7 @@
-# Domain Analytics
+---
+id: domain-analytics
+---
 
-![Domain Analytics](../../figures/domain_analytics.svg)
+# Domain Analytics [Kässmann]
+
+![Domain Analytics](../../figures/design/domain_analytics.svg)
