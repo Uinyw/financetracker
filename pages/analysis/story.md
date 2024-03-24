@@ -4,8 +4,6 @@ id: story
 
 # Story [Lachenicht, Kässmann]
 
-![Story Sketch](../../figures/analysis/story.svg)
-
 Lars is a KIT student who recently moved out of his parent's house and into his first apartment of his own.
 To prevent losing control of his financial situation, he wants to track and manage his personal finances.
 A fellow student recommends the web application _financetracker_, which Lars immediately starts using.
