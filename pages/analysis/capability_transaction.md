@@ -4,9 +4,7 @@ id: capability-transaction
 
 # Capability Transaction [Lachenicht]
 
-A user can manage their transactions in FinanceTracker.
-A transaction can be an income source or an expense.
-They can add, edit and delete transactions and display a transaction overview.
-They can categorize transactions.
-A user can set to be notified by FinanceTracker when incoming/outgoing transactions are due.
-A transactions is attached to a bank account.
+A user can view, add, update, and delete transactions.
+A transaction can be an income, expense or shift between bank accounts.
+A transaction can be executed periodically or on a one-time basis.
+Transactions can be categorized by labels.

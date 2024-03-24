@@ -4,6 +4,10 @@ id: capability-product
 
 # Capability Product [Lachenicht]
 
-A user can create, manage and keep track of their non-recurring purchases.
-Those purchases can have a categories assigned to them and they have a name, a price and a bank account attached to them.
-This capability is strongly related to capability `Purchase Connector`.
+A user can view, add, update, and delete products.
+Products can include food, drinks, household items, essentials, and pet supplies.
+When a food or drink is added, _financetracker_ automatically determines the nutritional values of the product.
+A user can add products to the supplies and the shopping cart.
+A user can settle purchases via bank accounts.
+Products can be categorized by labels.
+
