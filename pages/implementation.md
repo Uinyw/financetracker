@@ -3,3 +3,72 @@ id: implementation
 ---
 
 # Implementation [Lachenicht, Kässmann]
+
+
+## General Package Structure
+
+- 📁 **Financetracker**
+  - 📁 **figures**
+    - 📄 figure.svg
+    - 📄 figure.png
+    - 📄 figure.pdf
+    - 📁 implementation
+      - 📁 ___service_name___
+        - 📁 src
+          - 📁 main
+            - 📁 java.com.___service_name___
+              - 📁 **api**
+                - 📁 **mapping**
+                  - 📄 DTO_mapper.java
+                  - ...
+                - 📄 Resource.java
+                - ...
+              - 📁 **infrastructure**
+                - 📁 client
+                  - Folders for the clients
+                - 📁 config
+                  - 📄 configuration.java
+                - 📁 **db**
+                  - 📄 Repository_file.java
+                - 📁 **kafka**
+                  - 📄 Consumer.java
+              - 📁 **logic**
+                - 📁 **model**
+                  - 📄 model_class.java
+                  - ...
+                - 📁 **operations**
+                  - 📄 service_class.java
+                  - ...
+              - 📄 ____service_name____ application.java
+            - 📁 resources
+              - 📁 api
+                - 📄 **API_specification**.yaml
+              - 📄 **Application_specification**.yaml
+          - 📁 **test**.java.com.financetracker.___service_name___
+            - 📁 **api**
+            - 📁 **infrastructure**
+            - 📁 **logic**
+              - 📁 **model**
+              - 📁 **operations**
+            - 📄 IntegrationTestBase.java
+        - 📁 target
+              - ... generated files
+          - 📄 Dockerfile
+          - 📄 pom.xml
+  - 📁 pages
+    - 📁 **capabilities**
+      - 📄 capabilitiy.md
+      - ...
+    - 📁 **deployment**
+      - 📄 deployment.md
+    - 📁 **design**
+      - 📄 domain_design.md
+      - ...
+    - 📁 **use_cases**
+      - 📄 use_case_description.md
+      - 📄 use_case_diagram.md
+    - 📄 readme.md
+    - 📄 story.md
+  - 📄 README.md
+  - 📄 docker-compose.yml
+  - 📄 LICENSE
