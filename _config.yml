@@ -1,6 +1,7 @@
 remote_theme: zendesk/jekyll-theme-zendesk-garden@main
 
 sidebar:
+- microservice-engineering-approach
 - story
 
 - label: Capabilities
