@@ -4,60 +4,38 @@ id: story
 
 # Story [Lachenicht, Kässmann]
 
-![Story Sketch](../figures/story_sketch.svg)
+![Story Sketch](../../figures/analysis/story.svg)
 
-Lars is a KIT student who recently moved out of his parents' house and into his first apartment of his own.
+Lars is a KIT student who recently moved out of his parent's house and into his first apartment of his own.
 To prevent losing control of his financial situation, he wants to track and manage his personal finances.
-A fellow student recommends the app FinanceTracker, which Lars installs and opens on his mobile phone.
+A fellow student recommends the web application _financetracker_, which Lars immediately starts using.
 
-First, Lars provides FinanceTracker with information about his current financial resources.
-Lars owns two bank accounts, one is a savings account and one is his checking account he uses for his daily business.
+First, Lars provides _financetracker_ with information about his current financial resources.
+Lars owns two **bank accounts**, one is a savings account and one is his checking account he uses for his daily expenses.
 
-Second, Lars provides FinanceTracker with information about his income sources.
-Lars works as a waiter on the side, has a scholarship and is financially supported by his parents.
+Second, Lars provides _financetracker_ with information about his **income sources**.
+Lars works as a waiter on the side, has a scholarship, and is financially supported by his parents.
 While his parents pay him a fixed amount per month and the scholarship a fixed amount per quarter, his remuneration in his part-time job depends on the number of hours he works in the current month.
 
-Third, Lars provides FinanceTracker with information about his fixed expenses.
-Lars pays monthly rent, quarterly broadcasting fees and semester fees every six months.
-FinanceTracker allows him to categorize his fixed expenses.
-Lars can set up reminders for his fixed expenses, ensuring he never misses a payment deadline.
+Third, Lars provides _financetracker_ with information about his **expenses**.
+Lars pays monthly rent, quarterly broadcasting fees, and semester fees every six months.
+Lars also spends different amounts of money each month on **products** like food, clothes, and books.
+With the help of _financetracker_, Lars can manage the products he buys and generate shopping carts.
 
-Fourth, Lars provides FinanceTracker with information about his variable expenses.
-Lars spends different amounts of money each month on food, clothes, books and going to the movies.
-He has already started creating an Excel list for his expenses.
-FinanceTracker allows him to import his data.
-FinanceTracker allows him to categorize his variable expenses.
+Lars now sees an overview of his finances, including how much money he currently has in his bank accounts and how much money he earns and spends.
 
-Lars now sees an overview of his finances, this included how much money he currently has on his bank accounts and how much money he earns, spends and has left to save each month/semi-annually/annually.
-He configures FinanceTracker to notify him as soon his account balances fall below a given limit.
-
-Lars wants to save money regularly.
-He creates a long-term savings goal for this in FinanceTracker.
-FinanceTracker transfers the money virtually from his account to his savings account every month.
 Lars would like to go on vacation in six months.
-He creates a short-term savings goal for this in FinanceTracker.
-FinanceTracker transfers the money virtually from his account to a dedicated virtual savings account every month.
-FinanceTracker tells him how much he needs to save each month to achieve his goal.
-FinanceTracker also tracks if his expenses in the next months are in limits for his savings goal.
+He creates a periodical **savings goal** for this in _financetracker_.
+_Financetracker_ now transfers money from his checking account to his savings account every month for the following six months.
+Lars wants to prevent his checking bank account from falling below a certain amount.
+To do this, he creates a corresponding rule-based savings goal.
 
-As Lars wants to reduce his expenses, he sets a budget for each variable expense that he would like to spend.
-Over the following months, Lars enters each expense in the corresponding category.
-To do this, he scans his bills with FinanceTracker and the data is entered automatically.
-FinanceTracker informs him constantly if he stays within his financial limits and provides insights into his expense behavior over time.
+With _financetracker_, Lars sees how much money he accumulated over the last months/years and what predicted expenses will be coming in the next months.
+Seeing his predicted future expenses, Lars wants to further optimize his spending behavior.
+_Financetracker_ provides a tool for **analyzing** spending habits and creating a budget for each variable expense.
+Lars is also shown how many calories he has consumed in the last few months through the products he has purchased and consumed.
 
-With FinanceTracker, Lars sees how much money he accumulated over the last months/years and what predicted expenses will be coming in the next month.
-Seeing his predicted future expenses, Lars wants to further optimise his spending behavior.
-FinanceTracker provides a tool for analyzing spending habits, showing Lars where he might be overspending and suggesting areas for improvement.
-Lars is also interested to see, how much impact the current inflation is having on his current and future expenses.
-Finance Tracker provides him with corresponding statistics prospective analyses.
-
-Lars wants to impress his parents with his savings discipline.
-To do this, he creates a financial report about his tracked expenses and incomes with FinanceTracker.
+Lars wants to impress his parents with his financial discipline.
+To do this, he creates a financial report about his tracked expenses and income with _financetracker_.
 The report offers insights into spending patterns, income trends, and overall financial health.
 The report is in Excel format.
-
-Lars' financial information is confidential.
-Therefore FinanceTracker prioritizes security and privacy, ensuring that his information is secure.
-This includes using encryption and other security measures to protect his data.
-
-Lars likes to track his expenses on his mobile phone, but prefers to view statistics via a web app. FinanceTracker supports both application formats.
