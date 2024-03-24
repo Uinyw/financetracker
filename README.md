@@ -15,12 +15,23 @@
 
 ### Development Steps
 
-We developed the software according to the following steps
+We developed the software according to the following steps:
 
-1. Create a [user story](./story.md)
-2. Create [Capabilities](./pages/capabilities/) using the User Stories
-3. Use the Capabilities to create [Use Case Descriptinons and Use Case Diagrams](./pages/use_cases/)
-4. Design the [Domain Model](./pages/design/) for each domain
+1. **Requirement Analysis**
+   > Here we defined and expressed all the requirements for our software. By creating a [user story](./story.md) and then creating [Capabilities](./pages/capabilities/) using the User Stories. Using the Capabilities, we created the [Use Case Descriptions and Use Case Diagrams](./pages/use_cases/).
+
+2. **Domain/Architecture Design**
+   > Our goal in this step was to model the application domains and software architecture. The Artifacts of this step are the [Domain Models](./pages/design/) for each domain as well as our [Software Architecture](./pages/design/software_architecture.md).
+
+3. **API Specification**
+   > Our APIs for the microservice domains have been specified using OpenAPI specifications and can be found in their respective folders: [Analytics API](./implementation/Analytics/src/main/resources/api/Analytics.yaml), [BankAccount API](./implementation/bankaccount/src/main/resources/api/bankAccount.yaml), [Product API](./implementation/product/src/main/resources/api/product.yaml), [Savings Goal API](./implementation/savingsgoal/src/main/resources/api/savingsGoal.yaml), and the [Transaction API](./implementation/transaction/src/main/resources/api/transaction.yaml).
+
+4. **Implementation & Test**
+   > Our Microservices were then implemented based on their domain model and API specifications. Also, tests for each of them are present in their respective test folders. We used Unit, Integration, and E2E Tests to test our microservices.
+
+5. **Deployment**
+   > Lastly, our microservices were deployed using Docker Compose using the Docker images created using the Docker files from our services.
+
 
 [Capability Overview](./pages/capabilities/capabilities.md)
 
