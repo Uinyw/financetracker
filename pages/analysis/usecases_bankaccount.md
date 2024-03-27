@@ -6,26 +6,75 @@ id: usecases-bankaccount
 
 ![Use Cases BankAccount](../../figures/analysis/usecases_bankaccount.svg)
 
-## Add Bank Account
+## View Bank Account
 
 ```
-Title: Add Bank Account
+Title: View Bank Account
 
 Primary Actors: User
 Secondary Actors: -
 
 Preconditions: -
-Postconditions: The given bank account is created and added to set of bank accounts
+Postconditions: The user receives information regarding the selected bank account.
 
 Flow:
-1. The user enters the required data for an bank account such as the name.
-2. The system validates the received data and creates a new empty bank account.
+1. The user provides the ID of the bank account to view.
+2. The system presents all information regarding the bank account with the given ID.
 
 
 Alternative flows:
-2a. The provided data is invalid: The systems informs the user about his invalid input.
+2a. No bank account with the provided ID exists: The system informs the user about his invalid input.
 
-Information Requirements: UserID, Account name
+Information Requirements: ID
+```
+
+## Create Bank Account
+
+```
+Title: Create Bank Account
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: -
+Postconditions: A bank account with the given information exists in the set of bank accounts.
+
+Flow:
+1. The user enters the required information for a bank account.
+2. The system validates the received data.
+3. The system creates a new bank account.
+3. The systems adds the created bank account to the set of bank accounts.
+
+
+Alternative flows:
+3a. The received information is invalid: The system informs the user about his invalid input.
+
+Information Requirements: ID, Name, Description, Balance, Disposition Limit, Labels
+```
+
+## Update Bank Account
+
+```
+Title: Update Bank Account
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: The bank account to update exists in the set of bank accounts.
+Postconditions: The information of the existing bank account is updated.
+
+Flow:
+1. The user provides the ID of a bank account to update.
+2. The system retrieves the bank account with the given ID.
+3. The user enters the updated information for a bank account.
+4. The system validates the received data and updates the existing bank account.
+
+
+Alternative flows:
+2a. No bank account with the provided ID exists: The system informs the user about his invalid input.
+4a. The received information is invalid: The system informs the user about his invalid input.
+
+Information Requirements: ID, Name, Description, Balance, Disposition Limit, Labels
 ```
 
 ## Delete Bank Account
@@ -36,17 +85,16 @@ Title: Delete Bank Account
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The bank account to delete exists in the set of bank accounts for an specific user
-Postconditions: The given bank account is removed from the set of bank accounts
+Preconditions: The bank account to delete exists in the set of bank accounts.
+Postconditions: The bank account with the given ID does not exist in the set of bank accounts.
 
 Flow:
-1. The user enters the ID or the name of the bank account to delete it.
-2. The system queries for the corresponding bank account and finds it.
-3. The system removes the bank account and all associated data from the set of bank accounts.
+1. The user provides the ID of a bank account to update.
+2. The systems removes the bank account with the given ID from the set of bank accounts.
 
 
 Alternative flows:
-2a. No bank account with the given ID or name exists: The systems informs the user about the non-existence of the bank account to delete.
+2a. No bank account with the provided ID exists: The system informs the user about his invalid input.
 
-Information Requirements: ID or name of the bank account
+Information Requirements: ID
 ```
