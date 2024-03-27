@@ -41,9 +41,9 @@ Postconditions: A bank account with the given information exists in the set of b
 
 Flow:
 1. The user enters the required information for a bank account.
-2. The system validates the received data.
+2. The system validates the received information.
 3. The system creates a new bank account.
-3. The systems adds the created bank account to the set of bank accounts.
+4. The systems adds the created bank account to the set of bank accounts.
 
 
 Alternative flows:
@@ -64,7 +64,7 @@ Preconditions: The bank account to update exists in the set of bank accounts.
 Postconditions: The information of the existing bank account is updated.
 
 Flow:
-1. The user provides the ID of a bank account to update.
+1. The user provides the ID of the bank account to update.
 2. The system retrieves the bank account with the given ID.
 3. The user enters the updated information for a bank account.
 4. The system validates the received data and updates the existing bank account.
@@ -89,7 +89,7 @@ Preconditions: The bank account to delete exists in the set of bank accounts.
 Postconditions: The bank account with the given ID does not exist in the set of bank accounts.
 
 Flow:
-1. The user provides the ID of a bank account to update.
+1. The user provides the ID of the bank account to delete.
 2. The systems removes the bank account with the given ID from the set of bank accounts.
 
 

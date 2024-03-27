@@ -6,118 +6,105 @@ id: usecases-transaction
 
 ![Use Cases Transaction](../../figures/analysis/usecases_transaction.svg)
 
-## Add Transaction
+## View Transaction
 
 ```
-Title: Add Transaction
+Title: View Transaction
 
 Primary Actors: User
 Secondary Actors: -
 
 Preconditions: -
-Postconditions: The given transaction is added to set of transactions
+Postconditions: The user receives information regarding the selected transaction.
 
 Flow:
-1. The user selects a bank account to create an transaction for.
-2. The user enters the required data for a Transaction.
-3. The system validates the received data. A monetary amount can only be provided if the transaction is static. If the transaction is dynamic, records can be added later. OneTime transaction have to be static.
-4. The system creates a new transaction and saves it.
+1. The user provides the ID of the transaction to view.
+2. The system presents all information regarding the transaction with the given ID.
 
 
 Alternative flows:
-4a. The provided data is invalid: The systems informs the user about his invalid input.
+2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
 
-Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount
+Information Requirements: ID
 ```
 
-## Edit Transactions
+## Create Transaction
 
 ```
-Title: Edit Transaction
+Title: Create Transaction
 
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The transaction to edit exists in the set of transactions
-Postconditions: The transaction data is updated
+Preconditions: -
+Postconditions: A transaction with the given information exists in the set of transactions.
 
 Flow:
-1. The user enters the ID of the transaction to edit.
-2. The system queries for the corresponding transaction and finds it.
-3. The system displays the transaction and the information currently associated with it.
-4. The user edits the transaction information.
-5. The user adds transaction records if transaction is dynamic. See use case "Add transaction Record".
-6. The system validates the edited data. A monetary amount can only be provided if the transaction is static. If the transaction is dynamic, transaction records can be added. OneTime transaction have to be static.
-7. The system updates the transaction.
+1. The user enters the required information for a transaction.
+2. The system validates the received information.
+3. The system creates a new transaction.
+4. The systems adds the created transacton to the set of transactions.
+
 
 Alternative flows:
-3a. No transaction with the given ID exists: The systems informs the user about the non-existence of the transaction to edit.
-7a. The provided data is invalid: The systems informs the user about his invalid input.
+3a. The received information is invalid: The system informs the user about his invalid input.
 
-Information Requirements: BankAccountID, ID, Name, Description, Categories, Periodicity (OneTime, Monthly, Quarterly, HalfYearly, Yearly), Dynamic or Static, Monetary Amount, transaction Records
+Information Requirements: 
+- One-Time Transaction: ID, Name, Description, Type, Transfer, Date, Amount, Labels.
+- Recurring Transaction: ID, Name, Description, Type, Transfer, StartDate, Periodicity, FixedAmount, Labels.
 ```
 
-## Categorize Transactions
+## Update Transaction
 
 ```
-Title: Categorize Transactions
+Title: Update Transaction
 
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The transaction to categorize is currently added or edited
-Postconditions: The given transaction is assigned to a category
+Preconditions: The transacton to update exists in the set of transactions.
+Postconditions: The information of the existing transaction is updated.
 
 Flow:
-1. The user selects an existing category.
-2. The system assigns the category to the transaction.
+1. The user provides the ID of the transaction to update.
+2. The system retrieves the transaction with the given ID.
+3. The user enters the updated information for the transaction.
+4. The system validates the received data and updates the existing transaction.
 
 
 Alternative flows:
-1a. The user creates a new category and selects it.
-2a. The system saves the new category and assigns it to the transaction.
+2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
+4a. The transaction is successfully transferred: The system triggers use case RollbackTransaction. Then the transaction is updated.
 
-Information Requirements: ID, Name
+Information Requirements: 
+- One-Time Transaction: Name, Description, Type, Transfer, Date, Amount, Labels.
+- Recurring Transaction: Name, Description, Type, Transfer, StartDate, Periodicity, FixedAmount, Labels.
 ```
 
-## Add Notification
+
+## Update Records
 
 ```
-Title: Add Notification
+Title: Create Transaction
 
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The transaction to add a notification for is currently added or edited
-Postconditions: A new notification is created for the given transaction.
+Preconditions: The recurring transacton for which records should be updated exists in the set of transactions.
+Postconditions: The records of the recurring transaction are updated.
 
 Flow:
-1. The user creates a new notification for the transaction
-2. The system saves the notification and assigns it to the transaction.
+1. The user provides the ID of the recurring transaction for which records should be updated.
+2. The system retrieves the transaction with the given ID.
+3. The user updates the records for the transaction.
+4. The system validates the received information and updates the records of the recurring transaction.
 
-Information Requirements: ID, Name, Priority (High, Medium, Low), Periodicity
-```
-
-## Add Transaction Record
-
-```
-Title: Add Transaction Record
-
-Primary Actors: User
-Secondary Actors: -
-
-Preconditions: The transaction to add transaction records for is currently edited
-Postconditions: The transaction record is added to the transaction source
-
-Flow:
-1. The user adds transaction records.
-2. The system validates the provided data. Transaction records can only be added if transaction source is dynamic and not OneTime.
-3. The system creates the transaction record and assigns it to the transaction source.
 
 Alternative flows:
-3a. The provided data is invalid: The systems informs the user about his invalid input.
+2a. No transaction with the provided ID exists or existing transaction is not recurring: The system informs the user about his invalid input.
+4a. The received information is invalid: The system informs the user about his invalid input.
 
-Information Requirements: ID, Name, Date, Monetary Amount, Custom References
+Information Requirements: ID, Date, Amount
 ```
 
 ## Delete Transaction
@@ -128,40 +115,69 @@ Title: Delete Transaction
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The transaction to delete exists in the set of transactions
-Postconditions: The given transaction is removed from the set of transactions
+Preconditions: The transaction to delete exists in the set of transactions.
+Postconditions: The transaction with the given ID does not exist in the set of transactions and is successfully rolled back.
 
 Flow:
-1. The user enters the ID of the transaction to delete.
-2. The system queries for the corresponding transaction and finds it.
-3. The system removes the transaction and all associated data from the set of transactions.
+1. The user provides the ID of the transaction to delete.
+2. The system retrieves the transaction with the given ID.
+3. The system removes the transaction with the given ID from the set of transactions.
 
 
 Alternative flows:
-3a. No transaction with the given ID exists: The systems informs the user about the non-existence of the transaction to delete.
+2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
+3a. The transaction is successfully transferred: The system triggers use case RollbackTransaction. Then the transaction is removed.
 
-Information Requirements: ID of the transaction
+Information Requirements: ID
 ```
 
-## View Transaction Overview
+## Transfer Transaction
 
 ```
-Title: View Transaction Overview
+Title: Transfer Transaction
 
 Primary Actors: User
-Secondary Actors: -
+Secondary Actors: BankAccount
 
-Preconditions: -
-Postconditions: All existing transaction are displayed to the user
+Preconditions: The transaction to transfer exists in the set of transactions.
+Postconditions: The transaction is transferred and the corresponding bank accounts are updated.
 
 Flow:
-1. The user requests to view an overview of his transactions.
-2. The system queries for all transactions.
-3. The system displays all found transactions.
+1. The user provides the ID of the transaction to transfer.
+2. The system retrieves the transaction with the given ID.
+3. The system retrieves the involved bank accounts.
+4. The system validates, that the bank account to deposit from has enough balance.
+5. The system updates the involved bank accounts.
+6a. One-Time Transaction: The system sets the transfer status of the transaction to successful.
+6b. Recurring Transaction: The system creates a new transaction record and sets the status of the record to successful.
 
 
 Alternative flows:
-3a. No transaction exist: The systems informs the user about the fact, that no transactions exist.
+2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
+3a. One or both bank accounts involved in the transfer do not exist: The system informs the user about the failure and sets the transfer status to failed.
+4a. The source bank accounts does not have enough balance: The system informs the user about the failure and sets the transfer status to failed.
 
-Information Requirements: -
+Information Requirements: ID
+```
+
+## Rollback Transaction
+
+```
+Title: Rollback Transaction
+
+Primary Actors: -
+Secondary Actors: BankAccount
+
+Preconditions: The transaction to rollback exists in the set of transactions and is successfully transferred.
+Postconditions: The transaction is rolled back and the corresponding bank accounts are updated.
+
+Flow:
+1. The system retrieves the involved bank accounts.
+2. The system transfers the originally transferred amount back to the source bank account and deducts it from the target bank account.
+
+
+Alternative flows:
+1a. One or both bank accounts involved in the transfer do not exist: The system informs the user about the failure and aborts the transaction update/deletion.
+
+Information Requirements: Transfer
 ```
