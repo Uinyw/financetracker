@@ -11,4 +11,4 @@ Pipeline Steps:
 1. Load JDK 17
 2. Package and test all microservices
 3. Determine test coverage using the JaCoCo plugin
-4. Generate [test coverage badges](../badges/).
+4. Generate [test coverage badges](../pages/testing.md).
