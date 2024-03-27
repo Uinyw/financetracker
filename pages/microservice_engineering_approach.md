@@ -9,24 +9,29 @@ The development of the microservice-based application FinanceTracker included 5 
 **Requirement Analysis**
 
 In the first step, the application requirements are analyzed and specified.
-To achieve this, a **story** is written that describes the general domain of the application using an exemplary scenario.
+To achieve this, a [story](../pages/analysis/story.md) is written that describes the general domain of the application using an exemplary scenario.
 The story helps to identify the goals to be achieved and problems to be solved.
 Individual **capabilities** are then derived from the story, defining basic functionalities the system should offer.
 For each of the capabilities, corresponding **use cases** are derived. Use cases specify the functionalities offered to a user by defining user/system interaction flows. They define the specific application requirements.
 
 **Domain/Architecture Design**
 
+In the second step, the system is designed.
+In this context, **domain models** are created for each application domain (derived from capabilities) according to the principles of domain-driven design.
+Moreover, the [software architecture](../pages/design/software_architecture.md) is modeled, which divides the application to develop into logical components.
+Each of these components represents a microservice.
 
+**API Specification**
 
+In the third step, the provided **API** is specified for each of the microservices modeled in the software architecture.
+This is done using `OpenAPI`, a language for specifying REST APIs.
 
+**Implementation & Test**
 
-   Our goal in this step was to model the application domains and software architecture. The Artifacts of this step are the [Domain Models](./pages/design/) for each domain as well as our [Software Architecture](./pages/design/software_architecture.md).
+In the fourth step, the microservices are **implemented** based on their domain model and API specifications.
+For each microservice, unit **tests** and integration tests are written.
+End-to-end tests are written to test the interaction between the microservices.
 
-3. **API Specification**
-   > Our APIs for the microservice domains have been specified using OpenAPI specifications and can be found in their respective folders: [Analytics API](./implementation/Analytics/src/main/resources/api/Analytics.yaml), [BankAccount API](./implementation/bankaccount/src/main/resources/api/bankAccount.yaml), [Product API](./implementation/product/src/main/resources/api/product.yaml), [Savings Goal API](./implementation/savingsgoal/src/main/resources/api/savingsGoal.yaml), and the [Transaction API](./implementation/transaction/src/main/resources/api/transaction.yaml).
+**Deployment**
 
-4. **Implementation & Test**
-   > Our Microservices were then implemented based on their domain model and API specifications. Also, tests for each of them are present in their respective test folders. We used Unit, Integration, and E2E Tests to test our microservices.
-
-5. **Deployment**
-   > Lastly, our microservices were deployed using Docker Compose using the Docker images created using the Docker files from our services.
+In the fifth step, the microservices are **deployed** locally using Docker.
