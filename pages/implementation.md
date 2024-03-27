@@ -4,71 +4,39 @@ id: implementation
 
 # Implementation [Lachenicht, Kässmann]
 
+The implementation of the microservices can be found in the folder `implementation`.
 
 ## General Package Structure
+The package structure for each microservice is as follows:
 
-- 📁 **Financetracker**
-  - 📁 **figures**
-    - 📄 figure.svg
-    - 📄 figure.png
-    - 📄 figure.pdf
-    - 📁 implementation
-      - 📁 ___service_name___
-        - 📁 src
-          - 📁 main
-            - 📁 java.com.___service_name___
-              - 📁 **api**
-                - 📁 **mapping**
-                  - 📄 DTO_mapper.java
-                  - ...
-                - 📄 Resource.java
-                - ...
-              - 📁 **infrastructure**
-                - 📁 client
-                  - Folders for the clients
-                - 📁 config
-                  - 📄 configuration.java
-                - 📁 **db**
-                  - 📄 Repository_file.java
-                - 📁 **kafka**
-                  - 📄 Consumer.java
-              - 📁 **logic**
-                - 📁 **model**
-                  - 📄 model_class.java
-                  - ...
-                - 📁 **operations**
-                  - 📄 service_class.java
-                  - ...
-              - 📄 ____service_name____ application.java
-            - 📁 resources
-              - 📁 api
-                - 📄 **API_specification**.yaml
-              - 📄 **Application_specification**.yaml
-          - 📁 **test**.java.com.financetracker.___service_name___
-            - 📁 **api**
-            - 📁 **infrastructure**
-            - 📁 **logic**
-              - 📁 **model**
-              - 📁 **operations**
-            - 📄 IntegrationTestBase.java
-        - 📁 target
-              - ... generated files
-          - 📄 Dockerfile
-          - 📄 pom.xml
-  - 📁 pages
-    - 📁 **capabilities**
-      - 📄 capabilitiy.md
-      - ...
-    - 📁 **deployment**
-      - 📄 deployment.md
-    - 📁 **design**
-      - 📄 domain_design.md
-      - ...
-    - 📁 **use_cases**
-      - 📄 use_case_description.md
-      - 📄 use_case_diagram.md
-    - 📄 readme.md
-    - 📄 story.md
-  - 📄 README.md
-  - 📄 docker-compose.yml
-  - 📄 LICENSE
+- 📁 **api**
+  - 📁 **mapping**
+  - 📄 Resource.java
+- 📁 **infrastructure**
+  - 📁 client
+  - 📁 db
+  - 📁 kafka
+- 📁 **logic**
+  - 📁 **model**
+  - 📁 **operations**
+- 📁 **resources**
+  - 📁 api
+    - 📄 API-Specification.yaml
+
+
+## How to Run
+How to run a microservice, for example BankAccount:
+
+1. Navigate to folder `financetracker`
+2. Run the following command in order to generate the API interface and models in the `target` folder
+
+```
+mvn clean package --file implementation/bankaccount/pom.xml
+```
+
+3. Run the microservice in your IDE
+
+
+
+
+
