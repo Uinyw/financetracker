@@ -89,9 +89,9 @@ services:
       PRODUCT: product
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
 
-  #ui:
-   # container_name: ui
-    #build: ./implementation/ui-financetracker
-    #ports:
-     # - 4200:80
+  ui:
+    container_name: ui
+    build: ./implementation/ui-financetracker
+    ports:
+      - 4200:80
 
