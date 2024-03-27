@@ -4,114 +4,26 @@ id: domain-transaction
 
 # Domain Transaction [Lachenicht]
 
-```mermaid
+The central entity of this domain is the **transaction**.
+A transaction has a unique **identifier**, as well as a **name** for natural language identification and a **description** to add explanatory information.
+Transactionscan be grouped by **labels**.
+A transaction takes place either from an external source to a bank account (**income**), from a bank account to an external target (**expense**) or internally between two bank accounts (**shift**).
 
-classDiagram
+A transaction can be a **one-one transaction** or a **recurring transaction**.
+A one-time transaction defines a **date** on which a certain **amount** is transferred.
+A one-time transaction also has a **status** that indicates whether it has been successfully transferred.
 
-    Transaction  *-- "*" Label : labels
-    Transaction  *-- "1" Transfer : transfer
-    Transaction  --> "1" Type : type
+A recurring transaction is transferred **periodically**, for example every month, every quarter, every half year, or every year.
+A recurring transaction defines the **start date** starting from which periodic transfers are to be made.
+A recurring transaction also defines whether a **fixed amount** is to be transferred or whether the amount to be transferred is variable.
+When a recurring transaction is transferred, a **transaction record** is created for each execution, which defines a **date** on which a certain **amount** is to be transferered and has a **status**, analogous to the one-time transaction.
 
-    RecurringTransaction  --|> Transaction
-    RecurringTransaction  --> Periodicity : periodicity
-    RecurringTransaction  --> "0..1" MonetaryAmount : fixedAmount
-    RecurringTransaction  *-- "*" TransactionRecord : records
+The lifecycle of a transaction is managed by the **TransactionService**, which executes **CRUD** operations on transactions.
+The **TransferService** is responsible for transferring one-time transactions and transaction records.
+The **TransferScheduler** transfers recurring transactions on a recurring basis according to their start date and periodicity.
+The **persistence** of transactions is handled by the **TransactionRepository**.
 
-    TransactionRecord  ..> Transferable : implements
-    TransactionRecord  *-- MonetaryAmount : amount
-    TransactionRecord  --> TransferStatus : transferStatus
 
-    OneTimeTransaction  --|> Transaction
-    OneTimeTransaction  *-- MonetaryAmount : amount
-    OneTimeTransaction  --> TransferStatus : transferStatus
-    OneTimeTransaction  ..> Transferable : implements
+![Domain Transaction](../../figures/design/domain_transaction.svg)
 
-    OneTimeTransactionRepository ..> OneTimeTransaction : persists
-    RecurringTransactionRepository ..> RecurringTransaction : persists
 
-    class OneTimeTransactionRepository {
-        <<Repository>>
-        + save(transaction: OneTimeTransaction)
-        + findById(id: String) OneTimeTransaction
-        + findAll() Set of OneTimeTransaction
-    }
-
-    class RecurringTransactionRepository {
-        <<Repository>>
-        + save(transaction: RecurringTransaction)
-        + findById(id: String) RecurringTransaction
-        + findAll() Set of RecurringTransaction
-    }
-
-    class Transferable {
-        <<interface>>
-        + getDate() Date
-        + getAmount() MonetaryAmount
-        + getTransferStatus() TransferStatus
-        + setTransferStatus(status: TransferStatus)
-    }
-
-    class Transaction {
-        <<abstract>>
-        + id: String
-        + name: String
-        + description: String
-    }
-
-    class RecurringTransaction {
-        <<Entity>>
-        + startDate: Date
-    }
-
-    class OneTimeTransaction {
-        <<Entity>>
-        + date: Date
-    }
-
-    class TransactionRecord {
-        <<Entity>>
-        - id: String
-        + date: Date
-    }
-
-    class MonetaryAmount {
-        <<ValueObject>>
-        + amount: Number
-    }
-
-    class Label {
-        <<ValueObject>>
-        + name: String
-    }
-
-    class Type {
-        <<Enumeration>>
-        INCOME
-        EXPENSE
-        TYPE
-    }
-
-    class Transfer {
-        <<ValueObject>>
-        + sourceBankAccountId: String
-        + externalSource: String
-        + targetBankAccountId: String
-        + externalTarget: String
-    }
-
-    class TransferStatus {
-        <<Enumeration>>
-        INITIAL
-        FAILED
-        SUCCESSFUL
-    }
-
-    class Periodicity {
-        <<Enumeration>>
-        MONTHLY
-        QUARTERLY
-        HALF_YEARLY
-        YEARLY
-    }
-
-```

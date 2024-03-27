@@ -26,4 +26,4 @@ Supplies and shopping carts comprise **product entries** that **reference a prod
 
 The services **ShoppingCartService** and **SuppliesService** manage the two product entry collections. Both services involve **CRUD** operations. In addition to CRUD operations, **ShoppingCartService** includes functionality to **mark product entries as purchased** and to **debit the sumed price** of all marked products from a selected bank account. **SuppliesService** includes functionality to **add products that are needed to the shopping cart**.
 
-The **persistence** of product entries, shopping cart and supples is handled by the **ProductEntryRepository** and the **ProductEntryCollectionRepository**.
+The **persistence** of product entries, shopping cart and supplies is handled by the **ProductEntryRepository** and the **ProductEntryCollectionRepository**.
