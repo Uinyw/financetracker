@@ -4,12 +4,17 @@ id: deployment
 
 # Deployment [Lachenicht]
 
-## Installation using a terminal
 
-1. Open your terminal
-3. Clone the `financetracker` project
-4. Navigate to folder `financetracker`
-5. Run the following commands
+Die FinanceTracker application lässt sich mithilfe von Docker lokal deployen.
+Hierzu existiert für jeden microservice ein Dockerfile, zur isolierten containiriersung.
+
+Der Zusammenschluss der einzelnen Microserservice-Container in einen applications Container erfolgt mithilfe einer docker-compose.yml Datei. Hier werden konkrete Ports und Abhängigkeiten zwischen den microservice definiert.
+
+
+How to deploy and access the FinanceTracker application locally:
+
+1. Navigate to folder `financetracker`
+2. Run the following commands
 
 ```
 mvn clean package --file implementation/bankaccount/pom.xml
@@ -20,9 +25,5 @@ mvn clean package --file implementation/analytics/pom.xml
 docker-compose up -d --build
 ```
 
-5. Open your browser
-6. Open `localhost:4200` to access the UI
-
-## Installation using a installer Script
-
-run our [installer script](../../installer.bat)
+3. Open your browser
+4. Open `localhost:4200` to access the UI
