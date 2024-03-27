@@ -26,7 +26,7 @@ mvn clean test --file implementation/analytics/pom.xml
 
 The following code coverage is achieved by unit & integration tests (only the target folder and the application class with the main method are excluded):
 
-| Component | Coverage |
+| Microservice | Coverage |
 | :--- | :--- |
 | BankAccount | ![coverage](../badges/jacoco-bankaccount.svg) |
 | Transaction | ![coverage](../badges/jacoco-transaction.svg) |
