@@ -4,44 +4,43 @@ id: software-architecture
 
 # Software Architecture [Lachenicht]
 
-![Software Architecture](../../figures/software_architecture.svg)
+![Software Architecture](../../figures/design/software_architecture.svg)
 
 **<\<ui\>> UI-FinanceTracker**
-Uses the Jersey REST API offered by `PurchaseConnector`, `TransactionManagement`, `SavingsGoalManagement`, `BankAccountManagement` and `Analytics` to offer the user business capabilities.
+Utilizes the REST APIs offered by microservies `BankAccount`, `Transaction`, `Product`, `SavingsGoal` and `Analytics` to offer system functionalities to a user.
 
-**<\<service\>> ExternalSystem**
-Uses the Jersey REST API offered by `PurchaseConnector` to input purchase data.
+**<\<microservice\>> BankAccount**
+Provides a Spring REST API, which can be utilized to access functionalities of the domain BankAccount.
+Sends Kafka messages to microservices `SavingsGoal` and `Analytics` on bank account updates.
+Persists domain objects in a relational database using Spring Data JPA.
 
-**<\<microservice\>> PurchaseConnector**
-Provides a Jersey REST API, which can be utilized to input purchase data in different formats (e.g. photos or Excel lists).
-Uses the Jersey REST API offered by `PurchaseManagement` to create/modify purchases.
+**<\<microservice\>> Transaction**
+Provides a JAX-RS REST API, which can be utilized to access functionalities of the domain Transaction.
+Requires the REST API offered by microservice `BankAccount` to transfer transactions on bank accounts.
+Sends Kafka messages to microservice `Analytics` on transaction creation/update/deletion.
+Persists domain objects in a relational database using Spring Data JPA.
 
-**<\<microservice\>> PurchaseManagement**
-Provides a Jersey REST API, which can be utilized to perform operations in the domain *purchase*.
-Uses Hibernate to persist data.
-Uses the Jersey REST API offered by `BankAccountmanagement` to assign purchases to bank accounts and perform validations.
-Publishes Kafka events when creating/modifying data to `Analytics`.
+**<\<microservice\>> Product**
+Provides a JAX-RS REST API, which can be utilized to access functionalities of the domain Product.
+Requires the REST API offered by microservice `Transaction` to transfer shopping expenses.
+Sends Kafka messages to microservice `Analytics` on product update.
+Persists domain objects in a relational database using Spring Data JPA.
 
-**<\<microservice\>> TransactionManagement**
-Provides a Jersey REST API, which can be utilized to perform operations in the domain *transaction*.
-Uses Hibernate to persist data.
-Uses the Jersey REST API offered by `BankAccountmanagement` to assign transactions to bank accounts and perform validations.
-Publishes Kafka events when creating/modifying data to `Analytics`.
+**<\<externalsystem\>> NutritionProvider**
+Provides an API, which can be utilizes to fetch nutrition values for products.
 
-**<\<microservice\>> SavingsGoalManagement**
-Provides a Jersey REST API, which can be utilized to perform operations in the domain *savings goal*.
-Uses Hibernate to persist data.
-Uses the Jersey REST API offered by `BankAccountmanagement` to assign savings goals to bank accounts and perform validations.
-Publishes Kafka events when creating/modifying data to `Analytics`.
-
-**<\<microservice\>> BankAccountManagement**
-Provides a Jersey REST API, which can be utilized to perform operations in the domain *account*.
-Uses Hibernate to persist data.
+**<\<microservice\>> SavingsGoal**
+Provides a Spring REST API, which can be utilized to access functionalities of the domain SavingsGoal.
+Requires the REST API offered by microservice `Transaction` to transfer periodical savings goals.
+Requires the REST API offered by microservice `BankAccount` to validate rule-based savings goals.
+Consumes Kafka events sent by microservice `BankAccount` to re-validate rule-based savings goals on bank account update.
+Sends Kafka messages to microservice `Analytics` on savings goal creation/update/deletion.
+Persists domain objects in a relational database using Spring Data JPA.
 
 **<\<microservice\>> Analytics**
-Provides a Jersey REST API, which can be utilized to retrieve data from the domain *analytics*.
-Uses Hibernate to persist data.
-Consumes Kafka events sent by `TransactionManagement`, `SavingsGoalManagement` and `BankAccountManagement` to analyse the user data.
+Provides a Spring REST API, which can be utilized to access functionalities of the domain Analytics.
+Consumes Kafka events sent by microservices `BankAccount`, `Transaction`, `Product` and `SavingsGoal` analyse spending und food consumption habits.
+Persists domain objects in a relational database using Spring Data JPA.
 
 **<\<database\>> Relational Database**
-Offers a Hibernate interface to persist data.
+Offers a Spring Data JPA interface to persist data.
