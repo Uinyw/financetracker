@@ -28,13 +28,14 @@ The package structure for each microservice is as follows:
 How to run a microservice, for example BankAccount:
 
 1. Navigate to folder `financetracker`
-2. Run the following command in order to generate the API interface and models in the `target` folder
+2. Run the command below in order to generate the API interface and models in the `target` folder
+3. Run the microservice in your IDE
 
 ```
 mvn clean package --file implementation/bankaccount/pom.xml
 ```
 
-3. Run the microservice in your IDE
+
 
 
 
