@@ -6,73 +6,141 @@ id: usecases-product
 
 ![Use Cases Product](../../figures/analysis/usecases_product.svg)
 
-## Create Product Entry
+
+## Create Product
 
 ```
-Title: Create Product Entry
+Title: Create Product
 
 Primary Actors: User
 Secondary Actors: -
 
 Preconditions: -
-Postconditions: The given product is added to set of products
+Postconditions: A prouct with the given information exists in the set of products.
 
 Flow:
-1. The user enters the required data for a new product entry.
-2. The system validates the received data.
-3. The system creates a new product entry and saves it.
+1. The user enters the required information for a product.
+2. The system validates the received information.
+3. The system creates a new product.
+4. The system adds the created product to the set of product.
 
 
 Alternative flows:
-3a. The provided data is invalid: The systems informs the user about his invalid input.
+3a. The received information is invalid: The system informs the user about his invalid input.
+4a. The product belongs to category Food or Drink:  The system triggers use case 'Add Nutrition'. Then, the system adds the created product to the set of product.
 
-Information Requirements: ID, Name, Category, Monetary Amount
+Information Requirements: ID, Name, Description, Size, Price, Category, Labels.
 ```
 
-## Delete Product Entry
+## Add Nutrition
 
 ```
-Title: Delete Product Entry
+Title: Add Nutrition
+
+Primary Actors: -
+Secondary Actors: CalorieAPI
+
+Preconditions: A product with category Food or Dink is being created.
+Postconditions: The product is enriched with nutritional values.
+
+Flow:
+1. The system provides the CalorieAPI with the name of the product being created.
+2. The CalorieAPI responds with the nutritional values for this product.
+3. The system enriches the product with the nutritional values.
+
+
+Alternative flows:
+2a. The CalorieAPI could not determine nutritional values: The system does not add nutritional values to the product.
+
+Information Requirements: Name
+```
+
+## View Shopping Cart/View Supplies
+
+```
+Title: View Shopping Cart/View Supplies
 
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The product entry to delete exists in the set of product entries
-Postconditions: The given product entry is removed from the set of product entries
+Preconditions: -
+Postconditions: The user receives information regarding the shopping cart/supplies.
 
 Flow:
-1. The user enters the ID or a name of the product entry to delete it.
-2. The system queries for the corresponding product entry and finds it.
-3. The system removes the product entry and all associated data from the set to it.
+1. The user selects the shopping cart/supplies.
+2. The system presents all information regarding the shopping cart/supplies.
 
 
-Alternative flows:
-2a. No product entry with the given ID or name exists: The systems informs the user about the non-existence of the product entry to delete.
+Alternative flows: -
 
-Information Requirements: ID or name of the product entry
+Information Requirements: -
 ```
 
-## Edit Product Entry
+## Add Product to Shopping Cart/Supplies
 
 ```
-Title: Edit Product entry
+Title: Add Product to Shopping Cart/Supplies
 
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The product entry to edit exists in the set of product entries
-Postconditions: The given product entry is edited
+Preconditions: The user has created the product to add to the shopping cart/supplies.
+Postconditions: The created product exists in the shopping cart/supplies.
 
 Flow:
-1. The user enters the ID or a name of the product entry to edit it.
-2. The system queries for the corresponding product entry and finds it.
-3. The system shows the user the corresponding entry and all data associated to it.
-4. The user edits the information and submits it.
-5. The system edits the entry.
+1. The user selects the shopping cart/supplies.
+2. The user provides the ID of the product to add to the shopping cart/supplies.
+3. The system adds the product to the shopping cart/supplies.
 
 
 Alternative flows:
-2a. No product entry with the given ID exists: The systems informs the user about the non-existence of the product entry to edit.
+3a. No product with the provided ID exists: The system informs the user about his invalid input.
 
-Information Requirements: ID of the product entry, associated product entry
+Information Requirements: ID
+```
+
+## Delete Product From Shopping Cart/Supplies
+
+```
+Title: Delete Product From Shopping Cart/Supplies
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: The product to delete exists in the shopping cart/supplies.
+Postconditions: The product with the given ID does not exist in the shopping cart/supplies.
+
+Flow:
+1. The user selects the shopping cart/supplies.
+2. The user provides the ID of the product to delete.
+3. The system removes the product from the shopping cart/supplies.
+
+
+Alternative flows:
+3a. No product with the provided ID exists: The system informs the user about his invalid input.
+
+Information Requirements: ID
+```
+
+## Purchase Shopping Cart
+
+```
+Title: Purchase Shopping Cart
+
+Primary Actors: User
+Secondary Actors: -
+
+Preconditions: The product to delete exists in the shopping cart/supplies.
+Postconditions: The product with the given ID does not exist in the shopping cart/supplies.
+
+Flow:
+1. The user selects the shopping cart/supplies.
+2. The user provides the ID of the product to delete.
+3. The system removes the product from the shopping cart/supplies.
+
+
+Alternative flows:
+3a. No product with the provided ID exists: The system informs the user about his invalid input.
+
+Information Requirements: ID
 ```

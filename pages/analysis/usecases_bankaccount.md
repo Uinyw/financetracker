@@ -43,7 +43,7 @@ Flow:
 1. The user enters the required information for a bank account.
 2. The system validates the received information.
 3. The system creates a new bank account.
-4. The systems adds the created bank account to the set of bank accounts.
+4. The system adds the created bank account to the set of bank accounts.
 
 
 Alternative flows:

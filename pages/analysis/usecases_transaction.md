@@ -74,7 +74,7 @@ Flow:
 
 Alternative flows:
 2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
-4a. The transaction is successfully transferred: The system triggers use case RollbackTransaction. Then the transaction is updated.
+4a. The transaction is successfully transferred: The system triggers use case 'Rollback Transaction'. Then the transaction is updated.
 
 Information Requirements: 
 - One-Time Transaction: Name, Description, Type, Transfer, Date, Amount, Labels.
@@ -126,7 +126,7 @@ Flow:
 
 Alternative flows:
 2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
-3a. The transaction is successfully transferred: The system triggers use case RollbackTransaction. Then the transaction is removed.
+3a. The transaction is successfully transferred: The system triggers use case 'Rollback Transaction'. Then the transaction is removed.
 
 Information Requirements: ID
 ```
