@@ -4,6 +4,10 @@ id: domain-transaction
 
 # Domain Transaction [Lachenicht]
 
+![Domain Transaction](../../figures/design/domain_transaction.svg)
+
+## Domain Description
+
 The central entity of this domain is the **transaction**.
 A transaction has a unique **identifier**, as well as a **name** for natural language identification and a **description** to add explanatory information.
 Transactionscan be grouped by **labels**.
@@ -22,8 +26,3 @@ The lifecycle of a transaction is managed by the **TransactionService**, which e
 The **TransferService** is responsible for transferring one-time transactions and transaction records.
 The **TransferScheduler** transfers recurring transactions on a recurring basis according to their start date and periodicity.
 The **persistence** of transactions is handled by the **TransactionRepository**.
-
-
-![Domain Transaction](../../figures/design/domain_transaction.svg)
-
-
