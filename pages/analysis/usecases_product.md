@@ -16,18 +16,18 @@ Primary Actors: User
 Secondary Actors: -
 
 Preconditions: -
-Postconditions: A prouct with the given information exists in the set of products.
+Postconditions: A product with the given information exists in the set of products.
 
 Flow:
 1. The user enters the required information for a product.
 2. The system validates the received information.
 3. The system creates a new product.
-4. The system adds the created product to the set of product.
+4. The system adds the created product to the set of products.
 
 
 Alternative flows:
 3a. The received information is invalid: The system informs the user about his invalid input.
-4a. The product belongs to category Food or Drink:  The system triggers use case 'Add Nutrition'. Then, the system adds the created product to the set of product.
+4a. The product belongs to the category Food or Drink:  The system triggers the use case 'Add Nutrition'. Then, the system adds the created product to the set of products.
 
 Information Requirements: ID, Name, Description, Size, Price, Category, Labels.
 ```
@@ -40,7 +40,7 @@ Title: Add Nutrition
 Primary Actors: -
 Secondary Actors: CalorieAPI
 
-Preconditions: A product with category Food or Dink is being created.
+Preconditions: A product with the category Food or Dink is being created.
 Postconditions: The product is enriched with nutritional values.
 
 Flow:
@@ -128,19 +128,20 @@ Information Requirements: ID
 Title: Purchase Shopping Cart
 
 Primary Actors: User
-Secondary Actors: -
+Secondary Actors: Transaction
 
-Preconditions: The product to delete exists in the shopping cart/supplies.
-Postconditions: The product with the given ID does not exist in the shopping cart/supplies.
+Preconditions: Products exist in the shopping cart.
+Postconditions: The total cost of all products marked as purchased is transferred as an expense. 
 
 Flow:
-1. The user selects the shopping cart/supplies.
-2. The user provides the ID of the product to delete.
-3. The system removes the product from the shopping cart/supplies.
-
+1. The user selects the products in the shopping cart that are purchased.
+2. The user books the shopping expenses on a bank account.
+3. The system creates a corresponding expense transaction.
+4. Transaction transfers the expense.
+5. The system removes the purchased products from the shopping cart.
 
 Alternative flows:
-3a. No product with the provided ID exists: The system informs the user about his invalid input.
+5a. The transfer fails: The system informs the user about the failure.
 
-Information Requirements: ID
+Information Requirements: BankAccountID
 ```
