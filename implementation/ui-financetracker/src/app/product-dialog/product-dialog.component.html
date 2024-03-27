@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="product.name">
+    <input id="name-input" matInput [(ngModel)]="product.name">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Description</mat-label>
@@ -10,19 +10,19 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Price</mat-label>
-    <input type="number" matInput [(ngModel)]="product.price.amount">
+    <input id="price-input" type="number" matInput [(ngModel)]="product.price.amount">
   </mat-form-field>
 
   <mat-form-field class="full-width">
     <mat-label>Category</mat-label>
-    <mat-select [(ngModel)]="product.category">
-        <mat-option *ngFor="let c of categories;" [value]="c">{{c}}</mat-option>
+    <mat-select id="category-selector" [(ngModel)]="product.category">
+        <mat-option [id]="c" *ngFor="let c of categories;" [value]="c">{{c}}</mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Size in g</mat-label>
-    <input type="number" matInput [(ngModel)]="product.size">
+    <input id="size-input" type="number" matInput [(ngModel)]="product.size">
   </mat-form-field>
 
   <mat-form-field>
@@ -33,5 +33,5 @@
 
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Back</button>
-  <button mat-button [mat-dialog-close]="getResultingProduct()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
+  <button mat-button id="create-product" [mat-dialog-close]="getResultingProduct()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
 </div>

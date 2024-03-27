@@ -2,18 +2,18 @@
 <div mat-dialog-content>
     <mat-form-field>
         <mat-label>Product</mat-label>
-        <mat-select [(ngModel)]="productEntry.product" [(value)]="productEntry.product" [compareWith]="compareProductEntry">
-            <mat-option *ngFor="let p of products;" [value]="p">{{p.name}}</mat-option>
+        <mat-select id="product-selector" [(ngModel)]="productEntry.product" [(value)]="productEntry.product" [compareWith]="compareProductEntry">
+            <mat-option [id]="p.name" *ngFor="let p of products;" [value]="p">{{p.name}}</mat-option>
         </mat-select>
     </mat-form-field>
 
   <mat-form-field>
     <mat-label>Quantity</mat-label>
-    <input type="number" matInput [(ngModel)]="productEntry.quantity">
+    <input id="quantity-input" type="number" matInput [(ngModel)]="productEntry.quantity">
   </mat-form-field>
 </div>
 
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Back</button>
-  <button mat-button [mat-dialog-close]="getResultingProductEntry()" cdkFocusInitial>{{ editMode ? 'Save' : 'Add' }}</button>
+  <button id="add-product-to-cart" mat-button [mat-dialog-close]="getResultingProductEntry()" cdkFocusInitial>{{ editMode ? 'Save' : 'Add' }}</button>
 </div>

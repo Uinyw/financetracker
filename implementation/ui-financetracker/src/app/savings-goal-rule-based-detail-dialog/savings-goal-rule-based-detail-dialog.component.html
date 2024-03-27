@@ -3,21 +3,21 @@
 
     <mat-form-field class="half-width">
         <mat-label>Bank Account</mat-label>
-        <mat-select [(ngModel)]="rule.bankAccountId">
-            <mat-option *ngFor="let account of bankAccounts;" [value]="account.id">{{account.name}}</mat-option>
+        <mat-select id="bank-account-selector" [(ngModel)]="rule.bankAccountId">
+            <mat-option [id]="account.name" *ngFor="let account of bankAccounts;" [value]="account.id">{{account.name}}</mat-option>
         </mat-select>
     </mat-form-field>
   
 
   <mat-form-field>
     <mat-label>Target Amount</mat-label>
-    <input type="number" matInput [(ngModel)]="rule.target.amount">
+    <input id="target-amount-input" type="number" matInput [(ngModel)]="rule.target.amount">
   </mat-form-field>
 
   <mat-form-field class="full-width">
     <mat-label>Rule Type</mat-label>
-    <mat-select [(ngModel)]="rule.type">
-        <mat-option *ngFor="let type of types;" [value]="type">{{type}}</mat-option>
+    <mat-select id="type-selector" [(ngModel)]="rule.type">
+        <mat-option [id]="type" *ngFor="let type of types;" [value]="type">{{type}}</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -30,5 +30,5 @@
 
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Back</button>
-  <button mat-button [mat-dialog-close]="getResultingRule()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
+  <button id="create-rule" mat-button [mat-dialog-close]="getResultingRule()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
 </div>

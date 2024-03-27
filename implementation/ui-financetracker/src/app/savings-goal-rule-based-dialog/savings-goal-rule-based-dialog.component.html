@@ -2,16 +2,16 @@
 <div mat-dialog-content>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="savingsGoal.name">
+    <input id="name-input" matInput [(ngModel)]="savingsGoal.name">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Description</mat-label>
-    <input matInput [(ngModel)]="savingsGoal.description">
+    <input id="description-input" matInput [(ngModel)]="savingsGoal.description">
   </mat-form-field>
   <mat-form-field class="full-width">
     <mat-label>Matching Type</mat-label>
-    <mat-select [(ngModel)]="savingsGoal.matchingType">
-        <mat-option *ngFor="let type of types;" [value]="type">{{type}}</mat-option>
+    <mat-select id="matching-type-selector" [(ngModel)]="savingsGoal.matchingType">
+        <mat-option [id]="type" *ngFor="let type of types;" [value]="type">{{type}}</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -19,5 +19,5 @@
 
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Back</button>
-  <button mat-button [mat-dialog-close]="getResultingSavingsGoal()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
+  <button id="create-savings-goal" mat-button [mat-dialog-close]="getResultingSavingsGoal()" cdkFocusInitial>{{ editMode ? 'Save' : 'Create' }}</button>
 </div>
