@@ -12,7 +12,7 @@ In the first step, the application requirements are analyzed and specified.
 To achieve this, a [story](../pages/analysis/story.md) is written that describes the general domain of the application using an exemplary scenario.
 The story helps to identify the goals to be achieved and problems to be solved.
 Individual **capabilities** are then derived from the story, defining basic functionalities the system should offer.
-For each of the capabilities, corresponding **use cases** are derived. Use cases specify the functionalities offered to a user by defining user/system interaction flows. They define the specific application requirements.
+From each of the capabilities, corresponding **use cases** are derived. Use cases specify the functionalities offered to a user by defining user/system interaction flows. They define the specific application requirements.
 
 **Domain/Architecture Design**
 

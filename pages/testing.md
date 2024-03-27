@@ -4,7 +4,7 @@ id: testing
 
 # Testing [Lachenicht, Kässmann]
 
-The microservices are tested using unit, integration and end-to-end (E2E) tests.
+The microservices are tested using unit, integration, and end-to-end (E2E) tests.
 Unit tests validate individual components of the microservices in isolation.
 Integration tests validate the interaction between the components of a microservice.
 E2E tests validate the interaction of all microservices.

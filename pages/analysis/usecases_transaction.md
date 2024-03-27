@@ -43,7 +43,7 @@ Flow:
 1. The user enters the required information for a transaction.
 2. The system validates the received information.
 3. The system creates a new transaction.
-4. The systems adds the created transacton to the set of transactions.
+4. The system adds the created transaction to the set of transactions.
 
 
 Alternative flows:
@@ -62,8 +62,8 @@ Title: Update Transaction
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The transacton to update exists in the set of transactions.
-Postconditions: The information of the existing transaction is updated.
+Preconditions: The transaction to update exists in the set of transactions.
+Postconditions: The information on the existing transaction is updated.
 
 Flow:
 1. The user provides the ID of the transaction to update.
@@ -74,7 +74,7 @@ Flow:
 
 Alternative flows:
 2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
-4a. The transaction is successfully transferred: The system triggers use case 'Rollback Transaction'. Then the transaction is updated.
+4a. The transaction is successfully transferred: The system triggers the use case 'Rollback Transaction'. Then the transaction is updated.
 
 Information Requirements: 
 - One-Time Transaction: Name, Description, Type, Transfer, Date, Amount, Labels.
@@ -90,7 +90,7 @@ Title: Create Transaction
 Primary Actors: User
 Secondary Actors: -
 
-Preconditions: The recurring transacton for which records should be updated exists in the set of transactions.
+Preconditions: The recurring transaction for which records should be updated exists in the set of transactions.
 Postconditions: The records of the recurring transaction are updated.
 
 Flow:
@@ -126,7 +126,7 @@ Flow:
 
 Alternative flows:
 2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
-3a. The transaction is successfully transferred: The system triggers use case 'Rollback Transaction'. Then the transaction is removed.
+3a. The transaction is successfully transferred: The system triggers the use case 'Rollback Transaction'. Then the transaction is removed.
 
 Information Requirements: ID
 ```
@@ -155,7 +155,7 @@ Flow:
 Alternative flows:
 2a. No transaction with the provided ID exists: The system informs the user about his invalid input.
 3a. One or both bank accounts involved in the transfer do not exist: The system informs the user about the failure and sets the transfer status to failed.
-4a. The source bank accounts does not have enough balance: The system informs the user about the failure and sets the transfer status to failed.
+4a. The source bank account does not have enough balance: The system informs the user about the failure and sets the transfer status to failed.
 
 Information Requirements: ID
 ```

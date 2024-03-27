@@ -5,8 +5,8 @@ id: deployment
 # Deployment [Lachenicht]
 
 The FinanceTracker application can be deployed locally using Docker.
-For each microservice a Dockerfile exists for isolated containerization.
-The individual microservice containers are merged into an applications container using a [docker-compose.yml](../docker-compose.yml) file.
+For each microservice, a Dockerfile exists for isolated containerization.
+The individual microservice containers are merged into an application container using a [docker-compose.yml](../docker-compose.yml) file.
 Here, specific ports and dependencies between the microservices are defined.
 
 How to deploy and access the FinanceTracker application locally:

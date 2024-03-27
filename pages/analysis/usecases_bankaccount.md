@@ -61,7 +61,7 @@ Primary Actors: User
 Secondary Actors: -
 
 Preconditions: The bank account to update exists in the set of bank accounts.
-Postconditions: The information of the existing bank account is updated.
+Postconditions: The information on the existing bank account is updated.
 
 Flow:
 1. The user provides the ID of the bank account to update.
@@ -90,7 +90,7 @@ Postconditions: The bank account with the given ID does not exist in the set of 
 
 Flow:
 1. The user provides the ID of the bank account to delete.
-2. The systems removes the bank account with the given ID from the set of bank accounts.
+2. The system removes the bank account with the given ID from the set of bank accounts.
 
 
 Alternative flows:
